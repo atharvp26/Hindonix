@@ -1,9 +1,9 @@
 export const dynamic = 'force-dynamic';
 
-import { getBlogs } from "@/lib/data";
+import { getBlogsFromDB } from "@/lib/server-data";
 import { BlogsClient } from "./BlogsClient";
 
 export default async function BlogsPage() {
-  const blogs = await getBlogs().catch(() => []);
+  const blogs = await getBlogsFromDB();
   return <BlogsClient initialBlogs={blogs} />;
 }

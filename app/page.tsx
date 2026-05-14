@@ -5,7 +5,7 @@ import { TestimonialsSection } from "@/components/home/TestimonialsSection";
 import { CTASection } from "@/components/home/CTASection";
 export const dynamic = 'force-dynamic';
 
-import { getTestimonials } from "@/lib/data";
+import { getTestimonialsFromDB } from "@/lib/server-data";
 import pool from "@/lib/db";
 
 async function getHeroImagesFromDB(): Promise<string[]> {
@@ -34,7 +34,7 @@ async function getCTAImageFromDB(): Promise<string> {
 export default async function HomePage() {
   const [heroImages, testimonials, ctaBgImage] = await Promise.all([
     getHeroImagesFromDB(),
-    getTestimonials().catch(() => []),
+    getTestimonialsFromDB(),
     getCTAImageFromDB(),
   ]);
 
