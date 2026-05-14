@@ -7,45 +7,27 @@ import { cn } from "@/lib/utils";
 import { ImageDisplay } from "@/components/ImageDisplay";
 import { Button } from "@/components/ui/button";
 import {
-  type Product, type Category, type Subcategory, type Material, type Finish,
+  type Product, type Finish,
 } from "@/lib/data";
 
 interface ProductsClientProps {
   initialProducts: Product[];
-  initialCategories: Category[];
-  initialSubcategories: Subcategory[];
-  initialMaterials: Material[];
+  initialCategories: never[];
+  initialSubcategories: never[];
+  initialMaterials: never[];
   initialFinishes: Finish[];
 }
 
 export function ProductsClient({
   initialProducts: products,
-  initialCategories: categories,
-  initialSubcategories: subcategories,
-  initialMaterials: materials,
   initialFinishes: finishes,
 }: ProductsClientProps) {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [selectedSubcategories, setSelectedSubcategories] = useState<string[]>([]);
-  const [selectedMaterials, setSelectedMaterials] = useState<string[]>([]);
+  const [selectedSeries, setSelectedSeries] = useState<string[]>([]);
   const [selectedFinishes, setSelectedFinishes] = useState<string[]>([]);
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
 
-  const allCategories = useMemo(() => {
-    const names = new Set(products.map((p) => p.category).filter(Boolean));
-    return categories.filter((c) => names.has(c.name));
-  }, [products, categories]);
-
-  const allSubcategories = useMemo(() => {
-    const names = new Set(products.map((p) => p.subcategory).filter((s): s is string => !!s));
-    return subcategories.filter((s) => names.has(s.name));
-  }, [products, subcategories]);
-
-  const allMaterials = useMemo(() => {
-    const names = new Set(products.map((p) => p.material).filter(Boolean));
-    return materials.filter((m) => names.has(m.name));
-  }, [products, materials]);
+  const SERIES_OPTIONS = ["Minimal", "Classical"];
 
   const allFinishNames = useMemo(() => {
     const names = new Set<string>();
@@ -61,9 +43,7 @@ export function ProductsClient({
 
   const filteredProducts = useMemo(() => {
     return products.filter((p) => {
-      if (selectedCategories.length && !selectedCategories.includes(p.category)) return false;
-      if (selectedSubcategories.length && (!p.subcategory || !selectedSubcategories.includes(p.subcategory))) return false;
-      if (selectedMaterials.length && !selectedMaterials.includes(p.material)) return false;
+      if (selectedSeries.length && !selectedSeries.includes(p.series || "")) return false;
       if (selectedFinishes.length) {
         const pFinishNames = [
           ...(p.finishes || []),
@@ -77,14 +57,12 @@ export function ProductsClient({
       }
       return true;
     });
-  }, [products, selectedCategories, selectedSubcategories, selectedMaterials, selectedFinishes, searchQuery, finishes]);
+  }, [products, selectedSeries, selectedFinishes, searchQuery, finishes]);
 
-  const hasActiveFilters = selectedCategories.length > 0 || selectedSubcategories.length > 0 || selectedMaterials.length > 0 || selectedFinishes.length > 0 || !!searchQuery;
+  const hasActiveFilters = selectedSeries.length > 0 || selectedFinishes.length > 0 || !!searchQuery;
 
   const clearAllFilters = () => {
-    setSelectedCategories([]);
-    setSelectedSubcategories([]);
-    setSelectedMaterials([]);
+    setSelectedSeries([]);
     setSelectedFinishes([]);
     setSearchQuery("");
   };
@@ -119,72 +97,28 @@ export function ProductsClient({
         </button>
       )}
 
-      {allCategories.length > 0 && (
-        <div>
-          <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">Category</h3>
-          <div className="space-y-2">
-            {allCategories.map((cat) => (
-              <label key={cat.id} className="flex items-center gap-2.5 cursor-pointer group">
-                <input
-                  type="checkbox"
-                  checked={selectedCategories.includes(cat.name)}
-                  onChange={() => toggleFilter(cat.name, selectedCategories, setSelectedCategories)}
-                  className="rounded border-border"
-                />
-                <span className={cn("text-sm transition-colors", selectedCategories.includes(cat.name) ? "text-foreground font-medium" : "text-muted-foreground group-hover:text-foreground")}>
-                  {cat.name}
-                </span>
-              </label>
-            ))}
-          </div>
+      <div>
+        <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">Series</h3>
+        <div className="space-y-2">
+          {SERIES_OPTIONS.map((series) => (
+            <label key={series} className="flex items-center gap-2.5 cursor-pointer group">
+              <input
+                type="checkbox"
+                checked={selectedSeries.includes(series)}
+                onChange={() => toggleFilter(series, selectedSeries, setSelectedSeries)}
+                className="rounded border-border"
+              />
+              <span className={cn("text-sm transition-colors", selectedSeries.includes(series) ? "text-foreground font-medium" : "text-muted-foreground group-hover:text-foreground")}>
+                {series}
+              </span>
+            </label>
+          ))}
         </div>
-      )}
-
-      {allSubcategories.length > 0 && (
-        <div>
-          <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">Type</h3>
-          <div className="space-y-2">
-            {allSubcategories.map((sub) => (
-              <label key={sub.id} className="flex items-center gap-2.5 cursor-pointer group">
-                <input
-                  type="checkbox"
-                  checked={selectedSubcategories.includes(sub.name)}
-                  onChange={() => toggleFilter(sub.name, selectedSubcategories, setSelectedSubcategories)}
-                  className="rounded border-border"
-                />
-                <span className={cn("text-sm transition-colors", selectedSubcategories.includes(sub.name) ? "text-foreground font-medium" : "text-muted-foreground group-hover:text-foreground")}>
-                  {sub.name}
-                </span>
-              </label>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {allMaterials.length > 0 && (
-        <div>
-          <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">Material</h3>
-          <div className="space-y-2">
-            {allMaterials.map((mat) => (
-              <label key={mat.id} className="flex items-center gap-2.5 cursor-pointer group">
-                <input
-                  type="checkbox"
-                  checked={selectedMaterials.includes(mat.name)}
-                  onChange={() => toggleFilter(mat.name, selectedMaterials, setSelectedMaterials)}
-                  className="rounded border-border"
-                />
-                <span className={cn("text-sm transition-colors", selectedMaterials.includes(mat.name) ? "text-foreground font-medium" : "text-muted-foreground group-hover:text-foreground")}>
-                  {mat.name}
-                </span>
-              </label>
-            ))}
-          </div>
-        </div>
-      )}
+      </div>
 
       {allFinishNames.length > 0 && (
         <div>
-          <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">Finish</h3>
+          <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">Finishes</h3>
           <div className="space-y-2">
             {allFinishNames.map((name) => (
               <label key={name} className="flex items-center gap-2.5 cursor-pointer group">
@@ -272,7 +206,7 @@ export function ProductsClient({
               </div>
 
               {filteredProducts.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+                <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
                   {filteredProducts.map((product) => {
                     const finishNames = product.finishIds && product.finishIds.length > 0
                       ? product.finishIds.map((fid) => finishes.find((f) => f.id === fid)?.name).filter((n): n is string => !!n)
@@ -285,7 +219,7 @@ export function ProductsClient({
                         href={`/products/${product.id}`}
                         className="group bg-card rounded-2xl overflow-hidden shadow-card border border-border/50 hover:shadow-card-hover transition-all duration-300 flex flex-col"
                       >
-                        <div className="aspect-[4/3] overflow-hidden bg-secondary">
+                        <div className="aspect-square overflow-hidden bg-secondary">
                           <ImageDisplay
                             src={product.image}
                             alt={product.name}

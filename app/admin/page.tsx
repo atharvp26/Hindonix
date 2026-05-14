@@ -238,6 +238,7 @@ const Admin = () => {
   // Product form state
   const [productForm, setProductForm] = useState({
     name: "",
+    series: "",
     categoryId: undefined as number | undefined,
     subcategoryId: undefined as number | undefined,
     materialId: undefined as number | undefined,
@@ -557,6 +558,7 @@ const Admin = () => {
     setProductVideoFiles([]);
     setProductForm({
       name: "",
+      series: "",
       categoryId: undefined,
       subcategoryId: undefined,
       materialId: undefined,
@@ -598,6 +600,7 @@ const Admin = () => {
 
     setProductForm({
       name: product.name,
+      series: product.series || "",
       categoryId,
       subcategoryId,
       materialId,
@@ -696,6 +699,7 @@ const Admin = () => {
 
         await updateProduct(editingProduct.id, {
           name: productForm.name,
+          series: productForm.series || undefined,
           categoryId: productForm.categoryId,
           subcategoryId: productForm.subcategoryId,
           materialId: productForm.materialId,
@@ -732,6 +736,7 @@ const Admin = () => {
 
         await addProduct({
           name: productForm.name,
+          series: productForm.series || undefined,
           categoryId: productForm.categoryId!,
           subcategoryId: productForm.subcategoryId,
           materialId: productForm.materialId!,
@@ -2271,6 +2276,23 @@ const Admin = () => {
                 }
                 placeholder="BK-2024-01"
               />
+            </div>
+            <div>
+              <Label htmlFor="series">Series *</Label>
+              <Select
+                value={productForm.series}
+                onValueChange={(value) =>
+                  setProductForm({ ...productForm, series: value })
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select series" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Minimal">Minimal</SelectItem>
+                  <SelectItem value="Classical">Classical</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>

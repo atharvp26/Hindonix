@@ -82,6 +82,7 @@ export interface Finish {
 export interface Product {
   id: number;
   name: string;
+  series?: string;
   category: string;
   categoryId?: number;
   subcategory?: string;
