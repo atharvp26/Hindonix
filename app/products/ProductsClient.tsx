@@ -7,19 +7,22 @@ import { cn } from "@/lib/utils";
 import { ImageDisplay } from "@/components/ImageDisplay";
 import { Button } from "@/components/ui/button";
 import {
-  type Product, type Finish,
+  type Product, type Category, type Subcategory, type Material, type Finish,
 } from "@/lib/data";
 
 interface ProductsClientProps {
   initialProducts: Product[];
-  initialCategories: never[];
-  initialSubcategories: never[];
-  initialMaterials: never[];
+  initialCategories: Category[];
+  initialSubcategories: Subcategory[];
+  initialMaterials: Material[];
   initialFinishes: Finish[];
 }
 
 export function ProductsClient({
   initialProducts: products,
+  initialCategories: _categories,
+  initialSubcategories: _subcategories,
+  initialMaterials: _materials,
   initialFinishes: finishes,
 }: ProductsClientProps) {
   const [searchQuery, setSearchQuery] = useState("");
