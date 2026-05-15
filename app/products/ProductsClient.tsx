@@ -230,13 +230,6 @@ export function ProductsClient({
                           />
                         </div>
                         <div className="p-5 flex flex-col flex-1">
-                          <div className="flex flex-wrap gap-1.5 mb-3">
-                            <span className="px-2.5 py-0.5 bg-secondary rounded-full text-xs font-medium text-secondary-foreground">{product.category}</span>
-                            {product.subcategory && (
-                              <span className="px-2.5 py-0.5 bg-secondary rounded-full text-xs font-medium text-secondary-foreground">{product.subcategory}</span>
-                            )}
-                            <span className="px-2.5 py-0.5 bg-accent/10 text-accent rounded-full text-xs font-medium">{product.material}</span>
-                          </div>
                           <h3 className="font-heading text-base font-semibold text-foreground mb-1.5 group-hover:text-accent transition-colors line-clamp-2">{product.name}</h3>
                           <p className="text-muted-foreground text-sm mb-3 line-clamp-2 flex-1">{product.description}</p>
                           {finishNames.length > 0 && (
