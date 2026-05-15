@@ -10,6 +10,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     if (!r) return NextResponse.json({ error: "Not found" }, { status: 404 });
     return NextResponse.json({
       ...r,
+      series: r.series ?? undefined,
       categoryId: r.category_id,
       subcategoryId: r.subcategory_id,
       materialId: r.material_id,
@@ -29,13 +30,13 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
   const { id } = await params;
   try {
     const body = await request.json();
-    const { name, category, categoryId, subcategory, subcategoryId, material, materialId,
+    const { name, series, category, categoryId, subcategory, subcategoryId, material, materialId,
             description, modelNumber, longDescription, image, finishes, images, videos } = body;
     await pool.query(
-      `UPDATE products SET name=?, category=?, category_id=?, subcategory=?, subcategory_id=?,
+      `UPDATE products SET name=?, series=?, category=?, category_id=?, subcategory=?, subcategory_id=?,
         material=?, material_id=?, description=?, model_number=?, long_description=?, image=?,
         finishes=?, images=?, videos=? WHERE id=?`,
-      [name, category, categoryId ?? null, subcategory ?? null, subcategoryId ?? null,
+      [name, series ?? null, category, categoryId ?? null, subcategory ?? null, subcategoryId ?? null,
        material, materialId ?? null, description, modelNumber ?? null, longDescription ?? null,
        image, JSON.stringify(finishes ?? []), JSON.stringify(images ?? []), JSON.stringify(videos ?? []), id]
     );
