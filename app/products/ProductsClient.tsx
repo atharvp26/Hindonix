@@ -211,11 +211,6 @@ export function ProductsClient({
               {filteredProducts.length > 0 ? (
                 <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
                   {filteredProducts.map((product) => {
-                    const finishNames = product.finishIds && product.finishIds.length > 0
-                      ? product.finishIds.map((fid) => finishes.find((f) => f.id === fid)?.name).filter((n): n is string => !!n)
-                      : product.finishes || [];
-                    const visibleFinishes = finishNames.slice(0, 3);
-
                     return (
                       <Link
                         key={product.id}
@@ -231,17 +226,7 @@ export function ProductsClient({
                         </div>
                         <div className="p-5 flex flex-col flex-1">
                           <h3 className="font-heading text-base font-semibold text-foreground mb-1.5 group-hover:text-accent transition-colors line-clamp-2">{product.name}</h3>
-                          <p className="text-muted-foreground text-sm mb-3 line-clamp-2 flex-1">{product.description}</p>
-                          {finishNames.length > 0 && (
-                            <div className="flex flex-wrap gap-1 mt-auto">
-                              {visibleFinishes.map((f, i) => (
-                                <span key={i} className="text-xs px-2 py-0.5 bg-muted rounded text-muted-foreground">{f}</span>
-                              ))}
-                              {finishNames.length > 3 && (
-                                <span className="text-xs px-2 py-0.5 bg-muted rounded text-muted-foreground">+{finishNames.length - 3}</span>
-                              )}
-                            </div>
-                          )}
+                          <p className="text-muted-foreground text-sm line-clamp-2">{product.description}</p>
                         </div>
                       </Link>
                     );
