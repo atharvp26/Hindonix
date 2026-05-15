@@ -5,6 +5,7 @@ export interface ContactFormData {
   company?: string;
   country: string;
   city: string;
+  product?: string;
   subject?: string;
   message: string;
 }

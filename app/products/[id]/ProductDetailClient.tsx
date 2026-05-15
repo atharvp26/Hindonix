@@ -126,7 +126,7 @@ export function ProductDetailClient({ product }: { product: Product }) {
 
               <div className="pt-2">
                 <Button size="lg" asChild className="w-full sm:w-auto gap-2">
-                  <Link href="/contact">Request Quote <ArrowRight className="w-4 h-4" /></Link>
+                  <Link href={`/contact?product=${encodeURIComponent(product.name)}`}>Request Quote <ArrowRight className="w-4 h-4" /></Link>
                 </Button>
               </div>
             </div>

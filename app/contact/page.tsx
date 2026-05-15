@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, type ChangeEvent, type FormEvent, type SVGProps } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect, Suspense, type ChangeEvent, type FormEvent, type SVGProps } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { MapPin, Phone, Mail, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
@@ -20,12 +20,24 @@ const LinkedInLogo = (props: SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-export default function ContactPage() {
-  const [formData, setFormData] = useState({ name: "", email: "", phone: "", company: "", country: "", city: "", subject: "", message: "" });
+function ContactPageInner() {
+  const [formData, setFormData] = useState({ name: "", email: "", phone: "", company: "", country: "", city: "", product: "", subject: "", message: "" });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const productName = searchParams.get("product");
+    if (productName) {
+      setFormData((prev) => ({
+        ...prev,
+        product: productName,
+        subject: prev.subject || `Inquiry about ${productName}`,
+      }));
+    }
+  }, [searchParams]);
 
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
@@ -51,9 +63,9 @@ export default function ContactPage() {
     if (!validateForm()) return;
     setIsSubmitting(true);
     try {
-      await submitToGoogleSheetsWithRetry({ name: formData.name, email: formData.email, phone: formData.phone, company: formData.company || undefined, country: formData.country, city: formData.city, subject: formData.subject || undefined, message: formData.message });
+      await submitToGoogleSheetsWithRetry({ name: formData.name, email: formData.email, phone: formData.phone, company: formData.company || undefined, country: formData.country, city: formData.city, product: formData.product || undefined, subject: formData.subject || undefined, message: formData.message });
       toast({ title: "Inquiry Submitted!", description: "We'll get back to you within 24 hours." });
-      setFormData({ name: "", email: "", phone: "", company: "", country: "", city: "", subject: "", message: "" });
+      setFormData({ name: "", email: "", phone: "", company: "", country: "", city: "", product: "", subject: "", message: "" });
       router.push("/thank-you");
     } catch (error) {
       toast({ title: "Submission Failed", description: error instanceof Error ? error.message : "Failed to submit form. Please try again or contact us directly.", variant: "destructive" });
@@ -119,6 +131,10 @@ export default function ContactPage() {
                     </div>
                   </div>
                   <div>
+                    <label htmlFor="product" className="block text-sm font-medium text-foreground mb-2">Product</label>
+                    <input type="text" id="product" name="product" value={formData.product} onChange={handleChange} className={inputClass} placeholder="e.g. HCL-02" />
+                  </div>
+                  <div>
                     <label htmlFor="subject" className="block text-sm font-medium text-foreground mb-2">Subject</label>
                     <input type="text" id="subject" name="subject" value={formData.subject} onChange={handleChange} className={inputClass} placeholder="Product inquiry, quote request, etc." />
                   </div>
@@ -174,5 +190,13 @@ export default function ContactPage() {
         </div>
       </section>
     </main>
+  );
+}
+
+export default function ContactPage() {
+  return (
+    <Suspense>
+      <ContactPageInner />
+    </Suspense>
   );
 }
