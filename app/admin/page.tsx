@@ -5,6 +5,7 @@
 import { ImageDisplay } from "@/components/ImageDisplay";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useRouter } from "next/navigation";
 import {
   Plus,
   Edit,
@@ -204,16 +205,21 @@ const Admin = () => {
   const [finishImageFile, setFinishImageFile] = useState<File | null>(null);
 
   const { toast } = useToast();
+  const router = useRouter();
 
   // Role gate check on mount
   useEffect(() => {
     fetch("/api/users/me")
       .then((r) => r.json())
       .then((user) => {
-        setIsAdmin(user?.role === "admin");
+        if (user?.role === "admin") {
+          setIsAdmin(true);
+        } else {
+          router.replace("/");
+        }
         setRoleChecked(true);
       })
-      .catch(() => setRoleChecked(true));
+      .catch(() => router.replace("/"));
   }, []);
 
   // Load data on component mount
@@ -1571,21 +1577,10 @@ const Admin = () => {
     );
   }
 
-  if (!roleChecked) {
+  if (!roleChecked || !isAdmin) {
     return (
       <main className="min-h-screen flex items-center justify-center">
         <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
-      </main>
-    );
-  }
-
-  if (!isAdmin) {
-    return (
-      <main className="min-h-screen flex items-center justify-center">
-        <div className="text-center space-y-4">
-          <h1 className="font-heading text-3xl font-bold text-foreground">Access Denied</h1>
-          <p className="text-muted-foreground">You don&apos;t have admin privileges. Contact an existing admin to grant you access.</p>
-        </div>
       </main>
     );
   }
