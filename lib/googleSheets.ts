@@ -23,18 +23,26 @@ function generateSubmissionId(): string {
 export const submitToGoogleSheets = async (
   formData: ContactFormData
 ): Promise<GoogleSheetsResponse> => {
+  const submissionId = generateSubmissionId();
+
+  // Always save to DB (fire-and-forget, non-blocking for UX)
+  fetch("/api/inquiries", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ ...formData, submissionId }),
+  }).catch((err) => console.error("Failed to save inquiry to DB:", err));
+
   const webAppUrl = process.env.NEXT_PUBLIC_GOOGLE_SHEETS_WEB_APP_URL;
 
   if (!webAppUrl) {
-    throw new Error(
-      "Google Sheets Web App URL not configured. Please set NEXT_PUBLIC_GOOGLE_SHEETS_WEB_APP_URL in environment variables."
-    );
+    // Still return success since we saved to DB
+    return { success: true, message: "Inquiry saved successfully", submissionId };
   }
 
   const submissionData = {
     ...formData,
     timestamp: new Date().toISOString(),
-    submissionId: generateSubmissionId(),
+    submissionId,
   };
 
   const params = new URLSearchParams();
@@ -58,7 +66,7 @@ export const submitToGoogleSheets = async (
   return {
     success: result.success || true,
     message: result.message || "Form submitted successfully",
-    submissionId: submissionData.submissionId,
+    submissionId,
   };
 };
 

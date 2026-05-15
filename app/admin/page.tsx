@@ -15,6 +15,7 @@ import {
   Layers,
   Paintbrush,
   Loader2,
+  Inbox,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import {
@@ -125,6 +126,25 @@ const Admin = () => {
   // Controlled tabs state to persist current selection
   const [mainTab, setMainTab] = useState<string>("products");
   const [taxonomyTab, setTaxonomyTab] = useState<string>("categories");
+
+  // Inquiries
+  interface Inquiry {
+    id: number;
+    name: string;
+    email: string;
+    phone: string;
+    company?: string;
+    country: string;
+    city: string;
+    product?: string;
+    subject?: string;
+    message: string;
+    submission_id?: string;
+    created_at: string;
+  }
+  const [inquiries, setInquiries] = useState<Inquiry[]>([]);
+  const [inquiriesLoading, setInquiriesLoading] = useState(false);
+  const [expandedInquiry, setExpandedInquiry] = useState<number | null>(null);
 
   // Loading and uploading states
   const [loading, setLoading] = useState(false);
@@ -1704,6 +1724,14 @@ const Admin = () => {
               <TabsTrigger value="taxonomy">Taxonomy</TabsTrigger>
               <TabsTrigger value="blogs">Blogs</TabsTrigger>
               <TabsTrigger value="testimonials">Testimonials</TabsTrigger>
+              <TabsTrigger value="inquiries" onClick={() => {
+                if (inquiries.length === 0) {
+                  setInquiriesLoading(true);
+                  fetch("/api/inquiries").then(r => r.json()).then(data => {
+                    setInquiries(Array.isArray(data) ? data : []);
+                  }).catch(console.error).finally(() => setInquiriesLoading(false));
+                }
+              }}>Inquiries</TabsTrigger>
             </TabsList>
 
             {/* Products Tab */}
@@ -2238,6 +2266,83 @@ const Admin = () => {
                   </div>
                 ))}
               </div>
+            </TabsContent>
+
+            {/* Inquiries Tab */}
+            <TabsContent value="inquiries">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="font-heading text-2xl font-bold text-foreground flex items-center gap-2">
+                  <Inbox className="w-6 h-6" /> Inquiries
+                </h2>
+                <Button variant="outline" size="sm" onClick={() => {
+                  setInquiriesLoading(true);
+                  fetch("/api/inquiries").then(r => r.json()).then(data => {
+                    setInquiries(Array.isArray(data) ? data : []);
+                  }).catch(console.error).finally(() => setInquiriesLoading(false));
+                }}>
+                  Refresh
+                </Button>
+              </div>
+
+              {inquiriesLoading ? (
+                <div className="flex justify-center py-16"><Loader2 className="w-8 h-8 animate-spin text-muted-foreground" /></div>
+              ) : inquiries.length === 0 ? (
+                <div className="text-center py-16 text-muted-foreground">
+                  <Inbox className="w-12 h-12 mx-auto mb-3 opacity-40" />
+                  <p>No inquiries yet.</p>
+                </div>
+              ) : (
+                <div className="overflow-x-auto rounded-xl border border-border/50">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="bg-secondary text-left">
+                        <th className="px-4 py-3 font-semibold text-foreground">#</th>
+                        <th className="px-4 py-3 font-semibold text-foreground">Date</th>
+                        <th className="px-4 py-3 font-semibold text-foreground">Name</th>
+                        <th className="px-4 py-3 font-semibold text-foreground">Email</th>
+                        <th className="px-4 py-3 font-semibold text-foreground">Phone</th>
+                        <th className="px-4 py-3 font-semibold text-foreground">Country</th>
+                        <th className="px-4 py-3 font-semibold text-foreground">Product</th>
+                        <th className="px-4 py-3 font-semibold text-foreground">Subject</th>
+                        <th className="px-4 py-3 font-semibold text-foreground">Message</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {inquiries.map((inq, idx) => (
+                        <tr
+                          key={inq.id}
+                          className={`border-t border-border/50 cursor-pointer transition-colors ${
+                            expandedInquiry === inq.id ? "bg-accent/5" : idx % 2 === 0 ? "bg-background" : "bg-secondary/40"
+                          } hover:bg-accent/5`}
+                          onClick={() => setExpandedInquiry(expandedInquiry === inq.id ? null : inq.id)}
+                        >
+                          <td className="px-4 py-3 text-muted-foreground">{inq.id}</td>
+                          <td className="px-4 py-3 whitespace-nowrap text-muted-foreground">
+                            {new Date(inq.created_at).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}
+                          </td>
+                          <td className="px-4 py-3 font-medium text-foreground whitespace-nowrap">{inq.name}</td>
+                          <td className="px-4 py-3">
+                            <a href={`mailto:${inq.email}`} className="text-accent hover:underline" onClick={e => e.stopPropagation()}>{inq.email}</a>
+                          </td>
+                          <td className="px-4 py-3 whitespace-nowrap">
+                            <a href={`tel:${inq.phone}`} className="hover:text-accent transition-colors" onClick={e => e.stopPropagation()}>{inq.phone}</a>
+                          </td>
+                          <td className="px-4 py-3 whitespace-nowrap">{inq.city}{inq.country ? `, ${inq.country}` : ""}</td>
+                          <td className="px-4 py-3">{inq.product || <span className="text-muted-foreground/50">—</span>}</td>
+                          <td className="px-4 py-3 max-w-[180px] truncate">{inq.subject || <span className="text-muted-foreground/50">—</span>}</td>
+                          <td className="px-4 py-3 max-w-[200px]">
+                            {expandedInquiry === inq.id ? (
+                              <span className="whitespace-pre-wrap break-words">{inq.message}</span>
+                            ) : (
+                              <span className="truncate block max-w-[200px]">{inq.message}</span>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
             </TabsContent>
           </Tabs>
         </div>
