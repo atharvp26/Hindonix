@@ -18,7 +18,7 @@ export function ProductDetailClient({ product }: { product: Product }) {
 
   return (
     <main className="min-h-screen">
-      <section className="pt-24 pb-8">
+      <section className="pt-16 pb-8">
         <div className="container mx-auto px-4 lg:px-8">
           <Button variant="ghost" onClick={() => router.back()} className="mb-4 gap-2">
             <ArrowLeft className="w-4 h-4" /> Back
@@ -124,7 +124,7 @@ export function ProductDetailClient({ product }: { product: Product }) {
                 </div>
               )}
 
-              <div className="mt-auto pt-2">
+              <div className="pt-2">
                 <Button size="lg" asChild className="w-full sm:w-auto gap-2">
                   <Link href="/contact">Request Quote <ArrowRight className="w-4 h-4" /></Link>
                 </Button>
