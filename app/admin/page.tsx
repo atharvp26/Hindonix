@@ -146,6 +146,24 @@ const Admin = () => {
   const [inquiriesLoading, setInquiriesLoading] = useState(false);
   const [expandedInquiry, setExpandedInquiry] = useState<number | null>(null);
 
+  // Role gate
+  const [roleChecked, setRoleChecked] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  // Users management
+  interface AppUser {
+    id: number;
+    clerk_id: string;
+    email: string;
+    name?: string;
+    role: "user" | "admin";
+    created_at: string;
+    last_login: string;
+  }
+  const [appUsers, setAppUsers] = useState<AppUser[]>([]);
+  const [usersLoading, setUsersLoading] = useState(false);
+  const [roleUpdating, setRoleUpdating] = useState<string | null>(null);
+
   // Loading and uploading states
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -186,6 +204,17 @@ const Admin = () => {
   const [finishImageFile, setFinishImageFile] = useState<File | null>(null);
 
   const { toast } = useToast();
+
+  // Role gate check on mount
+  useEffect(() => {
+    fetch("/api/users/me")
+      .then((r) => r.json())
+      .then((user) => {
+        setIsAdmin(user?.role === "admin");
+        setRoleChecked(true);
+      })
+      .catch(() => setRoleChecked(true));
+  }, []);
 
   // Load data on component mount
   useEffect(() => {
@@ -1542,6 +1571,25 @@ const Admin = () => {
     );
   }
 
+  if (!roleChecked) {
+    return (
+      <main className="min-h-screen flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
+      </main>
+    );
+  }
+
+  if (!isAdmin) {
+    return (
+      <main className="min-h-screen flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <h1 className="font-heading text-3xl font-bold text-foreground">Access Denied</h1>
+          <p className="text-muted-foreground">You don&apos;t have admin privileges. Contact an existing admin to grant you access.</p>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="min-h-screen">
       
@@ -1732,6 +1780,12 @@ const Admin = () => {
                   }).catch(console.error).finally(() => setInquiriesLoading(false));
                 }
               }}>Inquiries</TabsTrigger>
+              <TabsTrigger value="users" onClick={() => {
+                setUsersLoading(true);
+                fetch("/api/users").then(r => r.json()).then(data => {
+                  setAppUsers(Array.isArray(data) ? data : []);
+                }).catch(console.error).finally(() => setUsersLoading(false));
+              }}>Users</TabsTrigger>
             </TabsList>
 
             {/* Products Tab */}
@@ -2336,6 +2390,94 @@ const Admin = () => {
                             ) : (
                               <span className="truncate block max-w-[200px]">{inq.message}</span>
                             )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </TabsContent>
+
+            {/* Users Tab */}
+            <TabsContent value="users">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="font-heading text-2xl font-bold text-foreground">Users</h2>
+                <Button variant="outline" size="sm" onClick={() => {
+                  setUsersLoading(true);
+                  fetch("/api/users").then(r => r.json()).then(data => {
+                    setAppUsers(Array.isArray(data) ? data : []);
+                  }).catch(console.error).finally(() => setUsersLoading(false));
+                }}>Refresh</Button>
+              </div>
+              {usersLoading ? (
+                <div className="flex justify-center py-16"><Loader2 className="w-8 h-8 animate-spin text-muted-foreground" /></div>
+              ) : appUsers.length === 0 ? (
+                <div className="text-center py-16 text-muted-foreground">No users found.</div>
+              ) : (
+                <div className="overflow-x-auto rounded-xl border border-border/50">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="bg-secondary text-left">
+                        <th className="px-4 py-3 font-semibold text-foreground">#</th>
+                        <th className="px-4 py-3 font-semibold text-foreground">Name</th>
+                        <th className="px-4 py-3 font-semibold text-foreground">Email</th>
+                        <th className="px-4 py-3 font-semibold text-foreground">Role</th>
+                        <th className="px-4 py-3 font-semibold text-foreground">Joined</th>
+                        <th className="px-4 py-3 font-semibold text-foreground">Last Login</th>
+                        <th className="px-4 py-3 font-semibold text-foreground">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {appUsers.map((u, idx) => (
+                        <tr key={u.id} className={`border-t border-border/50 ${idx % 2 === 0 ? "bg-background" : "bg-secondary/40"}`}>
+                          <td className="px-4 py-3 text-muted-foreground">{u.id}</td>
+                          <td className="px-4 py-3 font-medium text-foreground">{u.name || "—"}</td>
+                          <td className="px-4 py-3 text-muted-foreground">{u.email}</td>
+                          <td className="px-4 py-3">
+                            <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${
+                              u.role === "admin"
+                                ? "bg-accent/15 text-accent"
+                                : "bg-secondary text-muted-foreground"
+                            }`}>
+                              {u.role.toUpperCase()}
+                            </span>
+                          </td>
+                          <td className="px-4 py-3 text-muted-foreground whitespace-nowrap">
+                            {new Date(u.created_at).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}
+                          </td>
+                          <td className="px-4 py-3 text-muted-foreground whitespace-nowrap">
+                            {new Date(u.last_login).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}
+                          </td>
+                          <td className="px-4 py-3">
+                            <Button
+                              size="sm"
+                              variant={u.role === "admin" ? "outline" : "default"}
+                              disabled={roleUpdating === u.clerk_id}
+                              onClick={async () => {
+                                const newRole = u.role === "admin" ? "user" : "admin";
+                                setRoleUpdating(u.clerk_id);
+                                try {
+                                  const res = await fetch("/api/users", {
+                                    method: "PATCH",
+                                    headers: { "Content-Type": "application/json" },
+                                    body: JSON.stringify({ clerk_id: u.clerk_id, role: newRole }),
+                                  });
+                                  const data = await res.json();
+                                  if (!res.ok) throw new Error(data.error);
+                                  setAppUsers(prev => prev.map(x => x.clerk_id === u.clerk_id ? { ...x, role: newRole } : x));
+                                  toast({ title: "Role Updated", description: `${u.email} is now ${newRole}.` });
+                                } catch (e: any) {
+                                  toast({ title: "Error", description: e.message, variant: "destructive" });
+                                } finally {
+                                  setRoleUpdating(null);
+                                }
+                              }}
+                            >
+                              {roleUpdating === u.clerk_id ? (
+                                <Loader2 className="w-3 h-3 animate-spin" />
+                              ) : u.role === "admin" ? "Remove Admin" : "Make Admin"}
+                            </Button>
                           </td>
                         </tr>
                       ))}

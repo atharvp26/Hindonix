@@ -16,9 +16,11 @@ const navLinks = [
 
 function NavbarContent({
   isSignedIn,
+  isAdmin,
   showUserButton,
 }: {
   isSignedIn: boolean;
+  isAdmin: boolean;
   showUserButton: boolean;
 }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -63,7 +65,7 @@ function NavbarContent({
               {link.name}
             </Link>
           ))}
-          {isSignedIn && (
+          {isAdmin && (
             <Link
               href="/admin"
               className={cn(
@@ -138,7 +140,7 @@ function NavbarContent({
                 {link.name}
               </Link>
             ))}
-            {isSignedIn && (
+            {isAdmin && (
               <Link
                 href="/admin"
                 className={cn(
@@ -176,7 +178,20 @@ function NavbarContent({
 
 function NavbarWithClerk() {
   const { isSignedIn } = useAuth();
-  return <NavbarContent isSignedIn={!!isSignedIn} showUserButton={true} />;
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    if (isSignedIn) {
+      fetch("/api/users/me")
+        .then((r) => r.json())
+        .then((user) => setIsAdmin(user?.role === "admin"))
+        .catch(() => setIsAdmin(false));
+    } else {
+      setIsAdmin(false);
+    }
+  }, [isSignedIn]);
+
+  return <NavbarContent isSignedIn={!!isSignedIn} isAdmin={isAdmin} showUserButton={true} />;
 }
 
 export function Navbar() {
