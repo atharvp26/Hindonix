@@ -1,18 +1,23 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { ChevronLeft, ChevronRight, Quote, Star } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { getTestimonials, type Testimonial } from "@/lib/data";
+import { getTestimonials, getOverviewImages, type Testimonial } from "@/lib/data";
 import { ImageDisplay } from "@/components/ImageDisplay";
 
 interface TestimonialsSectionProps {
   initialTestimonials?: Testimonial[];
+  initialBackgroundImages?: string[];
 }
 
-export function TestimonialsSection({ initialTestimonials }: TestimonialsSectionProps) {
+export function TestimonialsSection({ initialTestimonials, initialBackgroundImages }: TestimonialsSectionProps) {
   const [testimonials, setTestimonials] = useState<Testimonial[]>(initialTestimonials ?? []);
   const [activeIndex, setActiveIndex] = useState(0);
+
+  const [bgImages, setBgImages] = useState<string[]>(initialBackgroundImages ?? []);
+  const [bgIndex, setBgIndex] = useState(0);
+  const bgTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
     if (!initialTestimonials) {
@@ -24,6 +29,23 @@ export function TestimonialsSection({ initialTestimonials }: TestimonialsSection
   }, [initialTestimonials]);
 
   useEffect(() => {
+    if (!initialBackgroundImages) {
+      getOverviewImages().then(setBgImages).catch(console.error);
+    }
+    const reload = () => getOverviewImages().then(setBgImages).catch(console.error);
+    window.addEventListener("overviewImagesUpdated", reload);
+    return () => window.removeEventListener("overviewImagesUpdated", reload);
+  }, [initialBackgroundImages]);
+
+  useEffect(() => {
+    if (bgImages.length <= 1) return;
+    bgTimerRef.current = setInterval(() => {
+      setBgIndex((prev) => (prev + 1) % bgImages.length);
+    }, 2500);
+    return () => { if (bgTimerRef.current) clearInterval(bgTimerRef.current); };
+  }, [bgImages.length]);
+
+  useEffect(() => {
     if (activeIndex >= testimonials.length) setActiveIndex(0);
   }, [testimonials.length, activeIndex]);
 
@@ -33,8 +55,35 @@ export function TestimonialsSection({ initialTestimonials }: TestimonialsSection
   const prevSlide = () => setActiveIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
 
   return (
-    <section className="py-20 lg:py-28" style={{ backgroundColor: '#eaeaea' }}>
-      <div className="container mx-auto px-4 lg:px-8">
+    <section className="py-20 lg:py-28 relative overflow-hidden" style={{ backgroundColor: '#eaeaea' }}>
+      {/* Background slideshow */}
+      {bgImages.map((src, idx) => (
+        <div
+          key={src + idx}
+          className="absolute inset-0 transition-opacity duration-1000 pointer-events-none"
+          style={{ opacity: idx === bgIndex ? 1 : 0, zIndex: 0 }}
+          aria-hidden="true"
+        >
+          <img
+            src={src}
+            alt=""
+            aria-hidden="true"
+            className="w-full h-full object-cover select-none"
+            style={{ display: "block" }}
+          />
+        </div>
+      ))}
+      {/* Overlay for readability — only shown when background images are present */}
+      {bgImages.length > 0 && (
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{ backgroundColor: 'rgba(234,234,234,0.72)', zIndex: 1 }}
+          aria-hidden="true"
+        />
+      )}
+
+      {/* Section content */}
+      <div className="container mx-auto px-4 lg:px-8 relative" style={{ zIndex: 2 }}>
         <div className="text-center max-w-3xl mx-auto mb-16">
           <span className="inline-block text-[#1a1a1a]/45 font-medium text-xs uppercase tracking-[0.25em] mb-4">Client Testimonials</span>
           <h2 className="text-3xl lg:text-4xl font-semibold text-[#1a1a1a] mb-6 tracking-tight">Trusted by Businesses Worldwide</h2>

@@ -2,7 +2,6 @@ import { HeroSection } from "@/components/home/HeroSection";
 import { OverviewSection } from "@/components/home/OverviewSection";
 import { WhyChooseUsSection } from "@/components/home/WhyChooseUsSection";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
-import { OverviewImagesSection } from "@/components/home/OverviewImagesSection";
 import { CTASection } from "@/components/home/CTASection";
 export const dynamic = 'force-dynamic';
 
@@ -57,8 +56,7 @@ export default async function HomePage() {
       <HeroSection initialImages={heroImages} />
       <OverviewSection />
       <WhyChooseUsSection />
-      <TestimonialsSection initialTestimonials={testimonials} />
-      <OverviewImagesSection initialImages={overviewImages} />
+      <TestimonialsSection initialTestimonials={testimonials} initialBackgroundImages={overviewImages} />
       <CTASection initialBgImage={ctaBgImage} />
     </main>
   );
