@@ -66,17 +66,15 @@ export function HeroSection({ initialImages }: HeroSectionProps) {
      * Desktop (≥ md): relative block — image absolute full-bleed, text absolute right overlay
      */
     <section
-      className="w-full bg-[#eaeaea] overflow-hidden flex flex-col md:relative md:block md:h-[calc(100vh-65px)] md:min-h-[500px]"
+      className="w-full bg-[#eaeaea] overflow-hidden relative h-[75vw] md:h-[calc(100vh-65px)] md:min-h-[500px]"
     >
-      {/* IMAGE ─────────────────────────────────────────────────────────
-          Mobile : proportional height (52vw), capped at 60vh, in normal flow
-          Desktop: absolute inset-0, fills entire section                */}
-      <div className="w-full h-[52vw] max-h-[60vh] flex-shrink-0 md:absolute md:inset-0 md:h-full md:max-h-none">
+      {/* IMAGE — always absolute background fill */}
+      <div className="absolute inset-0">
         {heroImages.length <= 1 ? (
           <ImageDisplay
             src={heroImages[0]}
             alt="Architectural Hardware Collection"
-            className="w-full h-full object-contain"
+            className="w-full h-full object-cover md:object-contain"
             style={{ objectPosition: 'left center' }}
           />
         ) : (
@@ -91,7 +89,7 @@ export function HeroSection({ initialImages }: HeroSectionProps) {
                   <ImageDisplay
                     src={img}
                     alt={`Hero ${idx + 1}`}
-                    className="w-full h-full object-contain"
+                    className="w-full h-full object-cover md:object-contain"
                     style={{ objectPosition: 'left center' }}
                   />
                 </CarouselItem>
@@ -101,10 +99,11 @@ export function HeroSection({ initialImages }: HeroSectionProps) {
         )}
       </div>
 
-      {/* TEXT ──────────────────────────────────────────────────────────
-          Mobile : centered column below image, px-6 padding
-          Desktop: absolute right overlay starting at 42% from left     */}
-      <div className="flex flex-col items-center justify-center text-center px-6 py-10 md:absolute md:z-10 md:top-0 md:bottom-0 md:h-full md:left-[42%] md:right-16 md:px-0 md:py-0">
+      {/* Mobile gradient — fades image toward bottom for text readability */}
+      <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-[#eaeaea] via-[#eaeaea]/60 to-transparent md:hidden" aria-hidden="true" />
+
+      {/* TEXT — overlay: bottom-center on mobile, right side on desktop */}
+      <div className="absolute bottom-0 left-0 right-0 z-10 flex flex-col items-center text-center px-6 pb-8 md:top-0 md:bottom-0 md:h-full md:left-[42%] md:right-16 md:px-0 md:pb-0 md:justify-center">
 
         {/* Heading — wraps on mobile, single line on desktop */}
         <h1
