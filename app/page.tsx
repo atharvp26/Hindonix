@@ -2,6 +2,7 @@ import { HeroSection } from "@/components/home/HeroSection";
 import { OverviewSection } from "@/components/home/OverviewSection";
 import { WhyChooseUsSection } from "@/components/home/WhyChooseUsSection";
 import { TestimonialsSection } from "@/components/home/TestimonialsSection";
+import { OverviewImagesSection } from "@/components/home/OverviewImagesSection";
 import { CTASection } from "@/components/home/CTASection";
 export const dynamic = 'force-dynamic';
 
@@ -31,11 +32,24 @@ async function getCTAImageFromDB(): Promise<string> {
   }
 }
 
+async function getOverviewImagesFromDB(): Promise<string[]> {
+  try {
+    const [rows] = await pool.query("SELECT urls FROM overview_images ORDER BY id ASC LIMIT 1");
+    const r = (rows as any[])[0];
+    if (!r) return [];
+    const urls = typeof r.urls === "string" ? JSON.parse(r.urls) : r.urls;
+    return Array.isArray(urls) ? urls : [];
+  } catch {
+    return [];
+  }
+}
+
 export default async function HomePage() {
-  const [heroImages, testimonials, ctaBgImage] = await Promise.all([
+  const [heroImages, testimonials, ctaBgImage, overviewImages] = await Promise.all([
     getHeroImagesFromDB(),
     getTestimonialsFromDB(),
     getCTAImageFromDB(),
+    getOverviewImagesFromDB(),
   ]);
 
   return (
@@ -44,6 +58,7 @@ export default async function HomePage() {
       <OverviewSection />
       <WhyChooseUsSection />
       <TestimonialsSection initialTestimonials={testimonials} />
+      <OverviewImagesSection initialImages={overviewImages} />
       <CTASection initialBgImage={ctaBgImage} />
     </main>
   );

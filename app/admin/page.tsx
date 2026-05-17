@@ -36,6 +36,8 @@ import {
   setHeroImages,
   getCTAImage,
   setCTAImage,
+  getOverviewImages,
+  setOverviewImages,
   getCategories,
   addCategory,
   updateCategory,
@@ -123,6 +125,10 @@ const Admin = () => {
   const [ctaImage, setCTAImageState] = useState<string>("");
   const [ctaImageFile, setCTAImageFile] = useState<File | null>(null);
   const [ctaImagePreview, setCTAImagePreview] = useState<string>("");
+
+  const [overviewImages, setOverviewImagesState] = useState<string[]>([]);
+  const [selectedOverviewImages, setSelectedOverviewImages] = useState<string[]>([]);
+  const [overviewImageFiles, setOverviewImageFiles] = useState<File[]>([]);
 
   // Controlled tabs state to persist current selection
   const [mainTab, setMainTab] = useState<string>("products");
@@ -238,6 +244,7 @@ const Admin = () => {
           finishCategoriesData,
           heroImagesData,
           ctaImageData,
+          overviewImagesData,
         ] = await Promise.all([
           getProducts(),
           getBlogs(),
@@ -249,6 +256,7 @@ const Admin = () => {
           getFinishCategories(),
           getHeroImages(),
           getCTAImage(),
+          getOverviewImages(),
         ]);
 
         setProducts(productsData);
@@ -263,6 +271,8 @@ const Admin = () => {
         setSelectedHeroImages(heroImagesData);
         setCTAImageState(ctaImageData);
         setCTAImagePreview(ctaImageData);
+        setOverviewImagesState(overviewImagesData);
+        setSelectedOverviewImages(overviewImagesData);
       } catch (error) {
         console.error("Error loading data:", error);
         toast({
@@ -606,6 +616,61 @@ const Admin = () => {
       setUploading(false);
     }
   };
+
+  // Overview Images handlers
+  const handleOverviewImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
+    try {
+      setUploading(true);
+      setOverviewImageFiles(files);
+      const uploadedUrls: string[] = [];
+      for (const file of files) {
+        const response = await uploadImageToCloudinary(file);
+        uploadedUrls.push(response.secure_url);
+      }
+      setSelectedOverviewImages((prev) => [...prev, ...uploadedUrls]);
+      toast({
+        title: "Images Uploaded",
+        description: `${files.length} image(s) uploaded. Click "Save Overview Images" to apply.`,
+      });
+    } catch (error) {
+      toast({
+        title: "Upload Error",
+        description: error instanceof Error ? error.message : "Failed to upload image(s).",
+        variant: "destructive",
+      });
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleSaveOverviewImages = async () => {
+    try {
+      setUploading(true);
+      await setOverviewImages(selectedOverviewImages);
+      setOverviewImagesState(selectedOverviewImages);
+      toast({ title: "Overview Images Saved", description: "The overview background images have been updated." });
+      window.dispatchEvent(new Event("overviewImagesUpdated"));
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to save overview images.",
+        variant: "destructive",
+      });
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleRemoveOverviewImage = (index: number) => {
+    setSelectedOverviewImages((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const handleClearAllOverviewImages = () => {
+    setSelectedOverviewImages([]);
+  };
+
   const handleAddProduct = () => {
     setEditingProduct(null);
     setProductImageFile(null);
@@ -1754,6 +1819,93 @@ const Admin = () => {
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-muted-foreground text-sm">
                       No image set (dark background will be used)
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Overview Images Slideshow (between Testimonials and CTA) */}
+          <div className="mb-12 bg-card rounded-xl p-8 border border-border/50">
+            <h2 className="font-heading text-2xl font-bold text-foreground mb-2">
+              Overview Section Background Images
+            </h2>
+            <p className="text-sm text-muted-foreground mb-6">
+              Upload background images displayed as a slideshow between the &ldquo;Client Testimonials&rdquo; and &ldquo;Ready to Elevate Your Next Project?&rdquo; sections.
+              Recommended size: <strong>1920 × 800 px (Landscape)</strong>. Images auto-advance every 2.5 seconds.
+            </p>
+            <div className="grid lg:grid-cols-2 gap-8">
+              <div>
+                <Label htmlFor="overview-image">Background Images</Label>
+                <Input
+                  id="overview-image"
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  onChange={handleOverviewImageUpload}
+                  disabled={uploading}
+                  className="cursor-pointer mt-2"
+                />
+                {uploading && (
+                  <div className="flex items-center gap-2 mt-2 text-sm text-primary">
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    Uploading to Cloudinary...
+                  </div>
+                )}
+                {selectedOverviewImages.length > 0 && !uploading && (
+                  <p className="text-sm text-green-600 mt-2 font-medium">
+                    ✓ {selectedOverviewImages.length} image(s) ready
+                  </p>
+                )}
+                {overviewImages.length > 0 && (
+                  <p className="text-sm text-muted-foreground mt-1">
+                    Current: {overviewImages.length} image(s)
+                  </p>
+                )}
+                <div className="flex gap-2 mt-4">
+                  <Button
+                    onClick={handleSaveOverviewImages}
+                    disabled={uploading}
+                  >
+                    {uploading ? (
+                      <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Saving...</>
+                    ) : "Save Overview Images"}
+                  </Button>
+                  {selectedOverviewImages.length > 0 && (
+                    <Button onClick={handleClearAllOverviewImages} variant="outline">
+                      Clear All
+                    </Button>
+                  )}
+                </div>
+              </div>
+              <div>
+                <Label>Preview</Label>
+                <div className="mt-2 bg-secondary rounded-lg overflow-hidden h-48">
+                  {selectedOverviewImages.length === 0 ? (
+                    <div className="w-full h-full flex items-center justify-center text-muted-foreground text-sm">
+                      No images selected (section will be hidden)
+                    </div>
+                  ) : selectedOverviewImages.length === 1 ? (
+                    <ImageDisplay
+                      src={selectedOverviewImages[0]}
+                      alt="Overview Preview"
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="flex w-full h-full overflow-x-auto gap-2 p-2">
+                      {selectedOverviewImages.map((url, idx) => (
+                        <div key={idx} className="relative group h-full flex-shrink-0">
+                          <img src={url} alt={`Preview ${idx + 1}`} className="h-full object-cover rounded-md" />
+                          <button
+                            onClick={() => handleRemoveOverviewImage(idx)}
+                            className="absolute top-1 right-1 bg-destructive text-destructive-foreground rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-xs font-bold"
+                            title="Remove image"
+                          >
+                            ×
+                          </button>
+                        </div>
+                      ))}
                     </div>
                   )}
                 </div>

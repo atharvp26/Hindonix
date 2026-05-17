@@ -221,3 +221,13 @@ export const getCTAImageFromDB = (): Promise<string> =>
 
 export const setCTAImageInDB = (url: string): Promise<string> =>
   apiFetch<{ url: string }>("/cta-image", { method: "PUT", body: JSON.stringify({ url }) }).then((r) => r.url || "");
+
+// ============================================
+// OVERVIEW IMAGES
+// ============================================
+
+export const getOverviewImagesFromDB = (): Promise<string[]> =>
+  apiFetch<string[]>("/overview-images");
+
+export const setOverviewImagesInDB = (urls: string[]): Promise<string[]> =>
+  apiFetch<string[]>("/overview-images", { method: "PUT", body: JSON.stringify({ urls }) });
