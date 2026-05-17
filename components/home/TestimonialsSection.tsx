@@ -55,7 +55,10 @@ export function TestimonialsSection({ initialTestimonials, initialBackgroundImag
   const prevSlide = () => setActiveIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
 
   return (
-    <section className="py-20 lg:py-28 relative overflow-hidden" style={{ backgroundColor: '#eaeaea' }}>
+    <section
+      className="py-10 md:py-12 lg:py-14 2xl:py-28 relative overflow-hidden"
+      style={{ backgroundColor: '#eaeaea', minHeight: 'calc(100vw * 800 / 1920)' }}
+    >
       {/* Background slideshow */}
       {bgImages.map((src, idx) => (
         <div
@@ -68,8 +71,8 @@ export function TestimonialsSection({ initialTestimonials, initialBackgroundImag
             src={src}
             alt=""
             aria-hidden="true"
-            className="w-full h-full object-cover select-none"
-            style={{ display: "block" }}
+            className="w-full h-full object-cover object-center select-none"
+            style={{ display: 'block' }}
           />
         </div>
       ))}
