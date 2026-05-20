@@ -1,16 +1,31 @@
-// v1.0.1
-import { Package, Truck, Users, Globe, Settings } from "lucide-react";
-import { cn } from "@/lib/utils";
+// v1.0.2
+"use client";
+import { useState, useEffect } from "react";
+import { getOverviewBlockImages } from "@/lib/data";
 
-const overviewCards = [
-  { icon: Package, title: "Premium Hardware", description: "Precision-crafted architectural hardware with exceptional quality and attention to detail.", stat: "1000+", statLabel: "Products" },
-  { icon: Truck, title: "UAE & USA Delivery", description: "Reliable logistics ensuring timely delivery to UAE and USA markets with careful handling.", stat: "98%", statLabel: "On-Time Delivery" },
-  { icon: Settings, title: "Customizations", description: "Bespoke hardware tailored to your exact specifications with personalized finishes and designs.", stat: "100%", statLabel: "Customizable", featured: true },
-  { icon: Users, title: "B2B Partners", description: "Building lasting relationships with architects, designers, and construction professionals.", stat: "10+", statLabel: "Trade Partners" },
-  { icon: Globe, title: "Premium Finishes", description: "Extensive range of finishes including PVD, brass, and premium metal options.", stat: "10+", statLabel: "Finish Options" },
-];
+interface OverviewSectionProps {
+  initialBlockImages?: string[];
+}
 
-export function OverviewSection() {
+export function OverviewSection({ initialBlockImages }: OverviewSectionProps) {
+  const [blockImages, setBlockImages] = useState<string[]>(initialBlockImages ?? []);
+
+  useEffect(() => {
+    if (!initialBlockImages || initialBlockImages.length === 0) {
+      getOverviewBlockImages()
+        .then((urls) => { if (urls.length > 0) setBlockImages(urls); })
+        .catch(console.error);
+    }
+
+    const handleUpdate = () => {
+      getOverviewBlockImages()
+        .then((urls) => setBlockImages(urls))
+        .catch(console.error);
+    };
+    window.addEventListener("overviewBlockImagesUpdated", handleUpdate);
+    return () => window.removeEventListener("overviewBlockImagesUpdated", handleUpdate);
+  }, [initialBlockImages]);
+
   return (
     <section className="py-20 lg:py-28" style={{ backgroundColor: '#eaeaea' }}>
       <div className="container mx-auto px-4 lg:px-8">
@@ -21,20 +36,23 @@ export function OverviewSection() {
         </div>
       </div>
       <div className="grid w-full grid-cols-1 lg:grid-cols-5 gap-px border-y border-[#1a1a1a]/10" style={{ backgroundColor: '#1a1a1a' }}>
-          {overviewCards.map((card, index) => (
-            <div key={card.title} className={cn("group p-8 transition-all duration-300", card.featured ? "bg-[#1a1a1a] text-[#eaeaea]" : "bg-[#eaeaea] hover:bg-white")} style={{ animationDelay: `${index * 0.1}s` }}>
-              <div className={cn("w-12 h-12 flex items-center justify-center mb-6 transition-all duration-300", card.featured ? "text-[#f3f3f3]" : "text-[#1a1a1a]/40 group-hover:text-[#1a1a1a]")}>
-                <card.icon className="w-6 h-6" />
-              </div>
-              <h3 className={cn("text-base font-semibold mb-3 tracking-wide", card.featured ? "text-[#eaeaea]" : "text-[#1a1a1a]")}>{card.title}</h3>
-              <p className={cn("text-xs mb-6 leading-relaxed font-light", card.featured ? "text-[#f3f3f3]/70" : "text-[#1a1a1a]/55")}>{card.description}</p>
-              <div className={cn("pt-4 border-t", card.featured ? "border-[#f3f3f3]/20" : "border-[#1a1a1a]/10")}>
-                <div className={cn("text-2xl font-semibold", card.featured ? "text-[#f3f3f3]" : "text-[#1a1a1a]")}>{card.stat}</div>
-                <div className={cn("text-xs uppercase tracking-wider mt-0.5", card.featured ? "text-[#f3f3f3]/60" : "text-[#1a1a1a]/45")}>{card.statLabel}</div>
-              </div>
+        {Array.from({ length: 5 }).map((_, index) => {
+          const url = blockImages[index];
+          return (
+            <div key={index} className="relative overflow-hidden" style={{ height: '340px' }}>
+              {url ? (
+                <img
+                  src={url}
+                  alt={`Block ${index + 1}`}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full" style={{ backgroundColor: '#1a1a1a' }} />
+              )}
             </div>
-          ))}
-        </div>
+          );
+        })}
+      </div>
     </section>
   );
 }

@@ -36,8 +36,12 @@ import {
   setHeroImages,
   getCTAImage,
   setCTAImage,
+  getCTAMobileImage,
+  setCTAMobileImage,
   getOverviewImages,
   setOverviewImages,
+  getOverviewBlockImages,
+  setOverviewBlockImages,
   getCategories,
   addCategory,
   updateCategory,
@@ -126,9 +130,16 @@ const Admin = () => {
   const [ctaImageFile, setCTAImageFile] = useState<File | null>(null);
   const [ctaImagePreview, setCTAImagePreview] = useState<string>("");
 
+  const [ctaMobileImage, setCTAMobileImageState] = useState<string>("");
+  const [ctaMobileImageFile, setCTAMobileImageFile] = useState<File | null>(null);
+  const [ctaMobileImagePreview, setCTAMobileImagePreview] = useState<string>("");
+
   const [overviewImages, setOverviewImagesState] = useState<string[]>([]);
   const [selectedOverviewImages, setSelectedOverviewImages] = useState<string[]>([]);
   const [overviewImageFiles, setOverviewImageFiles] = useState<File[]>([]);
+
+  const [blockImages, setBlockImagesState] = useState<string[]>(Array(5).fill(""));
+  const [blockImagePreviews, setBlockImagePreviews] = useState<string[]>(Array(5).fill(""));
 
   // Controlled tabs state to persist current selection
   const [mainTab, setMainTab] = useState<string>("products");
@@ -244,7 +255,9 @@ const Admin = () => {
           finishCategoriesData,
           heroImagesData,
           ctaImageData,
+          ctaMobileImageData,
           overviewImagesData,
+          blockImagesData,
         ] = await Promise.all([
           getProducts(),
           getBlogs(),
@@ -256,7 +269,9 @@ const Admin = () => {
           getFinishCategories(),
           getHeroImages(),
           getCTAImage(),
+          getCTAMobileImage(),
           getOverviewImages(),
+          getOverviewBlockImages(),
         ]);
 
         setProducts(productsData);
@@ -271,8 +286,13 @@ const Admin = () => {
         setSelectedHeroImages(heroImagesData);
         setCTAImageState(ctaImageData);
         setCTAImagePreview(ctaImageData);
+        setCTAMobileImageState(ctaMobileImageData);
+        setCTAMobileImagePreview(ctaMobileImageData);
         setOverviewImagesState(overviewImagesData);
         setSelectedOverviewImages(overviewImagesData);
+        const filled = Array(5).fill("").map((_, i) => blockImagesData[i] || "");
+        setBlockImagesState(filled);
+        setBlockImagePreviews(filled);
       } catch (error) {
         console.error("Error loading data:", error);
         toast({
@@ -617,6 +637,72 @@ const Admin = () => {
     }
   };
 
+  // CTA Mobile Image handlers
+  const handleCTAMobileImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      setUploading(true);
+      setCTAMobileImageFile(file);
+      const response = await uploadImageToCloudinary(file);
+      setCTAMobileImagePreview(response.secure_url);
+      toast({
+        title: "Image Uploaded",
+        description: "Mobile CTA image uploaded. Click \"Save Mobile Image\" to apply.",
+      });
+    } catch (error) {
+      toast({
+        title: "Upload Error",
+        description: error instanceof Error ? error.message : "Failed to upload image.",
+        variant: "destructive",
+      });
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleSaveCTAMobileImage = async () => {
+    if (!ctaMobileImagePreview) {
+      toast({ title: "Error", description: "Please upload an image first.", variant: "destructive" });
+      return;
+    }
+    try {
+      setUploading(true);
+      await setCTAMobileImage(ctaMobileImagePreview);
+      setCTAMobileImageState(ctaMobileImagePreview);
+      toast({ title: "Mobile CTA Image Saved", description: "The mobile CTA image has been updated." });
+      window.dispatchEvent(new Event("ctaImageUpdated"));
+    } catch (error) {
+      toast({
+        title: "Save Error",
+        description: error instanceof Error ? error.message : "Failed to save mobile CTA image.",
+        variant: "destructive",
+      });
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleRemoveCTAMobileImage = async () => {
+    try {
+      setUploading(true);
+      await setCTAMobileImage("");
+      setCTAMobileImageState("");
+      setCTAMobileImagePreview("");
+      setCTAMobileImageFile(null);
+      toast({ title: "Mobile CTA Image Removed", description: "Mobile CTA image removed." });
+      window.dispatchEvent(new Event("ctaImageUpdated"));
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to remove mobile CTA image.",
+        variant: "destructive",
+      });
+    } finally {
+      setUploading(false);
+    }
+  };
+
   // Overview Images handlers
   const handleOverviewImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
@@ -669,6 +755,53 @@ const Admin = () => {
 
   const handleClearAllOverviewImages = () => {
     setSelectedOverviewImages([]);
+  };
+
+  // Overview block image handlers (5 individual images)
+  const handleBlockImageUpload = async (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      setUploading(true);
+      const response = await uploadImageToCloudinary(file);
+      setBlockImagePreviews((prev) => {
+        const next = [...prev];
+        next[index] = response.secure_url;
+        return next;
+      });
+      toast({ title: "Image Uploaded", description: `Block ${index + 1} image uploaded. Click "Save Block Images" to apply.` });
+    } catch (error) {
+      toast({ title: "Upload Error", description: error instanceof Error ? error.message : "Failed to upload image.", variant: "destructive" });
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleSaveBlockImages = async () => {
+    try {
+      setUploading(true);
+      await setOverviewBlockImages(blockImagePreviews);
+      setBlockImagesState([...blockImagePreviews]);
+      toast({ title: "Block Images Saved", description: "The 5 block images have been updated." });
+      window.dispatchEvent(new Event("overviewBlockImagesUpdated"));
+    } catch (error) {
+      toast({ title: "Save Error", description: error instanceof Error ? error.message : "Failed to save block images.", variant: "destructive" });
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleRemoveBlockImage = (index: number) => {
+    setBlockImagePreviews((prev) => {
+      const next = [...prev];
+      next[index] = "";
+      return next;
+    });
+    setBlockImagesState((prev) => {
+      const next = [...prev];
+      next[index] = "";
+      return next;
+    });
   };
 
   const handleAddProduct = () => {
@@ -1824,6 +1957,122 @@ const Admin = () => {
                 </div>
               </div>
             </div>
+          </div>
+
+          {/* CTA Section Mobile Image */}
+          <div className="mb-12 bg-card rounded-xl p-8 border border-border/50">
+            <h2 className="font-heading text-2xl font-bold text-foreground mb-2">
+              CTA Section Mobile Image
+            </h2>
+            <p className="text-sm text-muted-foreground mb-6">
+              Upload a portrait image shown below the text block on mobile devices.
+              Recommended size: <strong>800 × 700 px</strong>. Falls back to the desktop image if none is set.
+            </p>
+            <div className="grid lg:grid-cols-2 gap-8">
+              <div>
+                <Label htmlFor="cta-image-mobile">Mobile Image</Label>
+                <Input
+                  id="cta-image-mobile"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleCTAMobileImageUpload}
+                  disabled={uploading}
+                  className="cursor-pointer mt-2"
+                />
+                {uploading && (
+                  <div className="flex items-center gap-2 mt-2 text-sm text-primary">
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    Uploading to Cloudinary...
+                  </div>
+                )}
+                {ctaMobileImagePreview && !uploading && (
+                  <p className="text-sm text-green-600 mt-2 font-medium">✓ Image ready to save</p>
+                )}
+                {ctaMobileImage && (
+                  <p className="text-sm text-muted-foreground mt-1">Current: image set</p>
+                )}
+                <div className="flex gap-2 mt-4">
+                  <Button
+                    onClick={handleSaveCTAMobileImage}
+                    disabled={!ctaMobileImagePreview || uploading}
+                  >
+                    {uploading ? (
+                      <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Saving...</>
+                    ) : "Save Mobile Image"}
+                  </Button>
+                  {ctaMobileImage && (
+                    <Button variant="outline" onClick={handleRemoveCTAMobileImage} disabled={uploading}>
+                      Remove Image
+                    </Button>
+                  )}
+                </div>
+              </div>
+              <div>
+                <Label>Preview</Label>
+                <div className="mt-2 rounded-lg overflow-hidden h-52 relative" style={{ backgroundColor: "#1a1a1a" }}>
+                  {ctaMobileImagePreview ? (
+                    <img src={ctaMobileImagePreview} alt="Mobile CTA Preview" className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-muted-foreground text-sm">
+                      No mobile image set (desktop image used as fallback)
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Overview Section Block Images (5 blocks) */}
+          <div className="mb-12 bg-card rounded-xl p-8 border border-border/50">
+            <h2 className="font-heading text-2xl font-bold text-foreground mb-2">
+              Exceptional Architectural Hardware — Block Images
+            </h2>
+            <p className="text-sm text-muted-foreground mb-6">
+              Upload one image per block for the 5-column grid section. Recommended size: <strong>600 × 340 px</strong> (landscape). Blocks with no image will appear as solid dark placeholders.
+            </p>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mb-6">
+              {Array.from({ length: 5 }).map((_, index) => (
+                <div key={index} className="flex flex-col gap-2">
+                  <Label htmlFor={`block-img-${index}`} className="text-sm font-medium">Block {index + 1}</Label>
+                  {/* Preview */}
+                  <div className="rounded-lg overflow-hidden" style={{ height: '120px', backgroundColor: '#1a1a1a' }}>
+                    {blockImagePreviews[index] ? (
+                      <img src={blockImagePreviews[index]} alt={`Block ${index + 1}`} className="w-full h-full object-cover" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-[#eaeaea]/40 text-xs">No image</div>
+                    )}
+                  </div>
+                  <Input
+                    id={`block-img-${index}`}
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => handleBlockImageUpload(index, e)}
+                    disabled={uploading}
+                    className="cursor-pointer text-xs"
+                  />
+                  {blockImagePreviews[index] && (
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveBlockImage(index)}
+                      className="text-xs text-destructive hover:underline text-left"
+                    >
+                      Remove
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+            {uploading && (
+              <div className="flex items-center gap-2 mb-4 text-sm text-primary">
+                <Loader2 className="w-4 h-4 animate-spin" />
+                Uploading to Cloudinary...
+              </div>
+            )}
+            <Button onClick={handleSaveBlockImages} disabled={uploading}>
+              {uploading ? (
+                <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Saving...</>
+              ) : "Save Block Images"}
+            </Button>
           </div>
 
           {/* Overview Images Slideshow (between Testimonials and CTA) */}

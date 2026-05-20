@@ -223,6 +223,16 @@ export const setCTAImageInDB = (url: string): Promise<string> =>
   apiFetch<{ url: string }>("/cta-image", { method: "PUT", body: JSON.stringify({ url }) }).then((r) => r.url || "");
 
 // ============================================
+// CTA IMAGE (MOBILE)
+// ============================================
+
+export const getCTAMobileImageFromDB = (): Promise<string> =>
+  apiFetch<{ url: string }>("/cta-image-mobile").then((r) => r.url || "");
+
+export const setCTAMobileImageInDB = (url: string): Promise<string> =>
+  apiFetch<{ url: string }>("/cta-image-mobile", { method: "PUT", body: JSON.stringify({ url }) }).then((r) => r.url || "");
+
+// ============================================
 // OVERVIEW IMAGES
 // ============================================
 
@@ -231,3 +241,13 @@ export const getOverviewImagesFromDB = (): Promise<string[]> =>
 
 export const setOverviewImagesInDB = (urls: string[]): Promise<string[]> =>
   apiFetch<string[]>("/overview-images", { method: "PUT", body: JSON.stringify({ urls }) });
+
+// ============================================
+// OVERVIEW BLOCK IMAGES (5 individual block images)
+// ============================================
+
+export const getOverviewBlockImagesFromDB = (): Promise<string[]> =>
+  apiFetch<string[]>("/overview-block-images");
+
+export const setOverviewBlockImagesInDB = (urls: string[]): Promise<string[]> =>
+  apiFetch<string[]>("/overview-block-images", { method: "PUT", body: JSON.stringify(urls) });

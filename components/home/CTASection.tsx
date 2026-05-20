@@ -3,14 +3,16 @@
 import Link from "next/link";
 import { Phone, Mail } from "lucide-react";
 import { useState, useEffect } from "react";
-import { getCTAImage } from "@/lib/data";
+import { getCTAImage, getCTAMobileImage } from "@/lib/data";
 
 interface CTASectionProps {
   initialBgImage?: string;
+  initialMobileImage?: string;
 }
 
-export function CTASection({ initialBgImage }: CTASectionProps) {
+export function CTASection({ initialBgImage, initialMobileImage }: CTASectionProps) {
   const [bgImage, setBgImage] = useState<string>(initialBgImage || "");
+  const [mobileImage, setMobileImage] = useState<string>(initialMobileImage || "");
 
   useEffect(() => {
     if (!initialBgImage) {
@@ -18,15 +20,19 @@ export function CTASection({ initialBgImage }: CTASectionProps) {
         .then((url) => { if (url) setBgImage(url); })
         .catch(console.error);
     }
+    if (!initialMobileImage) {
+      getCTAMobileImage()
+        .then((url) => { if (url) setMobileImage(url); })
+        .catch(console.error);
+    }
 
     const handleUpdate = () => {
-      getCTAImage()
-        .then((url) => setBgImage(url || ""))
-        .catch(console.error);
+      getCTAImage().then((url) => setBgImage(url || "")).catch(console.error);
+      getCTAMobileImage().then((url) => setMobileImage(url || "")).catch(console.error);
     };
     window.addEventListener("ctaImageUpdated", handleUpdate);
     return () => window.removeEventListener("ctaImageUpdated", handleUpdate);
-  }, [initialBgImage]);
+  }, [initialBgImage, initialMobileImage]);
 
   const bgStyle = bgImage
     ? {}
@@ -93,12 +99,12 @@ export function CTASection({ initialBgImage }: CTASectionProps) {
           <div className="bg-[#1a1a1a] px-8 py-16">
             {textContent}
           </div>
-          {bgImage && (
+          {(mobileImage || bgImage) && (
             <img
-              src={bgImage}
+              src={mobileImage || bgImage}
               alt=""
-              className="w-full object-cover"
-              style={{ maxHeight: '420px', objectPosition: 'center' }}
+              className="w-full block"
+              style={{ height: '420px', objectFit: 'cover', objectPosition: 'center' }}
             />
           )}
         </div>

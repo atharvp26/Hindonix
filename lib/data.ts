@@ -39,8 +39,12 @@ import {
   setHeroImagesInRedis,
   getCTAImageFromDB,
   setCTAImageInDB,
+  getCTAMobileImageFromDB,
+  setCTAMobileImageInDB,
   getOverviewImagesFromDB,
   setOverviewImagesInDB,
+  getOverviewBlockImagesFromDB,
+  setOverviewBlockImagesInDB,
   getCaseStudyById,
   getProductById,
 } from "./api";
@@ -161,8 +165,14 @@ export const setHeroImages = async (images: string[]): Promise<string[]> => setH
 export const getCTAImage = async (): Promise<string> => getCTAImageFromDB();
 export const setCTAImage = async (url: string): Promise<string> => setCTAImageInDB(url);
 
+export const getCTAMobileImage = async (): Promise<string> => getCTAMobileImageFromDB();
+export const setCTAMobileImage = async (url: string): Promise<string> => setCTAMobileImageInDB(url);
+
 export const getOverviewImages = async (): Promise<string[]> => getOverviewImagesFromDB();
 export const setOverviewImages = async (urls: string[]): Promise<string[]> => setOverviewImagesInDB(urls);
+
+export const getOverviewBlockImages = async (): Promise<string[]> => getOverviewBlockImagesFromDB();
+export const setOverviewBlockImages = async (urls: string[]): Promise<string[]> => setOverviewBlockImagesInDB(urls);
 
 export const getCategories = async (): Promise<Category[]> => getAllCategories();
 export const addCategory = async (category: Omit<Category, "id">): Promise<Category> => addCategoryToRedis(category);

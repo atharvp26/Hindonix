@@ -43,18 +43,31 @@ async function getOverviewImagesFromDB(): Promise<string[]> {
   }
 }
 
+async function getOverviewBlockImagesFromDB(): Promise<string[]> {
+  try {
+    const [rows] = await pool.query("SELECT urls FROM overview_block_images ORDER BY id ASC LIMIT 1");
+    const r = (rows as any[])[0];
+    if (!r) return [];
+    const urls = typeof r.urls === "string" ? JSON.parse(r.urls) : r.urls;
+    return Array.isArray(urls) ? urls : [];
+  } catch {
+    return [];
+  }
+}
+
 export default async function HomePage() {
-  const [heroImages, testimonials, ctaBgImage, overviewImages] = await Promise.all([
+  const [heroImages, testimonials, ctaBgImage, overviewImages, blockImages] = await Promise.all([
     getHeroImagesFromDB(),
     getTestimonialsFromDB(),
     getCTAImageFromDB(),
     getOverviewImagesFromDB(),
+    getOverviewBlockImagesFromDB(),
   ]);
 
   return (
     <main className="min-h-screen">
       <HeroSection initialImages={heroImages} />
-      <OverviewSection />
+      <OverviewSection initialBlockImages={blockImages} />
       <WhyChooseUsSection />
       <TestimonialsSection initialTestimonials={testimonials} initialBackgroundImages={overviewImages} />
       <CTASection initialBgImage={ctaBgImage} />
