@@ -286,11 +286,11 @@ const About = () => {
             </h2>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="flex flex-wrap justify-center gap-6">
             {certifications.map((cert) => (
               <div
                 key={cert.name}
-                className="bg-secondary rounded-xl p-6 text-center"
+                className="bg-secondary rounded-xl p-6 text-center w-64"
               >
                 <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center mx-auto mb-4">
                   <span className="text-primary-foreground font-bold text-xs">

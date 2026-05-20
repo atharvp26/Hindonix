@@ -135,9 +135,9 @@ export default function AboutPage() {
             <span className="inline-block text-accent font-semibold text-sm uppercase tracking-wider mb-4">Certifications & Partnerships</span>
             <h2 className="font-heading text-3xl lg:text-4xl font-bold text-foreground mb-6">Trusted & Certified</h2>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="flex flex-wrap justify-center gap-6">
             {certifications.map((cert) => (
-              <div key={cert.name} className="bg-secondary rounded-xl p-6 text-center">
+              <div key={cert.name} className="bg-secondary rounded-xl p-6 text-center w-64">
                 <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center mx-auto mb-4">
                   <span className="text-primary-foreground font-bold text-xs">{cert.name.split(" ")[0]}</span>
                 </div>
