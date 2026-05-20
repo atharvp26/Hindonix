@@ -225,8 +225,7 @@ export function ProductsClient({
                           />
                         </div>
                         <div className="p-5 flex flex-col flex-1">
-                          <h3 className="font-heading text-base font-semibold text-foreground mb-1.5 group-hover:text-accent transition-colors line-clamp-2">{product.name}</h3>
-                          <p className="text-muted-foreground text-sm line-clamp-2">{product.description}</p>
+                          <h3 className="font-heading text-base font-semibold text-foreground group-hover:text-accent transition-colors line-clamp-2">{product.name}</h3>
                         </div>
                       </Link>
                     );

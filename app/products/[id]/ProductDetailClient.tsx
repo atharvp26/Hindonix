@@ -11,8 +11,8 @@ import { type Product } from "@/lib/data";
 export function ProductDetailClient({ product }: { product: Product }) {
   const router = useRouter();
 
-  // Build all images: primary first, then extras
-  const allImages = [product.image, ...(product.images || [])].filter(Boolean);
+  // Build all images: extra images first (upload sequence), then thumbnail last
+  const allImages = [...(product.images || []), product.image].filter(Boolean);
   const [activeIndex, setActiveIndex] = useState(0);
   const videos = product.videos || [];
 
