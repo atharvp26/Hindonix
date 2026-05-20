@@ -13,12 +13,12 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src-vite/*"]
     },
     "skipLibCheck": true,
     "strict": false,
     "target": "ES2020",
     "useDefineForClassFields": true
   },
-  "include": ["src"]
+  "include": ["src-vite"]
 }

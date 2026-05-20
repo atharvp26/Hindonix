@@ -26,7 +26,7 @@ export function WhyChooseUsSection() {
               <h3 className="text-2xl lg:text-3xl font-semibold text-[#1a1a1a] mb-3 tracking-tight">Specialized in Architectural Hardware</h3>
               <p className="text-[#1a1a1a]/55 text-sm lg:text-base mb-5 leading-relaxed font-light">Since 2025, we&apos;ve been crafting premium architectural hardware for luxury residential and commercial projects. Our expertise in material selection, finish quality, and ergonomic design ensures hardware that performs beautifully for decades.</p>
               <div className="flex flex-wrap gap-2 mb-6">
-                {["Brass Knobs", "Wooden Knobs", "Door Handles", "Pull Handles", "PVD Finishes", "Custom Solutions"].map((tag) => (
+                {["Door Handles", "Mortise Handles", "Custom Finishes"].map((tag) => (
                   <span key={tag} className="px-3 py-1.5 text-xs font-medium border border-[#1a1a1a]/20 text-[#1a1a1a]/70 hover:border-[#1a1a1a] hover:text-[#1a1a1a] transition-colors cursor-default tracking-wide">{tag}</span>
                 ))}
               </div>

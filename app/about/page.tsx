@@ -17,10 +17,7 @@ const team = [
 ];
 
 const certifications = [
-  { name: "ISO 9001:2025", description: "Quality Management" },
-  { name: "ISO 14001", description: "Environmental Management" },
-  { name: "AEO Certified", description: "Authorized Economic Operator" },
-  { name: "FIATA Member", description: "International Freight Association" },
+  { name: "ISO 9001:2025", description: "Quality Management" }
 ];
 
 export default function AboutPage() {
