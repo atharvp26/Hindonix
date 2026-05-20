@@ -107,10 +107,3 @@ export function CTASection({ initialBgImage }: CTASectionProps) {
     </section>
   );
 }
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
