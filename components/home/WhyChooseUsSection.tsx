@@ -9,10 +9,10 @@ const reasons = [
 ];
 
 const stats = [
-  { value: "200+", label: "Trade Partners", icon: Handshake },
+  { value: "10+", label: "Trade Partners", icon: Handshake },
   { value: "5,000+", label: "Projects Completed", icon: TrendingUp },
   { value: "99%", label: "Satisfaction Rate", icon: CheckCircle },
-  { value: "11+", label: "Premium Finishes", icon: Globe },
+  { value: "10+", label: "Premium Finishes", icon: Globe },
 ];
 
 export function WhyChooseUsSection() {
@@ -35,7 +35,7 @@ export function WhyChooseUsSection() {
               <div className="bg-[#eaeaea] p-5 text-center">
                 <Factory className="w-8 h-8 text-[#1a1a1a]/40 mx-auto mb-3" />
                 <div className="text-xl font-semibold text-[#1a1a1a]">10+</div>
-                <div className="text-xs text-[#1a1a1a]/50 uppercase tracking-wider mt-1">Years Experience</div>
+                <div className="text-xs text-[#1a1a1a]/50 uppercase tracking-wider mt-1">Finishes</div>
               </div>
               <div className="bg-[#eaeaea] p-5 text-center">
                 <Shield className="w-8 h-8 text-[#1a1a1a]/40 mx-auto mb-3" />

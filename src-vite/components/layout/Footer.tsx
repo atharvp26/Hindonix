@@ -22,7 +22,7 @@ const FacebookLogo = (props: SVGProps<SVGSVGElement>) => (
 
 const footerTopLinks = [
   { name: "About", path: "/about" },
-  { name: "Product Catalogue", path: "/products" },
+  { name: "Catalogue", path: "/products" },
   { name: "Blogs", path: "/blogs" },
   { name: "Get Quote", path: "/contact" },
 ];

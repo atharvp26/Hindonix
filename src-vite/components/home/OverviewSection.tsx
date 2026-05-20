@@ -48,7 +48,7 @@ const overviewCards = [
     title: "Premium Finishes",
     description:
       "Extensive range of finishes including PVD, brass, and premium metal options.",
-    stat: "11+",
+    stat: "10+",
     statLabel: "Finish Options",
   },
 ];

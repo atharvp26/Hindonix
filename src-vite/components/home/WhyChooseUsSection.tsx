@@ -41,7 +41,7 @@ const stats = [
   { value: "10+", label: "Trade Partners", icon: Handshake },
   { value: "5,000+", label: "Projects Completed", icon: TrendingUp },
   { value: "99%", label: "Satisfaction Rate", icon: CheckCircle },
-  { value: "11+", label: "Premium Finishes", icon: Globe },
+  { value: "10+", label: "Premium Finishes", icon: Globe },
 ];
 
 export function WhyChooseUsSection() {
@@ -89,7 +89,7 @@ export function WhyChooseUsSection() {
                   10+
                 </div>
                 <div className="text-xs text-muted-foreground">
-                  Years Experience
+                  Finishes
                 </div>
               </div>
               <div className="bg-secondary rounded-2xl p-5 text-center">
