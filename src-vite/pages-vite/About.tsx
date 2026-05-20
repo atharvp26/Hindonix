@@ -128,7 +128,7 @@ const About = () => {
                 Who We Are
               </span>
               <h2 className="font-heading text-3xl lg:text-4xl font-bold text-foreground mb-6">
-                14+ Years of Excellence in International Trade
+                Excellence in International Trade
               </h2>
               <p className="text-muted-foreground text-lg mb-6 leading-relaxed">
                 Founded in 2025, Hindonix has grown from a passionate trading
@@ -145,7 +145,7 @@ const About = () => {
               <div className="space-y-4">
                 {[
                   "Specialized in hardware & industrial products",
-                  "Network of 200+ verified global suppliers",
+                  "Network of 10+ verified global suppliers",
                   "End-to-end logistics and documentation support",
                   "24/7 customer service and shipment tracking",
                 ].map((item, index) => (
@@ -168,23 +168,23 @@ const About = () => {
               <div className="bg-card rounded-2xl p-6 shadow-card text-center mt-8">
                 <Users className="w-10 h-10 text-accent mx-auto mb-3" />
                 <div className="text-3xl font-heading font-bold text-foreground">
-                  500+
+                  50+
                 </div>
                 <div className="text-sm text-muted-foreground">Clients</div>
               </div>
               <div className="bg-card rounded-2xl p-6 shadow-card text-center">
                 <Handshake className="w-10 h-10 text-accent mx-auto mb-3" />
                 <div className="text-3xl font-heading font-bold text-foreground">
-                  200+
+                  10+
                 </div>
                 <div className="text-sm text-muted-foreground">Suppliers</div>
               </div>
               <div className="bg-card rounded-2xl p-6 shadow-card text-center mt-8">
                 <Award className="w-10 h-10 text-accent mx-auto mb-3" />
                 <div className="text-3xl font-heading font-bold text-foreground">
-                  14+
+                  10+
                 </div>
-                <div className="text-sm text-muted-foreground">Years</div>
+                <div className="text-sm text-muted-foreground">Finishes</div>
               </div>
             </div>
           </div>

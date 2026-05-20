@@ -38,7 +38,7 @@ const reasons = [
 ];
 
 const stats = [
-  { value: "200+", label: "Trade Partners", icon: Handshake },
+  { value: "10+", label: "Trade Partners", icon: Handshake },
   { value: "5,000+", label: "Projects Completed", icon: TrendingUp },
   { value: "99%", label: "Satisfaction Rate", icon: CheckCircle },
   { value: "11+", label: "Premium Finishes", icon: Globe },

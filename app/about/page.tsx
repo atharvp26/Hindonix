@@ -59,11 +59,11 @@ export default function AboutPage() {
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div>
               <span className="inline-block text-accent font-semibold text-sm uppercase tracking-wider mb-4">Who We Are</span>
-              <h2 className="font-heading text-3xl lg:text-4xl font-bold text-foreground mb-6">14+ Years of Excellence in International Trade</h2>
+              <h2 className="font-heading text-3xl lg:text-4xl font-bold text-foreground mb-6">Excellence in International Trade</h2>
               <p className="text-muted-foreground text-lg mb-6 leading-relaxed">Founded in 2025, Hindonix has grown from a passionate trading company to a leading international import-export firm serving clients across six continents.</p>
               <p className="text-muted-foreground text-lg mb-8 leading-relaxed">Our deep expertise in hardware products and industrial supplies, combined with a vast network of certified suppliers and logistics partners, enables us to deliver exceptional value to our clients.</p>
               <div className="space-y-4">
-                {["Specialized in hardware & industrial products", "Network of 200+ verified global suppliers", "End-to-end logistics and documentation support", "24/7 customer service and shipment tracking"].map((item, index) => (
+                {["Specialized in hardware & industrial products", "Network of 10+ verified global suppliers", "End-to-end logistics and documentation support", "24/7 customer service and shipment tracking"].map((item, index) => (
                   <div key={index} className="flex items-center gap-3">
                     <CheckCircle className="w-5 h-5 text-accent flex-shrink-0" />
                     <span className="text-foreground">{item}</span>
@@ -72,7 +72,7 @@ export default function AboutPage() {
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
-              {[{ icon: Globe, val: "50+", label: "Countries" }, { icon: Users, val: "500+", label: "Clients", mt: true }, { icon: Handshake, val: "200+", label: "Suppliers" }, { icon: Award, val: "14+", label: "Years", mt: true }].map(({ icon: Icon, val, label, mt }) => (
+              {[{ icon: Globe, val: "10+", label: "Countries" }, { icon: Users, val: "50+", label: "Clients", mt: true }, { icon: Handshake, val: "10+", label: "Suppliers" }, { icon: Award, val: "10+", label: "Finishes", mt: true }].map(({ icon: Icon, val, label, mt }) => (
                 <div key={label} className={`bg-card rounded-2xl p-6 shadow-card text-center${mt ? " mt-8" : ""}`}>
                   <Icon className="w-10 h-10 text-accent mx-auto mb-3" />
                   <div className="text-3xl font-heading font-bold text-foreground">{val}</div>

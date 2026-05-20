@@ -40,7 +40,7 @@ const overviewCards = [
     title: "B2B Partners",
     description:
       "Building lasting relationships with architects, designers, and construction professionals.",
-    stat: "200+",
+    stat: "10+",
     statLabel: "Trade Partners",
   },
   {
