@@ -39,7 +39,7 @@ export function OverviewSection({ initialBlockImages }: OverviewSectionProps) {
         {Array.from({ length: 5 }).map((_, index) => {
           const url = blockImages[index];
           return (
-            <div key={index} className="relative overflow-hidden" style={{ height: '340px' }}>
+            <div key={index} className="relative overflow-hidden" style={{ height: '280px' }}>
               {url ? (
                 <img
                   src={url}
