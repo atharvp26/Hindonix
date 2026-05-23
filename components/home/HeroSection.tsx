@@ -96,7 +96,7 @@ export function HeroSection({ initialImages }: HeroSectionProps) {
               ))}
             </CarouselContent>
           </Carousel>
-        )
+        )}
       </div>
 
       {/* Mobile gradient — fades image toward bottom for text readability */}
