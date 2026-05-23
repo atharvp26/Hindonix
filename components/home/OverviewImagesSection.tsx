@@ -41,8 +41,8 @@ export function OverviewImagesSection({ initialImages }: OverviewImagesSectionPr
 
   return (
     <section
-      className="relative overflow-hidden"
-      style={{ height: "800px", maxHeight: "800px" }}
+      className="relative overflow-hidden min-h-[500px] md:min-h-[600px] lg:min-h-[800px]"
+      style={{ aspectRatio: '16 / 9' }}
       aria-label="Overview background slideshow"
     >
       {images.map((src, idx) => (
