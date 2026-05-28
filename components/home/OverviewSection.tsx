@@ -10,6 +10,7 @@ interface OverviewSectionProps {
 export function OverviewSection({ initialBlockImages }: OverviewSectionProps) {
   const [blockImages, setBlockImages] = useState<string[]>(initialBlockImages ?? []);
   const [imagesPerView, setImagesPerView] = useState(3);
+  const [mobileHeight, setMobileHeight] = useState(240);
   const [imageDimensions, setImageDimensions] = useState<{ width: number; height: number } | null>(null);
   const [offset, setOffset] = useState(0);
   const sliderRef = useRef<HTMLDivElement>(null);
@@ -31,20 +32,29 @@ export function OverviewSection({ initialBlockImages }: OverviewSectionProps) {
     const calculateImagesPerView = () => {
       if (!imageDimensions) return;
       
-      if (window.innerWidth < 768) {
-        // Mobile: show 1 image
+      const screenWidth = window.innerWidth;
+      const imageAspectRatio = imageDimensions.width / imageDimensions.height;
+      
+      if (screenWidth < 768) {
+        // Mobile: show 1 image - calculate height to maintain aspect ratio
         setImagesPerView(1);
-      } else if (window.innerWidth < 1024) {
-        // Tablet: show 2 images
+        const mobileContainerWidth = screenWidth - 32; // container padding
+        const calculatedHeight = Math.round(mobileContainerWidth / imageAspectRatio);
+        setMobileHeight(calculatedHeight);
+      } else if (screenWidth < 1024) {
+        // Tablet: show 2 images - calculate height
         setImagesPerView(2);
+        const tabletContainerWidth = screenWidth - 32; // container padding
+        const calculatedHeight = Math.round((tabletContainerWidth / 2) / imageAspectRatio);
+        setMobileHeight(calculatedHeight);
       } else {
         // Desktop: calculate based on container width and image width
-        const containerWidth = window.innerWidth - (32 * 2); // container padding
-        const imageAspectRatio = imageDimensions.width / imageDimensions.height;
+        const containerWidth = screenWidth - (32 * 2); // container padding
         const imageHeight = 500; // increased height for 800x700 images
         const imageWidth = imageHeight * imageAspectRatio;
         const imagesCanFit = Math.floor(containerWidth / imageWidth);
         setImagesPerView(Math.max(3, imagesCanFit)); // at least 3
+        setMobileHeight(240); // reset for desktop
       }
     };
 
@@ -62,9 +72,10 @@ export function OverviewSection({ initialBlockImages }: OverviewSectionProps) {
     animationRef.current = setInterval(() => {
       setOffset((prev) => {
         const singleImageWidth = 100 / imagesPerView;
+        const maxSlides = Math.max(1, blockImages.length - imagesPerView + 1);
         const nextOffset = prev + singleImageWidth;
-        // When we've scrolled through all images, reset to 0 for seamless loop
-        if (nextOffset >= blockImages.length * singleImageWidth) {
+        // When we've scrolled through all viewable slides, reset to 0 for seamless loop
+        if (nextOffset >= maxSlides * singleImageWidth) {
           return 0;
         }
         return nextOffset;
@@ -102,15 +113,22 @@ export function OverviewSection({ initialBlockImages }: OverviewSectionProps) {
         </div>
       </div>
 
-      {/* Mobile Grid View - Show all images in grid */}
+      {/* Mobile Grid View - Show all images in grid without cropping */}
       <div className="lg:hidden grid w-full grid-cols-1 md:grid-cols-2 gap-px border-y border-[#1a1a1a]/10" style={{ backgroundColor: '#1a1a1a' }}>
         {blockImages.map((url, index) => (
-          <div key={index} className="relative overflow-hidden" style={{ height: '240px' }}>
+          <div 
+            key={index} 
+            className="relative overflow-hidden bg-[#1a1a1a]"
+            style={{
+              height: `${mobileHeight}px`,
+              minHeight: '200px',
+            }}
+          >
             {url ? (
               <img
                 src={url}
                 alt={`Block ${index + 1}`}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-contain"
               />
             ) : (
               <div className="w-full h-full" style={{ backgroundColor: '#1a1a1a' }} />
