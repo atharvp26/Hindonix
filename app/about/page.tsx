@@ -60,7 +60,7 @@ export default function AboutPage() {
             <div>
               <span className="inline-block text-accent font-semibold text-sm uppercase tracking-wider mb-4">Who We Are</span>
               <h2 className="font-heading text-3xl lg:text-4xl font-bold text-foreground mb-6">Excellence in International Trade</h2>
-              <p className="text-muted-foreground text-lg mb-6 leading-relaxed">Founded in 2025, Hindonix has grown from a passionate trading company to a leading international import-export firm serving clients across six continents.</p>
+              <p className="text-muted-foreground text-lg mb-6 leading-relaxed">Founded in 2025, Hindonix has grown from a passionate collaborative manufacturing company to a leading international export firm serving clients across six continents.</p>
               <p className="text-muted-foreground text-lg mb-8 leading-relaxed">Our deep expertise in hardware products and industrial supplies, combined with a vast network of certified suppliers and logistics partners, enables us to deliver exceptional value to our clients.</p>
               <div className="space-y-4">
                 {["Specialized in hardware & industrial products", "Network of 10+ verified global suppliers", "End-to-end logistics and documentation support", "24/7 customer service and shipment tracking"].map((item, index) => (

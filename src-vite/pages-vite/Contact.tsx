@@ -465,7 +465,7 @@ const Contact = () => {
                       <p className="text-muted-foreground text-sm">
                         182/1/A/1, Shiv samarth nagar, Opp.ST Depot,
                         <br />
-                        Tal.Khed, Dis.Ratnagiri. Pin code : 415709.
+                        Tal.Khed, Dis.Ratnagiri. Pin code : 415709. Maharashtra, India
                       </p>
                     </div>
                   </div>
