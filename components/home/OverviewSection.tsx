@@ -1,11 +1,11 @@
-// v1.0.6
+// v1.0.7
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { getOverviewBlockImages } from "@/lib/data";
 
-const VISIBLE = 3;     // images visible at once (desktop)
-const STEP_MS = 3000;  // pause between steps
-const ANIM_MS = 600;   // slide-transition duration
+const VISIBLE = 3;      // images visible at once (desktop)
+const STEP_MS = 3000;   // pause between steps
+const ANIM_MS = 600;    // slide animation duration
 
 interface OverviewSectionProps {
   initialBlockImages?: string[];
@@ -17,10 +17,11 @@ export function OverviewSection({ initialBlockImages }: OverviewSectionProps) {
 
   const containerRef = useRef<HTMLDivElement>(null);
   const trackRef     = useRef<HTMLDivElement>(null);
-  const indexRef     = useRef(0);      // current first-visible index (0 … N)
-  const busyRef      = useRef(false);  // true while transition in progress
+  const indexRef     = useRef(0);
+  const busyRef      = useRef(false);
   const imagesRef    = useRef<string[]>([]);
-  imagesRef.current  = blockImages;   // always-current without stale closure
+  const aspectRef    = useRef(1.0); // width/height of overview images
+  imagesRef.current  = blockImages;
 
   /* ── fetch / sync images ── */
   useEffect(() => {
@@ -35,38 +36,57 @@ export function OverviewSection({ initialBlockImages }: OverviewSectionProps) {
     return () => window.removeEventListener("overviewBlockImagesUpdated", onUpdate);
   }, [initialBlockImages]);
 
-  /* ── mobile height from first image's aspect ratio ── */
+  /* ── load first image to derive aspect ratio ──────────────────────────
+     This drives both the mobile grid height and the desktop track height
+     so images are shown at their natural ratio with zero cropping.
+  ── */
   useEffect(() => {
     if (!blockImages.length) return;
+    let cancelled = false;
     let removeResize: (() => void) | null = null;
+
     const img = new Image();
     img.onload = () => {
-      if (!img.naturalWidth) return;
+      if (cancelled || !img.naturalWidth || !img.naturalHeight) return;
       const ratio = img.naturalWidth / img.naturalHeight;
-      const recalc = () =>
+      aspectRef.current = ratio;
+
+      // Mobile: one image per row, height = width / ratio
+      const calcMobile = () =>
         setMobileHeight(Math.max(180, Math.round((window.innerWidth - 32) / ratio)));
-      recalc();
-      window.addEventListener("resize", recalc);
-      removeResize = () => window.removeEventListener("resize", recalc);
+      calcMobile();
+      window.addEventListener("resize", calcMobile);
+      removeResize = () => window.removeEventListener("resize", calcMobile);
+
+      // Desktop: update track height immediately if DOM is ready
+      if (containerRef.current && trackRef.current) {
+        const slideW = containerRef.current.offsetWidth / VISIBLE;
+        trackRef.current.style.height = `${Math.round(slideW / ratio)}px`;
+        Array.from(trackRef.current.children as HTMLCollectionOf<HTMLElement>).forEach(
+          el => { el.style.width = `${slideW}px`; }
+        );
+      }
     };
     img.src = blockImages[0];
-    return () => { removeResize?.(); };
+
+    return () => {
+      cancelled = true;
+      removeResize?.();
+    };
   }, [blockImages]);
 
-  /* ── desktop step-based carousel ──────────────────────────────────────
-     Track layout (N = blockImages.length, 5 in this example):
-       [ img1 img2 img3 img4 img5 | img1 img2 img3 img4 img5 ]
-         ← original set (idx 0–4)  ← clone set (idx 5–9)
+  /* ── desktop step carousel ────────────────────────────────────────────
+     Track layout (N images, shown 3 at a time):
+       [ 1  2  3  4  5 | 1* 2* 3* 4* 5* ]
+          real set         clone set
 
-     index=0 → shows 1 2 3   (translateX 0)
-     index=1 → shows 2 3 4   (translateX -1w)
-     index=2 → shows 3 4 5   (translateX -2w)
-     index=3 → shows 4 5 1*  (translateX -3w)  * clone
-     index=4 → shows 5 1* 2* (translateX -4w)
-     index=5 → shows 1* 2* 3*(translateX -5w)  ← identical to index=0
-
-     After animating to index N (clone region), we snap silently to
-     index 0. The content is identical, so the jump is invisible.
+     index 0 → translateX(0)   → shows 1 2 3
+     index 1 → translateX(-1w) → shows 2 3 4
+     index 2 → translateX(-2w) → shows 3 4 5
+     index 3 → translateX(-3w) → shows 4 5 1*   (451)
+     index 4 → translateX(-4w) → shows 5 1* 2*  (512)
+     index N → translateX(-Nw) → shows 1*2*3*   ← identical to index 0
+               ↑ snap to 0 silently, no visible jump
   ── */
   useEffect(() => {
     if (typeof window === "undefined" || window.innerWidth < 1024) return;
@@ -78,26 +98,28 @@ export function OverviewSection({ initialBlockImages }: OverviewSectionProps) {
 
     let active = true;
 
-    const getW = () => container.offsetWidth / VISIBLE;
+    const getSlideW = () => container.offsetWidth / VISIBLE;
 
-    const applyWidths = () => {
-      const w = getW();
+    // Set pixel widths on all slides AND correct track height
+    const applyLayout = () => {
+      const w = getSlideW();
+      const h = Math.round(w / aspectRef.current);
       Array.from(track.children as HTMLCollectionOf<HTMLElement>).forEach(
         el => { el.style.width = `${w}px`; }
       );
+      track.style.height = `${h}px`;
     };
 
     const moveTo = (idx: number, animated: boolean) => {
       track.style.transition = animated
         ? `transform ${ANIM_MS}ms ease-in-out`
         : "none";
-      track.style.transform = `translateX(-${idx * getW()}px)`;
+      track.style.transform = `translateX(-${idx * getSlideW()}px)`;
     };
 
-    // reset to clean state
     indexRef.current = 0;
     busyRef.current  = false;
-    applyWidths();
+    applyLayout();
     moveTo(0, false);
 
     const advance = () => {
@@ -106,17 +128,15 @@ export function OverviewSection({ initialBlockImages }: OverviewSectionProps) {
       if (N === 0) return;
 
       busyRef.current = true;
-      const next = indexRef.current + 1; // advance by 1 image
+      const next = indexRef.current + 1;
 
-      moveTo(next, true); // slide left
+      moveTo(next, true); // animate one step left
 
       const onEnd = () => {
         track.removeEventListener("transitionend", onEnd);
-        if (!active) return; // effect was torn down mid-transition
-
+        if (!active) return;
         if (next >= N) {
-          // We just animated into the clone region (index N).
-          // Clone content is identical to index 0 — snap back invisibly.
+          // Clone region — visually same as index 0, snap back silently
           indexRef.current = 0;
           moveTo(0, false);
         } else {
@@ -129,9 +149,8 @@ export function OverviewSection({ initialBlockImages }: OverviewSectionProps) {
 
     const timer = setInterval(advance, STEP_MS);
 
-    // keep pixel widths correct when window is resized
     const onResize = () => {
-      applyWidths();
+      applyLayout();
       moveTo(indexRef.current, false);
     };
     window.addEventListener("resize", onResize);
@@ -188,16 +207,17 @@ export function OverviewSection({ initialBlockImages }: OverviewSectionProps) {
         ))}
       </div>
 
-      {/* Desktop: step carousel — exactly 3 visible, 1-image steps */}
+      {/* Desktop: step carousel — 3 visible, height auto-fits image ratio */}
       <div
         ref={containerRef}
         className="hidden lg:block overflow-hidden border-y border-[#1a1a1a]/10"
         style={{ backgroundColor: "#1a1a1a" }}
       >
+        {/* minHeight prevents zero-height flash before aspect ratio loads */}
         <div
           ref={trackRef}
           className="flex will-change-transform"
-          style={{ height: "500px" }}
+          style={{ minHeight: "300px" }}
         >
           {doubled.map((url, i) => (
             <div
@@ -209,7 +229,7 @@ export function OverviewSection({ initialBlockImages }: OverviewSectionProps) {
                 <img
                   src={url}
                   alt={`Block ${i + 1}`}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain"
                   draggable={false}
                 />
               )}
