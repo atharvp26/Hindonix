@@ -63,7 +63,7 @@ export function OverviewSection({ initialBlockImages }: OverviewSectionProps) {
     return () => window.removeEventListener("resize", calculateImagesPerView);
   }, [imageDimensions]);
 
-  // Continuous infinite scroll animation for desktop only
+  // Continuous infinite scroll animation for desktop only - scrolls left only
   useEffect(() => {
     if (window.innerWidth < 1024 || blockImages.length === 0) return; // Only on desktop
 
@@ -72,10 +72,11 @@ export function OverviewSection({ initialBlockImages }: OverviewSectionProps) {
     animationRef.current = setInterval(() => {
       setOffset((prev) => {
         const singleImageWidth = 100 / imagesPerView;
-        const maxSlides = Math.max(1, blockImages.length - imagesPerView + 1);
+        // Total width of all duplicated images (2x for seamless loop)
+        const totalWidth = 200; // 100% original + 100% duplicate
         const nextOffset = prev + singleImageWidth;
-        // When we've scrolled through all viewable slides, reset to 0 for seamless loop
-        if (nextOffset >= maxSlides * singleImageWidth) {
+        // When we've scrolled through one complete set, jump back to 0 (to start of duplicate set)
+        if (nextOffset >= 100) {
           return 0;
         }
         return nextOffset;
@@ -153,7 +154,8 @@ export function OverviewSection({ initialBlockImages }: OverviewSectionProps) {
               transition: 'transform 0.8s ease-in-out',
             }}
           >
-            {blockImages.map((url, index) => (
+            {/* Render images twice for seamless infinite loop */}
+            {[...blockImages, ...blockImages].map((url, index) => (
               <div
                 key={index}
                 className="relative overflow-hidden flex-shrink-0 border-r border-[#1a1a1a]/10"
