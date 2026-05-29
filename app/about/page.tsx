@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
   Target, Eye, Heart, Shield, Users, Award, ArrowRight,
-  CheckCircle, Globe, Handshake,
+  CheckCircle,
 } from "lucide-react";
 
 const values = [
@@ -72,17 +72,14 @@ export default function AboutPage() {
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
-              {[{ image: "https://res.cloudinary.com/dlt9vf8qk/image/upload/v1780072786/10-countries_capmwi.png", val: "10+", label: "Countries" }, { image: "https://res.cloudinary.com/dlt9vf8qk/image/upload/v1780072786/50-Clients_rb2nrl.png", val: "50+", label: "Clients", mt: true }, { icon: Handshake, val: "10+", label: "Suppliers" }, { image: "https://res.cloudinary.com/dlt9vf8qk/image/upload/v1780072787/10-Finishes_pefw99.png", val: "10+", label: "Finishes", mt: true }].map(({ image, icon: Icon, val, label, mt }) => (
-                <div key={label} className={`bg-card rounded-2xl p-8 shadow-card text-center flex flex-col items-center justify-end min-h-64${mt ? " mt-8" : ""}`}>
-                  {image ? (
-                    <div className="w-full h-40 flex items-center justify-center mb-4 overflow-hidden">
-                      <img src={image} alt={label} className="max-w-full max-h-full object-contain" />
-                    </div>
-                  ) : (
-                    Icon && <Icon className="w-12 h-12 text-accent mx-auto mb-4" />
-                  )}
-                  <div className="text-3xl font-heading font-bold text-foreground">{val}</div>
-                  <div className="text-sm text-muted-foreground">{label}</div>
+              {[
+                { image: "https://res.cloudinary.com/dlt9vf8qk/image/upload/v1780072786/10-countries_capmwi.png", label: "Countries" },
+                { image: "https://res.cloudinary.com/dlt9vf8qk/image/upload/v1780072786/50-Clients_rb2nrl.png", label: "Clients", mt: true },
+                { image: "https://res.cloudinary.com/dlt9vf8qk/image/upload/v1779628390/hindonix/zintjx4w2x5g77996zma.png", label: "Suppliers" },
+                { image: "https://res.cloudinary.com/dlt9vf8qk/image/upload/v1780072787/10-Finishes_pefw99.png", label: "Finishes", mt: true },
+              ].map(({ image, label, mt }) => (
+                <div key={label} className={`relative rounded-2xl shadow-card overflow-hidden h-64${mt ? " mt-8" : ""}`}>
+                  <img src={image} alt={label} className="absolute inset-0 w-full h-full object-cover" />
                 </div>
               ))}
             </div>
