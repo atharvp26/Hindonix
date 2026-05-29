@@ -73,11 +73,13 @@ export default function AboutPage() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               {[{ image: "https://res.cloudinary.com/dlt9vf8qk/image/upload/v1780072786/10-countries_capmwi.png", val: "10+", label: "Countries" }, { image: "https://res.cloudinary.com/dlt9vf8qk/image/upload/v1780072786/50-Clients_rb2nrl.png", val: "50+", label: "Clients", mt: true }, { icon: Handshake, val: "10+", label: "Suppliers" }, { image: "https://res.cloudinary.com/dlt9vf8qk/image/upload/v1780072787/10-Finishes_pefw99.png", val: "10+", label: "Finishes", mt: true }].map(({ image, icon: Icon, val, label, mt }) => (
-                <div key={label} className={`bg-card rounded-2xl p-6 shadow-card text-center flex flex-col items-center justify-center min-h-48${mt ? " mt-8" : ""}`}>
+                <div key={label} className={`bg-card rounded-2xl p-8 shadow-card text-center flex flex-col items-center justify-end min-h-64${mt ? " mt-8" : ""}`}>
                   {image ? (
-                    <img src={image} alt={label} className="w-full h-32 object-contain mb-3" />
+                    <div className="w-full h-40 flex items-center justify-center mb-4 overflow-hidden">
+                      <img src={image} alt={label} className="max-w-full max-h-full object-contain" />
+                    </div>
                   ) : (
-                    Icon && <Icon className="w-10 h-10 text-accent mx-auto mb-3" />
+                    Icon && <Icon className="w-12 h-12 text-accent mx-auto mb-4" />
                   )}
                   <div className="text-3xl font-heading font-bold text-foreground">{val}</div>
                   <div className="text-sm text-muted-foreground">{label}</div>

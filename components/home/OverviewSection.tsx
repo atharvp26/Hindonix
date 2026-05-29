@@ -76,14 +76,22 @@ export function OverviewSection({ initialBlockImages }: OverviewSectionProps) {
         const fullSetWidth = blockImages.length * singleImageWidth;
         const nextOffset = prev + singleImageWidth;
         
-        // When we've scrolled through one complete set, reset to 0 seamlessly
+        // When we've scrolled through one complete set, reset to 0
         if (nextOffset >= fullSetWidth) {
-          // Disable transition for instant reset
+          // Disable transition to hide the jump
           setApplyTransition(false);
-          // Re-enable transition after the reset
-          setTimeout(() => setApplyTransition(true), 0);
+          // Use a setTimeout to ensure the DOM updates happen in the right order
+          setTimeout(() => {
+            setApplyTransition(true);
+          }, 50);
           return 0;
         }
+        
+        // Ensure transition is enabled during normal scrolling
+        if (!applyTransition) {
+          setApplyTransition(true);
+        }
+        
         return nextOffset;
       });
     }, 3000); // Move one image every 3 seconds
