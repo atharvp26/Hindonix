@@ -13,6 +13,7 @@ export function OverviewSection({ initialBlockImages }: OverviewSectionProps) {
   const [mobileHeight, setMobileHeight] = useState(240);
   const [imageDimensions, setImageDimensions] = useState<{ width: number; height: number } | null>(null);
   const [offset, setOffset] = useState(0);
+  const [applyTransition, setApplyTransition] = useState(true);
   const sliderRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
@@ -72,11 +73,15 @@ export function OverviewSection({ initialBlockImages }: OverviewSectionProps) {
     animationRef.current = setInterval(() => {
       setOffset((prev) => {
         const singleImageWidth = 100 / imagesPerView;
-        // Total width of all duplicated images (2x for seamless loop)
-        const totalWidth = 200; // 100% original + 100% duplicate
+        const fullSetWidth = blockImages.length * singleImageWidth;
         const nextOffset = prev + singleImageWidth;
-        // When we've scrolled through one complete set, jump back to 0 (to start of duplicate set)
-        if (nextOffset >= 100) {
+        
+        // When we've scrolled through one complete set, reset to 0 seamlessly
+        if (nextOffset >= fullSetWidth) {
+          // Disable transition for instant reset
+          setApplyTransition(false);
+          // Re-enable transition after the reset
+          setTimeout(() => setApplyTransition(true), 0);
           return 0;
         }
         return nextOffset;
@@ -151,7 +156,7 @@ export function OverviewSection({ initialBlockImages }: OverviewSectionProps) {
             className="flex"
             style={{
               transform: `translateX(-${offset}%)`,
-              transition: 'transform 0.8s ease-in-out',
+              transition: applyTransition ? 'transform 0.8s ease-in-out' : 'none',
             }}
           >
             {/* Render images twice for seamless infinite loop */}
