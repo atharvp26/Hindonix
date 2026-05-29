@@ -1,11 +1,11 @@
-// v1.0.5
+// v1.0.6
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { getOverviewBlockImages } from "@/lib/data";
 
-const DESKTOP_VISIBLE = 3;    // images visible side-by-side on desktop
-const SECS_PER_IMAGE  = 3;    // seconds for one image-width to scroll past
-const DESKTOP_HEIGHT  = 500;  // px
+const VISIBLE = 3;     // images visible at once (desktop)
+const STEP_MS = 3000;  // pause between steps
+const ANIM_MS = 600;   // slide-transition duration
 
 interface OverviewSectionProps {
   initialBlockImages?: string[];
@@ -17,11 +17,12 @@ export function OverviewSection({ initialBlockImages }: OverviewSectionProps) {
 
   const containerRef = useRef<HTMLDivElement>(null);
   const trackRef     = useRef<HTMLDivElement>(null);
-  const posRef       = useRef(0);
-  const lastTRef     = useRef<number | null>(null);
-  const rafRef       = useRef<number | null>(null);
+  const indexRef     = useRef(0);      // current first-visible index (0 … N)
+  const busyRef      = useRef(false);  // true while transition in progress
+  const imagesRef    = useRef<string[]>([]);
+  imagesRef.current  = blockImages;   // always-current without stale closure
 
-  /* ── fetch / listen for image updates ── */
+  /* ── fetch / sync images ── */
   useEffect(() => {
     if (!initialBlockImages || initialBlockImages.length === 0) {
       getOverviewBlockImages()
@@ -36,69 +37,113 @@ export function OverviewSection({ initialBlockImages }: OverviewSectionProps) {
 
   /* ── mobile height from first image's aspect ratio ── */
   useEffect(() => {
-    if (blockImages.length === 0) return;
+    if (!blockImages.length) return;
+    let removeResize: (() => void) | null = null;
     const img = new Image();
     img.onload = () => {
       if (!img.naturalWidth) return;
       const ratio = img.naturalWidth / img.naturalHeight;
-      const calc = () =>
+      const recalc = () =>
         setMobileHeight(Math.max(180, Math.round((window.innerWidth - 32) / ratio)));
-      calc();
-      window.addEventListener("resize", calc);
+      recalc();
+      window.addEventListener("resize", recalc);
+      removeResize = () => window.removeEventListener("resize", recalc);
     };
     img.src = blockImages[0];
+    return () => { removeResize?.(); };
   }, [blockImages]);
 
-  /* ── desktop infinite left-scroll via requestAnimationFrame ──
-     Logic: render [...images, ...images] (2× the images).
-     The track is twice as wide as one full cycle.
-     We continuously increase posRef. When pos reaches
-     (N × imageWidth) — exactly halfway — we subtract that value:
-     the visual position is identical (second copy = first copy),
-     so there is never a visible jump or rightward movement. ── */
+  /* ── desktop step-based carousel ──────────────────────────────────────
+     Track layout (N = blockImages.length, 5 in this example):
+       [ img1 img2 img3 img4 img5 | img1 img2 img3 img4 img5 ]
+         ← original set (idx 0–4)  ← clone set (idx 5–9)
+
+     index=0 → shows 1 2 3   (translateX 0)
+     index=1 → shows 2 3 4   (translateX -1w)
+     index=2 → shows 3 4 5   (translateX -2w)
+     index=3 → shows 4 5 1*  (translateX -3w)  * clone
+     index=4 → shows 5 1* 2* (translateX -4w)
+     index=5 → shows 1* 2* 3*(translateX -5w)  ← identical to index=0
+
+     After animating to index N (clone region), we snap silently to
+     index 0. The content is identical, so the jump is invisible.
+  ── */
   useEffect(() => {
     if (typeof window === "undefined" || window.innerWidth < 1024) return;
+    if (!blockImages.length) return;
 
     const container = containerRef.current;
     const track     = trackRef.current;
-    if (!container || !track || blockImages.length === 0) return;
+    if (!container || !track) return;
+
+    let active = true;
+
+    const getW = () => container.offsetWidth / VISIBLE;
 
     const applyWidths = () => {
-      const w = container.offsetWidth / DESKTOP_VISIBLE;
+      const w = getW();
       Array.from(track.children as HTMLCollectionOf<HTMLElement>).forEach(
         el => { el.style.width = `${w}px`; }
       );
     };
-    applyWidths();
 
-    let active = true;
-
-    const tick = (t: number) => {
-      if (!active) return;
-      if (lastTRef.current === null) lastTRef.current = t;
-      const dt = Math.min(t - lastTRef.current, 100); // cap lag on tab-switch
-      lastTRef.current = t;
-
-      const imgW  = container.offsetWidth / DESKTOP_VISIBLE;
-      const cycle = blockImages.length * imgW; // width of one complete set
-
-      posRef.current += (imgW / (SECS_PER_IMAGE * 1000)) * dt;
-      if (posRef.current >= cycle) posRef.current -= cycle; // seamless wrap
-
-      track.style.transform = `translateX(-${posRef.current}px)`;
-      rafRef.current = requestAnimationFrame(tick);
+    const moveTo = (idx: number, animated: boolean) => {
+      track.style.transition = animated
+        ? `transform ${ANIM_MS}ms ease-in-out`
+        : "none";
+      track.style.transform = `translateX(-${idx * getW()}px)`;
     };
 
-    rafRef.current = requestAnimationFrame(tick);
-    window.addEventListener("resize", applyWidths);
+    // reset to clean state
+    indexRef.current = 0;
+    busyRef.current  = false;
+    applyWidths();
+    moveTo(0, false);
+
+    const advance = () => {
+      if (!active || busyRef.current) return;
+      const N = imagesRef.current.length;
+      if (N === 0) return;
+
+      busyRef.current = true;
+      const next = indexRef.current + 1; // advance by 1 image
+
+      moveTo(next, true); // slide left
+
+      const onEnd = () => {
+        track.removeEventListener("transitionend", onEnd);
+        if (!active) return; // effect was torn down mid-transition
+
+        if (next >= N) {
+          // We just animated into the clone region (index N).
+          // Clone content is identical to index 0 — snap back invisibly.
+          indexRef.current = 0;
+          moveTo(0, false);
+        } else {
+          indexRef.current = next;
+        }
+        busyRef.current = false;
+      };
+      track.addEventListener("transitionend", onEnd);
+    };
+
+    const timer = setInterval(advance, STEP_MS);
+
+    // keep pixel widths correct when window is resized
+    const onResize = () => {
+      applyWidths();
+      moveTo(indexRef.current, false);
+    };
+    window.addEventListener("resize", onResize);
 
     return () => {
       active = false;
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      lastTRef.current = null;
-      window.removeEventListener("resize", applyWidths);
+      clearInterval(timer);
+      window.removeEventListener("resize", onResize);
     };
-  }, [blockImages]);
+  }, [blockImages]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const doubled = [...blockImages, ...blockImages];
 
   return (
     <section className="py-20 lg:py-28" style={{ backgroundColor: "#eaeaea" }}>
@@ -121,7 +166,7 @@ export function OverviewSection({ initialBlockImages }: OverviewSectionProps) {
         </div>
       </div>
 
-      {/* Mobile / Tablet: static grid (no scrolling) */}
+      {/* Mobile / Tablet: static grid, no scrolling */}
       <div
         className="lg:hidden grid w-full grid-cols-1 md:grid-cols-2 gap-px border-y border-[#1a1a1a]/10"
         style={{ backgroundColor: "#1a1a1a" }}
@@ -143,7 +188,7 @@ export function OverviewSection({ initialBlockImages }: OverviewSectionProps) {
         ))}
       </div>
 
-      {/* Desktop: infinite left-scroll, 3 images visible at once */}
+      {/* Desktop: step carousel — exactly 3 visible, 1-image steps */}
       <div
         ref={containerRef}
         className="hidden lg:block overflow-hidden border-y border-[#1a1a1a]/10"
@@ -152,10 +197,9 @@ export function OverviewSection({ initialBlockImages }: OverviewSectionProps) {
         <div
           ref={trackRef}
           className="flex will-change-transform"
-          style={{ height: `${DESKTOP_HEIGHT}px` }}
+          style={{ height: "500px" }}
         >
-          {/* Images doubled so the wrap-point is visually identical to the start */}
-          {[...blockImages, ...blockImages].map((url, i) => (
+          {doubled.map((url, i) => (
             <div
               key={i}
               className="flex-shrink-0 overflow-hidden border-r border-[#1a1a1a]/10"
