@@ -78,7 +78,7 @@ function ContactPageInner() {
 
   return (
     <main className="min-h-screen">
-      <section className="relative w-full overflow-hidden" style={{ aspectRatio: '2400 / 1350' }}>
+      <section className="relative w-full overflow-hidden" style={{ aspectRatio: '2400 / 500' }}>
         <img
           src="https://res.cloudinary.com/dlt9vf8qk/image/upload/v1780214477/Get-in-Touch-01_1_jedpla.png"
           alt=""
