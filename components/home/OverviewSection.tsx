@@ -53,7 +53,7 @@ export function OverviewSection({ initialBlockImages }: OverviewSectionProps) {
 
       // Mobile: one image per row, height = width / ratio
       const calcMobile = () =>
-        setMobileHeight(Math.max(180, Math.round((window.innerWidth - 32) / ratio)));
+        setMobileHeight(Math.max(180, Math.round(window.innerWidth / ratio)));
       calcMobile();
       window.addEventListener("resize", calcMobile);
       removeResize = () => window.removeEventListener("resize", calcMobile);
@@ -200,7 +200,7 @@ export function OverviewSection({ initialBlockImages }: OverviewSectionProps) {
               <img
                 src={url}
                 alt={`Block ${i + 1}`}
-                className="w-full h-full object-contain"
+                className="w-full h-full object-cover"
               />
             )}
           </div>
