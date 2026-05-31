@@ -78,8 +78,8 @@ export default function AboutPage() {
                 { image: "https://res.cloudinary.com/dlt9vf8qk/image/upload/v1779628390/hindonix/zintjx4w2x5g77996zma.png", label: "Suppliers" },
                 { image: "https://res.cloudinary.com/dlt9vf8qk/image/upload/v1780072787/10-Finishes_pefw99.png", label: "Finishes", mt: true },
               ].map(({ image, label, mt }) => (
-                <div key={label} className={`relative rounded-2xl shadow-card overflow-hidden h-64${mt ? " lg:mt-8" : ""}`}>
-                  <img src={image} alt={label} className="absolute inset-0 w-full h-full object-cover" />
+                <div key={label} className={`rounded-2xl shadow-card overflow-hidden${mt ? " lg:mt-8" : ""}`}>
+                  <img src={image} alt={label} className="w-full h-auto block" />
                 </div>
               ))}
             </div>
