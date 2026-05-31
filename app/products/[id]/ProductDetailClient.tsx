@@ -11,8 +11,8 @@ import { type Product } from "@/lib/data";
 // Parse "Code: HCL 03 Unit: Pair Weight: 0.98 Kg ..." into [{key,value}]
 function parseOverview(desc: string): { key: string; value: string }[] {
   const entries: { key: string; value: string }[] = [];
-  const regex = /([A-Z][a-zA-Z]*):\s*(.*?)(?=\s+[A-Z][a-zA-Z]*:|$)/gs;
-  let match;
+  const regex = /([A-Z][a-zA-Z]*):\s*(.*?)(?=\s+[A-Z][a-zA-Z]*:|$)/g;
+  let match: RegExpExecArray | null;
   while ((match = regex.exec(desc)) !== null) {
     const key = match[1].trim();
     const value = match[2].trim();
