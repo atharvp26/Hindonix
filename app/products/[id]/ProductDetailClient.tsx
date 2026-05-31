@@ -161,7 +161,7 @@ export function ProductDetailClient({ product }: { product: Product }) {
                   <div className="grid grid-cols-2 gap-x-6 gap-y-4">
                     {overviewPairs.map(({ key, value }) => (
                       <div key={key}>
-                        <p className="text-xs font-semibold text-foreground uppercase tracking-wide">{key}</p>
+                        <p className="text-xs font-semibold text-foreground">{key}</p>
                         <p className="text-sm text-muted-foreground mt-0.5">{value}</p>
                       </div>
                     ))}

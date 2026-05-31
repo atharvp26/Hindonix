@@ -58,10 +58,10 @@ export function Footer() {
       <div className="container mx-auto px-4 lg:px-8 py-16">
         <div className="max-w-md mx-auto text-center space-y-8">
           <h3
-            className="text-3xl font-normal leading-none"
-            style={{ fontFamily: '"Times New Roman", Times, serif', color: '#eaeaea', letterSpacing: '0.2em' }}
+            className="text-xl font-normal leading-none"
+            style={{ fontFamily: '"Times New Roman", Times, serif', color: '#eaeaea', letterSpacing: '0.3em' }}
           >
-            HINDONIX<sup className="text-xs ml-1" style={{ fontFamily: 'Montserrat, sans-serif' }}>®</sup>
+            HINDONIX<sup className="text-xs ml-0.5" style={{ fontFamily: 'Montserrat, sans-serif' }}>®</sup>
           </h3>
           <div className="space-y-2.5">
             <p className="flex items-center justify-center gap-2 text-sm font-light" style={{ color: '#f3f3f399' }}>

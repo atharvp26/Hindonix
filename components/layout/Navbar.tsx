@@ -36,7 +36,7 @@ function NavbarContent({
   return (
     <>
       {/* ── HORIZONTAL TOP NAV ─────────────────────────────────────── */}
-      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-5 lg:px-8 py-5 bg-[#eaeaea]">
+      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-5 lg:px-8 py-5 bg-[#eaeaea]/75 backdrop-blur-md">
         {/* Brand — left, flex-1 so it balances the right spacer */}
         <div className="flex-1">
           <Link href="/" aria-label="Hindonix home" className="shrink-0 inline-block">

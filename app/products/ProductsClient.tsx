@@ -226,6 +226,9 @@ export function ProductsClient({
                         </div>
                         <div className="p-5 flex flex-col flex-1">
                           <h3 className="font-heading text-base font-semibold text-foreground group-hover:text-accent transition-colors line-clamp-2">{product.name}</h3>
+                          {product.modelNumber && (
+                            <p className="text-xs text-foreground/40 mt-0.5">{product.modelNumber}</p>
+                          )}
                         </div>
                       </Link>
                     );

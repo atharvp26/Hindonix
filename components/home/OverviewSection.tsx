@@ -186,14 +186,11 @@ export function OverviewSection({ initialBlockImages }: OverviewSectionProps) {
       </div>
 
       {/* Mobile / Tablet: static grid, no scrolling */}
-      <div
-        className="lg:hidden grid w-full grid-cols-1 md:grid-cols-2 gap-px border-y border-[#1a1a1a]/10"
-        style={{ backgroundColor: "#1a1a1a" }}
-      >
+      <div className="lg:hidden grid w-full grid-cols-1 md:grid-cols-2">
         {blockImages.map((url, i) => (
           <div
             key={i}
-            className="overflow-hidden bg-[#1a1a1a]"
+            className="overflow-hidden"
             style={{ height: `${mobileHeight}px`, minHeight: "180px" }}
           >
             {url && (
@@ -210,8 +207,7 @@ export function OverviewSection({ initialBlockImages }: OverviewSectionProps) {
       {/* Desktop: step carousel — 3 visible, height auto-fits image ratio */}
       <div
         ref={containerRef}
-        className="hidden lg:block overflow-hidden border-y border-[#1a1a1a]/10"
-        style={{ backgroundColor: "#1a1a1a" }}
+        className="hidden lg:block overflow-hidden"
       >
         {/* minHeight prevents zero-height flash before aspect ratio loads */}
         <div
@@ -222,14 +218,14 @@ export function OverviewSection({ initialBlockImages }: OverviewSectionProps) {
           {doubled.map((url, i) => (
             <div
               key={i}
-              className="flex-shrink-0 overflow-hidden border-r border-[#1a1a1a]/10"
+              className="flex-shrink-0 overflow-hidden"
               style={{ height: "100%" }}
             >
               {url && (
                 <img
                   src={url}
                   alt={`Block ${i + 1}`}
-                  className="w-full h-full object-contain"
+                  className="w-full h-full object-cover"
                   draggable={false}
                 />
               )}
