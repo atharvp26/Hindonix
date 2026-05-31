@@ -103,6 +103,7 @@ export interface Product {
   videos?: string[];
   finishes: string[];
   finishIds?: number[];
+  resolvedFinishes?: { name: string; image: string }[];
 }
 
 export interface Blog {

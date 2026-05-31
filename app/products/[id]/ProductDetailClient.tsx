@@ -180,13 +180,23 @@ export function ProductDetailClient({ product }: { product: Product }) {
 
               {product.finishes && product.finishes.length > 0 && (
                 <div className="mb-5">
-                  <h2 className="font-heading text-base font-semibold text-foreground mb-2">Available Finishes</h2>
-                  <div className="flex flex-wrap gap-2">
-                    {product.finishes.map((finish, index) => (
-                      <span key={index} className="px-3 py-1.5 bg-secondary rounded-lg text-sm font-medium text-foreground border border-border hover:border-accent transition-colors">
-                        {finish}
-                      </span>
-                    ))}
+                  <h2 className="font-heading text-base font-semibold text-foreground mb-3">Available Finishes</h2>
+                  <div className="flex flex-wrap gap-4">
+                    {product.resolvedFinishes && product.resolvedFinishes.length > 0
+                      ? product.resolvedFinishes.map(({ name, image }) => (
+                          <div key={name} className="flex flex-col items-center gap-1.5 w-14">
+                            <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-border hover:border-accent transition-colors flex-shrink-0">
+                              <img src={image} alt={name} className="w-full h-full object-cover" />
+                            </div>
+                            <span className="text-xs text-muted-foreground text-center leading-tight">{name}</span>
+                          </div>
+                        ))
+                      : product.finishes.map((finish, index) => (
+                          <span key={index} className="px-3 py-1.5 bg-secondary rounded-lg text-sm font-medium text-foreground border border-border hover:border-accent transition-colors">
+                            {finish}
+                          </span>
+                        ))
+                    }
                   </div>
                 </div>
               )}
