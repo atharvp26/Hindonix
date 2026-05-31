@@ -34,6 +34,8 @@ export function ProductDetailClient({ product }: { product: Product }) {
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const [zoomPos, setZoomPos]           = useState({ x: 50, y: 50 });
   const [isZooming, setIsZooming]       = useState(false);
+  const [lbZoomPos, setLbZoomPos]       = useState({ x: 50, y: 50 });
+  const [lbIsZooming, setLbIsZooming]   = useState(false);
 
   const videos = product.videos || [];
   const overviewPairs = parseOverview(product.description || "");
@@ -154,7 +156,7 @@ export function ProductDetailClient({ product }: { product: Product }) {
               <div className="mb-4">
                 <h2 className="font-heading text-base font-semibold text-foreground mb-3">Overview</h2>
                 {overviewPairs.length > 1 ? (
-                  <div className="grid grid-cols-2 gap-x-6 gap-y-4 rounded-xl border border-border/40 bg-secondary/30 p-4">
+                  <div className="grid grid-cols-2 gap-x-6 gap-y-4">
                     {overviewPairs.map(({ key, value }) => (
                       <div key={key}>
                         <p className="text-xs font-semibold text-foreground uppercase tracking-wide">{key}</p>
@@ -231,13 +233,31 @@ export function ProductDetailClient({ product }: { product: Product }) {
             </>
           )}
 
-          {/* Full image */}
-          <img
-            src={allImages[lightboxIndex] ?? ""}
-            alt={product.name}
-            className="max-w-[90vw] max-h-[90vh] object-contain rounded-lg"
+          {/* Full image — hover to zoom */}
+          <div
+            className="overflow-hidden rounded-lg cursor-zoom-in max-w-[90vw] max-h-[90vh]"
             onClick={(e) => e.stopPropagation()}
-          />
+            onMouseMove={(e) => {
+              const r = e.currentTarget.getBoundingClientRect();
+              setLbZoomPos({
+                x: ((e.clientX - r.left) / r.width)  * 100,
+                y: ((e.clientY - r.top)  / r.height) * 100,
+              });
+            }}
+            onMouseEnter={() => setLbIsZooming(true)}
+            onMouseLeave={() => setLbIsZooming(false)}
+          >
+            <img
+              src={allImages[lightboxIndex] ?? ""}
+              alt={product.name}
+              className="max-w-[90vw] max-h-[90vh] object-contain rounded-lg block"
+              style={{
+                transformOrigin: `${lbZoomPos.x}% ${lbZoomPos.y}%`,
+                transform: lbIsZooming ? "scale(2)" : "scale(1)",
+                transition: lbIsZooming ? "none" : "transform 0.2s ease-out",
+              }}
+            />
+          </div>
 
           {/* Dot indicators */}
           {allImages.length > 1 && (
