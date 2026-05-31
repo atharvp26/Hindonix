@@ -100,13 +100,15 @@ export function ProductDetailClient({ product }: { product: Product }) {
                   <>
                     <button
                       onClick={(e) => { e.stopPropagation(); setActiveIndex(i => (i - 1 + allImages.length) % allImages.length); }}
-                      className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 hover:bg-white flex items-center justify-center shadow transition-colors z-10"
+                      onMouseEnter={() => setIsZooming(false)}
+                      className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 hover:bg-white flex items-center justify-center shadow transition-colors z-10 cursor-default"
                     >
                       <ChevronLeft className="w-4 h-4" />
                     </button>
                     <button
                       onClick={(e) => { e.stopPropagation(); setActiveIndex(i => (i + 1) % allImages.length); }}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 hover:bg-white flex items-center justify-center shadow transition-colors z-10"
+                      onMouseEnter={() => setIsZooming(false)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/80 hover:bg-white flex items-center justify-center shadow transition-colors z-10 cursor-default"
                     >
                       <ChevronRight className="w-4 h-4" />
                     </button>
@@ -219,14 +221,16 @@ export function ProductDetailClient({ product }: { product: Product }) {
           {allImages.length > 1 && (
             <>
               <button
-                className="absolute left-4 z-10 w-10 h-10 rounded-full bg-white/10 hover:bg-white/25 flex items-center justify-center text-white transition-colors"
+                className="absolute left-4 z-10 w-10 h-10 rounded-full bg-white/10 hover:bg-white/25 flex items-center justify-center text-white transition-colors cursor-default"
                 onClick={(e) => { e.stopPropagation(); setLightboxIndex(i => (i - 1 + allImages.length) % allImages.length); }}
+                onMouseEnter={() => setLbIsZooming(false)}
               >
                 <ChevronLeft className="w-6 h-6" />
               </button>
               <button
-                className="absolute right-4 z-10 w-10 h-10 rounded-full bg-white/10 hover:bg-white/25 flex items-center justify-center text-white transition-colors"
+                className="absolute right-4 z-10 w-10 h-10 rounded-full bg-white/10 hover:bg-white/25 flex items-center justify-center text-white transition-colors cursor-default"
                 onClick={(e) => { e.stopPropagation(); setLightboxIndex(i => (i + 1) % allImages.length); }}
+                onMouseEnter={() => setLbIsZooming(false)}
               >
                 <ChevronRight className="w-6 h-6" />
               </button>
