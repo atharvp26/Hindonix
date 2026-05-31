@@ -80,7 +80,7 @@ function ContactPageInner() {
     <main className="min-h-screen">
       <section className="relative w-full overflow-hidden" style={{ aspectRatio: '2400 / 1350' }}>
         <img
-          src="https://res.cloudinary.com/dlt9vf8qk/image/upload/v1780213479/Get-in-Touch-01_q1njie.png"
+          src="https://res.cloudinary.com/dlt9vf8qk/image/upload/v1780214477/Get-in-Touch-01_1_jedpla.png"
           alt=""
           aria-hidden="true"
           className="absolute inset-0 w-full h-full object-cover"
