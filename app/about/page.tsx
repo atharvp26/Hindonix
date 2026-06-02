@@ -23,12 +23,21 @@ const certifications = [
 export default function AboutPage() {
   return (
     <main className="min-h-screen">
-      <section className="pt-32 pb-20 gradient-hero">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="max-w-3xl mx-auto text-center">
-            <span className="inline-block text-accent font-semibold text-sm uppercase tracking-wider mb-4">About Us</span>
-            <h1 className="font-heading text-4xl lg:text-5xl font-bold text-primary-foreground mb-6">Your Partner in Architectural Hardware Excellence</h1>
-            <p className="text-lg text-primary-foreground/80 mb-8">Since 2025, Hindonix has been crafting premium architectural hardware, delivering exceptional quality and design to UAE & USA markets with integrity and expertise.</p>
+      <section className="relative w-full overflow-hidden" style={{ aspectRatio: '2500 / 500' }}>
+        <img
+          src="https://res.cloudinary.com/dlt9vf8qk/image/upload/v1780418023/About-Us_jkxo1j.png"
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-black/40" />
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="container mx-auto px-4 lg:px-8 pt-16 lg:pt-20">
+            <div className="max-w-3xl mx-auto text-center">
+              <span className="inline-block font-semibold text-sm uppercase tracking-wider mb-4" style={{ color: '#ffffff' }}>About Us</span>
+              <h1 className="font-heading text-4xl lg:text-5xl font-bold mb-6" style={{ color: '#ffffff' }}>Your Partner in Architectural Hardware Excellence</h1>
+              <p className="text-lg mb-8" style={{ color: '#ffffff' }}>Since 2025, Hindonix has been crafting premium architectural hardware, delivering exceptional quality and design to UAE &amp; USA markets with integrity and expertise.</p>
+            </div>
           </div>
         </div>
       </section>
