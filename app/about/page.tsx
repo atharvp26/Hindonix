@@ -32,10 +32,10 @@ export default function AboutPage() {
         />
         <div className="absolute inset-0 bg-black/40" />
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="container mx-auto px-4 lg:px-8 pt-16 lg:pt-20">
+          <div className="container mx-auto px-4 lg:px-8 pt-20 lg:pt-24">
             <div className="max-w-3xl mx-auto text-center">
               <span className="inline-block font-semibold text-sm tracking-wider mb-4" style={{ color: '#ffffff' }}>About Us</span>
-              <h1 className="font-heading text-4xl lg:text-5xl font-bold mb-6" style={{ color: '#ffffff' }}>Crafting Hardware For Timeless Spaces</h1>
+              <h1 className="font-heading text-2xl lg:text-3xl font-bold mb-6" style={{ color: '#ffffff' }}>Crafting Hardware For Timeless Spaces</h1>
               <p className="text-lg mb-8" style={{ color: '#ffffff' }}>Hindonix delivers precision engineered architectural hardware for architects, designers &amp; developers who value timeless aesthetics, reliable performance &amp; refined craftsmanship.</p>
             </div>
           </div>
