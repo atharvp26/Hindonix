@@ -11,7 +11,7 @@ interface BlogsClientProps {
 export function BlogsClient({ initialBlogs }: BlogsClientProps) {
   return (
     <main className="min-h-screen">
-      <section className="relative w-full overflow-hidden" style={{ aspectRatio: '2500 / 500' }}>
+      <section className="relative w-full overflow-hidden" style={{ aspectRatio: '2500 / 500', minHeight: '240px' }}>
         <img
           src="https://res.cloudinary.com/dlt9vf8qk/image/upload/v1780418023/Blogs_nfwxdu.png"
           alt=""
