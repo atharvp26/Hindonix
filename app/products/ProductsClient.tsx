@@ -155,7 +155,7 @@ export function ProductsClient({
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="container mx-auto px-4 lg:px-8 pt-16 lg:pt-20">
             <div className="max-w-3xl mx-auto text-center">
-              <span className="inline-block font-semibold text-sm uppercase tracking-wider mb-4" style={{ color: '#ffffff' }}>Our Collection</span>
+              <span className="inline-block font-semibold text-sm tracking-wider mb-4" style={{ color: '#ffffff' }}>Our Collections</span>
               <h1 className="font-heading text-4xl lg:text-5xl font-bold mb-6" style={{ color: '#ffffff' }}>Architectural Hardware</h1>
               <p className="text-lg" style={{ color: '#ffffff' }}>Discover our curated collection of precision-crafted door handles and hardware.</p>
             </div>

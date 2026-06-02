@@ -89,7 +89,7 @@ function ContactPageInner() {
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="container mx-auto px-4 lg:px-8 pt-16 lg:pt-20">
             <div className="max-w-3xl mx-auto text-center">
-              <span className="inline-block font-semibold text-sm uppercase tracking-wider mb-4" style={{ color: '#ffffff' }}>Contact Us</span>
+              <span className="inline-block font-semibold text-sm tracking-wider mb-4" style={{ color: '#ffffff' }}>Contact Us</span>
               <h1 className="font-heading text-4xl lg:text-5xl font-bold mb-6" style={{ color: '#ffffff' }}>Get in Touch</h1>
               <p className="text-lg" style={{ color: '#ffffff' }}>Have a question about our architectural hardware? We&apos;re here to help.</p>
             </div>

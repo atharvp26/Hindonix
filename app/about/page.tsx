@@ -34,9 +34,9 @@ export default function AboutPage() {
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="container mx-auto px-4 lg:px-8 pt-16 lg:pt-20">
             <div className="max-w-3xl mx-auto text-center">
-              <span className="inline-block font-semibold text-sm uppercase tracking-wider mb-4" style={{ color: '#ffffff' }}>About Us</span>
-              <h1 className="font-heading text-4xl lg:text-5xl font-bold mb-6" style={{ color: '#ffffff' }}>Your Partner in Architectural Hardware Excellence</h1>
-              <p className="text-lg mb-8" style={{ color: '#ffffff' }}>Since 2025, Hindonix has been crafting premium architectural hardware, delivering exceptional quality and design to UAE &amp; USA markets with integrity and expertise.</p>
+              <span className="inline-block font-semibold text-sm tracking-wider mb-4" style={{ color: '#ffffff' }}>About Us</span>
+              <h1 className="font-heading text-4xl lg:text-5xl font-bold mb-6" style={{ color: '#ffffff' }}>Crafting Hardware For Timeless Spaces</h1>
+              <p className="text-lg mb-8" style={{ color: '#ffffff' }}>Hindonix delivers precision engineered architectural hardware for architects, designers &amp; developers who value timeless aesthetics, reliable performance &amp; refined craftsmanship.</p>
             </div>
           </div>
         </div>
