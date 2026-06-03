@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { X, Menu } from "lucide-react";
+import { X } from "lucide-react";
 import { UserButton, useAuth } from "@clerk/nextjs";
 import { cn } from "@/lib/utils";
 
@@ -41,7 +41,7 @@ function NavbarContent({
         <div className="flex-1">
           <Link href="/" aria-label="Hindonix home" className="shrink-0 inline-block">
             <span
-              className="text-[#1a1a1a] text-2xl md:text-3xl leading-none"
+              className="text-[#1a1a1a] text-lg md:text-3xl leading-none"
               style={{ fontFamily: '"Times New Roman", Times, serif', fontWeight: 400, letterSpacing: '0.2em' }}
             >
               HINDONIX<sup className="text-[10px] ml-0.5">®</sup>

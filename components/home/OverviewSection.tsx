@@ -170,15 +170,15 @@ export function OverviewSection({ initialBlockImages }: OverviewSectionProps) {
       <div className="container mx-auto px-4 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <span
-            className="inline-block text-[#1a1a1a]/50 font-normal text-xs tracking-[0.05em] mb-4"
+            className="block text-center text-[#1a1a1a]/50 font-normal text-xs tracking-[0.05em] mb-4"
             style={{ fontFamily: "Montserrat, system-ui, sans-serif" }}
           >
             Why Design Professionals Choose Us
           </span>
-          <h2 className="text-3xl lg:text-4xl font-semibold text-[#1a1a1a] mb-6 tracking-tight">
+          <h2 className="text-center text-3xl lg:text-4xl font-semibold text-[#1a1a1a] mb-6 tracking-tight">
             Exceptional Architectural Hardware
           </h2>
-          <p className="text-[#1a1a1a]/60 text-base lg:text-lg font-light">
+          <p className="text-center text-[#1a1a1a]/60 text-base lg:text-lg font-light">
             From concept to installation, we provide premium hardware solutions
             with uncompromising quality, elegant design, and lasting durability.
           </p>

@@ -20,6 +20,12 @@ const FacebookLogo = (props: SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
+const YouTubeLogo = (props: SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
+    <path d="M23.495 6.205a3.007 3.007 0 0 0-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 0 0 .527 6.205a31.247 31.247 0 0 0-.522 5.805 31.247 31.247 0 0 0 .522 5.783 3.007 3.007 0 0 0 2.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 0 0 2.088-2.088 31.247 31.247 0 0 0 .5-5.783 31.247 31.247 0 0 0-.5-5.805zM9.609 15.601V8.408l6.264 3.602z" />
+  </svg>
+);
+
 const footerTopLinks = [
   { name: "About", path: "/about" },
   { name: "Catalogue", path: "/products" },
@@ -31,6 +37,7 @@ const socialLinks = [
   { name: "LinkedIn", href: "#", icon: LinkedInLogo },
   { name: "Instagram", href: "https://www.instagram.com/hindonix.handles?igsh=eTlidHJhdG54OGY1", icon: InstagramLogo },
   { name: "Facebook", href: "https://www.facebook.com/share/1BjnmmbXY1/", icon: FacebookLogo },
+  { name: "YouTube", href: "https://youtube.com/@hindonix?si=Brk-vBuUaCcPNOzX", icon: YouTubeLogo },
 ];
 
 export function Footer() {
