@@ -11,7 +11,7 @@ interface BlogsClientProps {
 export function BlogsClient({ initialBlogs }: BlogsClientProps) {
   return (
     <main className="min-h-screen">
-      <section className="relative w-full overflow-hidden" style={{ aspectRatio: '2500 / 500', minHeight: '240px' }}>
+      <section className="relative w-full overflow-hidden lg:aspect-[2500/500]">
         <img
           src="https://res.cloudinary.com/dlt9vf8qk/image/upload/v1780418023/Blogs_nfwxdu.png"
           alt=""
@@ -19,12 +19,12 @@ export function BlogsClient({ initialBlogs }: BlogsClientProps) {
           className="absolute inset-0 w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-black/40" />
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="container mx-auto px-4 lg:px-8 pt-16 lg:pt-20">
+        <div className="relative lg:absolute lg:inset-0 flex items-center justify-center pt-24 pb-10 lg:py-0">
+          <div className="container mx-auto px-4 lg:px-8 lg:pt-16">
             <div className="max-w-3xl mx-auto text-center">
               <span className="inline-block font-semibold text-sm tracking-wider mb-4" style={{ color: '#ffffff' }}>Blogs</span>
-              <h1 className="font-heading text-4xl lg:text-5xl font-bold mb-6" style={{ color: '#ffffff' }}>Latest Insights &amp; Articles</h1>
-              <p className="text-lg" style={{ color: '#ffffff' }}>Explore our latest blog posts and stay updated with industry insights.</p>
+              <h1 className="font-heading text-3xl lg:text-5xl font-bold mb-4" style={{ color: '#ffffff' }}>Latest Insights &amp; Articles</h1>
+              <p className="text-sm lg:text-lg" style={{ color: '#ffffff' }}>Explore our latest blog posts and stay updated with industry insights.</p>
             </div>
           </div>
         </div>

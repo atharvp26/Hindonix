@@ -23,7 +23,7 @@ const certifications = [
 export default function AboutPage() {
   return (
     <main className="min-h-screen">
-      <section className="relative w-full overflow-hidden" style={{ aspectRatio: '2500 / 500', minHeight: '240px' }}>
+      <section className="relative w-full overflow-hidden lg:aspect-[2500/500]">
         <img
           src="https://res.cloudinary.com/dlt9vf8qk/image/upload/v1780418023/About-Us_jkxo1j.png"
           alt=""
@@ -31,12 +31,12 @@ export default function AboutPage() {
           className="absolute inset-0 w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-black/40" />
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="container mx-auto px-4 lg:px-8 pt-20 lg:pt-24">
+        <div className="relative lg:absolute lg:inset-0 flex items-center justify-center pt-24 pb-10 lg:py-0">
+          <div className="container mx-auto px-4 lg:px-8 lg:pt-20">
             <div className="max-w-3xl mx-auto text-center">
               <span className="inline-block font-semibold text-sm tracking-wider mb-4" style={{ color: '#ffffff' }}>About Us</span>
-              <h1 className="font-heading text-2xl lg:text-3xl font-bold mb-6" style={{ color: '#ffffff' }}>Crafting Hardware For Timeless Spaces</h1>
-              <p className="text-base mb-8" style={{ color: '#ffffff' }}>Hindonix delivers precision engineered architectural hardware for architects, designers &amp; developers who value timeless aesthetics, reliable performance &amp; refined craftsmanship.</p>
+              <h1 className="font-heading text-2xl lg:text-3xl font-bold mb-4" style={{ color: '#ffffff' }}>Crafting Hardware For Timeless Spaces</h1>
+              <p className="text-sm lg:text-base mb-4" style={{ color: '#ffffff' }}>Hindonix delivers precision engineered architectural hardware for architects, designers &amp; developers who value timeless aesthetics, reliable performance &amp; refined craftsmanship.</p>
             </div>
           </div>
         </div>
