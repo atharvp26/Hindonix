@@ -178,9 +178,9 @@ export function OverviewSection({ initialBlockImages }: OverviewSectionProps) {
           <h2 className="text-center text-3xl lg:text-4xl font-semibold text-[#1a1a1a] mb-6 tracking-tight">
             Exceptional Architectural Hardware
           </h2>
-          <p className="text-center text-[#1a1a1a]/60 text-base lg:text-lg font-light">
+          <p className="text-left lg:text-center text-[#1a1a1a]/60 text-base lg:text-lg font-light">
             From concept to installation, we provide premium hardware solutions
-            with uncompromising quality, elegant design, and lasting durability.
+            with quality that is uncompromising, elegant design, and lasting durability.
           </p>
         </div>
       </div>
