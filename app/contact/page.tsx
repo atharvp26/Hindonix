@@ -182,9 +182,9 @@ function ContactPageInner() {
                   ))}
                 </div>
               </div>
-              <div className="bg-secondary rounded-2xl overflow-hidden h-64">
+              <div className="bg-secondary rounded-2xl overflow-hidden h-64 relative">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3610.178509324792!2d55.26585607538467!3d25.197201977706!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e5f43348a67e24b%3A0xff45e502e1ceb7e2!2sBusiness%20Bay%20-%20Dubai%20-%20United%20Arab%20Emirates!5e0!3m2!1sen!2s!4v1704123456789!5m2!1sen!2s"
+                  src="https://maps.google.com/maps?q=182%2F1%2FA%2F1+Shiv+Samarth+Nagar+Opp+ST+Depot+Khed+Ratnagiri+Maharashtra+415709+India&output=embed&z=15"
                   width="100%"
                   height="100%"
                   style={{ border: 0 }}
@@ -193,6 +193,14 @@ function ContactPageInner() {
                   referrerPolicy="no-referrer-when-downgrade"
                   title="Office Location"
                 />
+                <a
+                  href="https://maps.app.goo.gl/MkUiawF7yq4tcYP48"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="absolute bottom-3 right-3 bg-white text-[#1a1a1a] text-xs font-medium px-3 py-1.5 rounded-full shadow hover:bg-accent hover:text-white transition-colors"
+                >
+                  Open in Maps
+                </a>
               </div>
             </div>
           </div>
