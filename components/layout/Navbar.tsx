@@ -37,11 +37,12 @@ function NavbarContent({
     <>
       {/* ── HORIZONTAL TOP NAV ─────────────────────────────────────── */}
       <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-5 lg:px-8 py-5 bg-[#eaeaea]/30 backdrop-blur-md">
-        {/* Brand — left, flex-1 so it balances the right spacer */}
+
+        {/* LEFT: Brand on desktop | empty spacer on mobile */}
         <div className="flex-1">
-          <Link href="/" aria-label="Hindonix home" className="shrink-0 inline-block">
+          <Link href="/" aria-label="Hindonix home" className="hidden md:inline-block shrink-0">
             <span
-              className="text-[#1a1a1a] text-lg md:text-3xl leading-none"
+              className="text-[#1a1a1a] text-3xl leading-none"
               style={{ fontFamily: '"Times New Roman", Times, serif', fontWeight: 400, letterSpacing: '0.2em' }}
             >
               HINDONIX<sup className="text-[10px] ml-0.5">®</sup>
@@ -49,72 +50,85 @@ function NavbarContent({
           </Link>
         </div>
 
-        {/* Nav links — centre pill (hidden on mobile) */}
-        <div className="hidden md:flex items-center rounded-full border border-[#e0e0e0] bg-[#f5f5f5] px-2 py-1 gap-1">
-          {navLinks.map((link) => (
-            <Link
-              key={link.path}
-              href={link.path}
-              className={cn(
-                "px-5 py-1.5 rounded-full text-base transition-colors tracking-wide",
-                pathname === link.path
-                  ? "bg-white text-[#1a1a1a] shadow-sm font-medium"
-                  : "text-[#555] hover:text-[#1a1a1a] hover:bg-white/70"
-              )}
+        {/* CENTER: Nav pill on desktop | Brand on mobile */}
+        <div className="flex items-center">
+          {/* Mobile — centered logo */}
+          <Link href="/" aria-label="Hindonix home" className="md:hidden shrink-0 inline-block">
+            <span
+              className="text-[#1a1a1a] text-base leading-none"
+              style={{ fontFamily: '"Times New Roman", Times, serif', fontWeight: 400, letterSpacing: '0.12em' }}
             >
-              {link.name}
-            </Link>
-          ))}
-          {isAdmin && (
-            <Link
-              href="/admin"
-              className={cn(
-                "px-5 py-1.5 rounded-full text-base transition-colors tracking-wide",
-                pathname === "/admin"
-                  ? "bg-white text-[#1a1a1a] shadow-sm font-medium"
-                  : "text-[#555] hover:text-[#1a1a1a] hover:bg-white/70"
-              )}
-            >
-              Admin
-            </Link>
-          )}
-          {!isSignedIn ? (
-            <Link
-              href="/sign-in"
-              className={cn(
-                "px-5 py-1.5 rounded-full text-base transition-colors tracking-wide",
-                pathname === "/sign-in"
-                  ? "bg-white text-[#1a1a1a] shadow-sm font-medium"
-                  : "text-[#555] hover:text-[#1a1a1a] hover:bg-white/70"
-              )}
-            >
-              Login
-            </Link>
-          ) : (
-            showUserButton && (
-              <div className="px-2">
-                <UserButton appearance={{ elements: { avatarBox: "w-7 h-7" } }} />
-              </div>
-            )
-          )}
+              HINDONIX<sup className="text-[9px] ml-0.5">®</sup>
+            </span>
+          </Link>
+
+          {/* Desktop — nav pill */}
+          <div className="hidden md:flex items-center rounded-full border border-[#e0e0e0] bg-[#f5f5f5] px-2 py-1 gap-1">
+            {navLinks.map((link) => (
+              <Link
+                key={link.path}
+                href={link.path}
+                className={cn(
+                  "px-5 py-1.5 rounded-full text-base transition-colors tracking-wide",
+                  pathname === link.path
+                    ? "bg-white text-[#1a1a1a] shadow-sm font-medium"
+                    : "text-[#555] hover:text-[#1a1a1a] hover:bg-white/70"
+                )}
+              >
+                {link.name}
+              </Link>
+            ))}
+            {isAdmin && (
+              <Link
+                href="/admin"
+                className={cn(
+                  "px-5 py-1.5 rounded-full text-base transition-colors tracking-wide",
+                  pathname === "/admin"
+                    ? "bg-white text-[#1a1a1a] shadow-sm font-medium"
+                    : "text-[#555] hover:text-[#1a1a1a] hover:bg-white/70"
+                )}
+              >
+                Admin
+              </Link>
+            )}
+            {!isSignedIn ? (
+              <Link
+                href="/sign-in"
+                className={cn(
+                  "px-5 py-1.5 rounded-full text-base transition-colors tracking-wide",
+                  pathname === "/sign-in"
+                    ? "bg-white text-[#1a1a1a] shadow-sm font-medium"
+                    : "text-[#555] hover:text-[#1a1a1a] hover:bg-white/70"
+                )}
+              >
+                Login
+              </Link>
+            ) : (
+              showUserButton && (
+                <div className="px-2">
+                  <UserButton appearance={{ elements: { avatarBox: "w-7 h-7" } }} />
+                </div>
+              )
+            )}
+          </div>
         </div>
 
-        {/* Right spacer — flex-1 mirrors brand side to keep pill centred; shows hamburger on mobile */}
+        {/* RIGHT: hamburger on mobile | flex-1 spacer on desktop */}
         <div className="flex-1 flex justify-end">
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="md:hidden p-2 text-[#1a1a1a] flex flex-col gap-[5px]"
-          aria-label="Toggle menu"
-        >
-          {isOpen ? (
-            <X className="w-5 h-5" />
-          ) : (
-            <>
-              <span className="block w-5 h-px bg-[#1a1a1a]" />
-              <span className="block w-5 h-px bg-[#1a1a1a]" />
-            </>
-          )}
-        </button>
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="md:hidden p-2 text-[#1a1a1a] flex flex-col gap-[5px]"
+            aria-label="Toggle menu"
+          >
+            {isOpen ? (
+              <X className="w-5 h-5" />
+            ) : (
+              <>
+                <span className="block w-5 h-px bg-[#1a1a1a]" />
+                <span className="block w-5 h-px bg-[#1a1a1a]" />
+              </>
+            )}
+          </button>
         </div>
       </nav>
 

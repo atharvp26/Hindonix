@@ -84,7 +84,7 @@ export default function AboutPage() {
               {[
                 { image: "https://res.cloudinary.com/dlt9vf8qk/image/upload/v1780072786/10-countries_capmwi.png", label: "Countries" },
                 { image: "https://res.cloudinary.com/dlt9vf8qk/image/upload/v1780072786/50-Clients_rb2nrl.png", label: "Clients", mt: true },
-                { image: "https://res.cloudinary.com/dlt9vf8qk/image/upload/v1779628390/hindonix/zintjx4w2x5g77996zma.png", label: "Suppliers" },
+                { image: "https://res.cloudinary.com/dlt9vf8qk/image/upload/v1780072786/Precision_lavali.png", label: "Suppliers" },
                 { image: "https://res.cloudinary.com/dlt9vf8qk/image/upload/v1780072787/10-Finishes_pefw99.png", label: "Finishes", mt: true },
               ].map(({ image, label, mt }) => (
                 <div key={label} className={`rounded-2xl shadow-card overflow-hidden${mt ? " lg:mt-8" : ""}`}>
