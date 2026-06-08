@@ -55,10 +55,10 @@ function NavbarContent({
           {/* Mobile — centered logo */}
           <Link href="/" aria-label="Hindonix home" className="md:hidden shrink-0 inline-block">
             <span
-              className="text-[#1a1a1a] text-base leading-none"
-              style={{ fontFamily: '"Times New Roman", Times, serif', fontWeight: 400, letterSpacing: '0.12em' }}
+              className="text-[#1a1a1a] text-sm leading-none"
+              style={{ fontFamily: '"Times New Roman", Times, serif', fontWeight: 400, letterSpacing: '0.2em' }}
             >
-              HINDONIX<sup className="text-[9px] ml-0.5">®</sup>
+              HINDONIX<sup className="text-[8px] ml-0.5">®</sup>
             </span>
           </Link>
 
