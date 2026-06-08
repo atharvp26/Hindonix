@@ -64,12 +64,21 @@ export function Footer() {
       {/* Center brand block */}
       <div className="container mx-auto px-4 lg:px-8 py-16">
         <div className="max-w-md mx-auto text-center space-y-8">
+          {/* Image logo — inverted to white for dark background */}
+          <img
+            src="https://res.cloudinary.com/dlt9vf8qk/image/upload/v1780943181/Logo-Black_ytnast.png"
+            alt="Hindonix"
+            className="h-7 w-auto mx-auto"
+            style={{ filter: 'brightness(0) invert(1)' }}
+          />
+          {/* Text logo fallback — uncomment to use
           <h3
             className="text-sm md:text-xl font-normal leading-none tracking-[0.2em] md:tracking-[0.3em]"
             style={{ fontFamily: '"Times New Roman", Times, serif', color: '#eaeaea' }}
           >
             HINDONIX<sup className="text-xs ml-0.5" style={{ fontFamily: 'Montserrat, sans-serif' }}>®</sup>
           </h3>
+          */}
           <div className="space-y-2.5">
             <p className="flex items-center justify-center gap-2 text-sm font-light" style={{ color: '#f3f3f399' }}>
               <Phone className="w-4 h-4" style={{ color: '#f3f3f3' }} />

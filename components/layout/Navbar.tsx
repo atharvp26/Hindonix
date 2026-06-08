@@ -41,12 +41,20 @@ function NavbarContent({
         {/* LEFT: Brand on desktop | empty spacer on mobile */}
         <div className="flex-1">
           <Link href="/" aria-label="Hindonix home" className="hidden md:inline-block shrink-0">
+            {/* Image logo */}
+            <img
+              src="https://res.cloudinary.com/dlt9vf8qk/image/upload/v1780943181/Logo-Black_ytnast.png"
+              alt="Hindonix"
+              className="h-8 w-auto"
+            />
+            {/* Text logo fallback — uncomment to use
             <span
               className="text-[#1a1a1a] text-3xl leading-none"
               style={{ fontFamily: '"Times New Roman", Times, serif', fontWeight: 400, letterSpacing: '0.2em' }}
             >
               HINDONIX<sup className="text-[10px] ml-0.5">®</sup>
             </span>
+            */}
           </Link>
         </div>
 
@@ -54,12 +62,20 @@ function NavbarContent({
         <div className="flex items-center">
           {/* Mobile — centered logo */}
           <Link href="/" aria-label="Hindonix home" className="md:hidden shrink-0 inline-block">
+            {/* Image logo */}
+            <img
+              src="https://res.cloudinary.com/dlt9vf8qk/image/upload/v1780943181/Logo-Black_ytnast.png"
+              alt="Hindonix"
+              className="h-6 w-auto"
+            />
+            {/* Text logo fallback — uncomment to use
             <span
               className="text-[#1a1a1a] text-sm leading-none"
               style={{ fontFamily: '"Times New Roman", Times, serif', fontWeight: 400, letterSpacing: '0.2em' }}
             >
               HINDONIX<sup className="text-[8px] ml-0.5">®</sup>
             </span>
+            */}
           </Link>
 
           {/* Desktop — nav pill */}
