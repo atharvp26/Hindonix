@@ -80,14 +80,14 @@ export default function AboutPage() {
                 ))}
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-4 items-start">
               {[
                 { image: "https://res.cloudinary.com/dlt9vf8qk/image/upload/v1780072786/10-countries_capmwi.png", label: "Countries" },
-                { image: "https://res.cloudinary.com/dlt9vf8qk/image/upload/v1780072786/50-Clients_rb2nrl.png", label: "Clients", mt: true },
+                { image: "https://res.cloudinary.com/dlt9vf8qk/image/upload/v1780072786/50-Clients_rb2nrl.png", label: "Clients" },
                 { image: "https://res.cloudinary.com/dlt9vf8qk/image/upload/v1780072786/Precision_lavali.png", label: "Suppliers" },
-                { image: "https://res.cloudinary.com/dlt9vf8qk/image/upload/v1780072787/10-Finishes_pefw99.png", label: "Finishes", mt: true },
-              ].map(({ image, label, mt }) => (
-                <div key={label} className={`rounded-2xl shadow-card overflow-hidden${mt ? " lg:mt-8" : ""}`}>
+                { image: "https://res.cloudinary.com/dlt9vf8qk/image/upload/v1780072787/10-Finishes_pefw99.png", label: "Finishes" },
+              ].map(({ image, label }) => (
+                <div key={label} className="rounded-2xl shadow-card overflow-hidden">
                   <img src={image} alt={label} className="w-full h-auto block" />
                 </div>
               ))}

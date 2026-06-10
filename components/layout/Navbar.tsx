@@ -45,7 +45,7 @@ function NavbarContent({
             <img
               src="https://res.cloudinary.com/dlt9vf8qk/image/upload/v1780943181/Logo-Black_ytnast.png"
               alt="Hindonix"
-              className="h-8 w-auto"
+              className="h-12 w-auto"
             />
             {/* Text logo fallback — uncomment to use
             <span
@@ -66,7 +66,7 @@ function NavbarContent({
             <img
               src="https://res.cloudinary.com/dlt9vf8qk/image/upload/v1780943181/Logo-Black_ytnast.png"
               alt="Hindonix"
-              className="h-6 w-auto"
+              className="h-9 w-auto"
             />
             {/* Text logo fallback — uncomment to use
             <span

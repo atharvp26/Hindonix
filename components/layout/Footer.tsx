@@ -68,7 +68,7 @@ export function Footer() {
           <img
             src="https://res.cloudinary.com/dlt9vf8qk/image/upload/v1780943181/Logo-Black_ytnast.png"
             alt="Hindonix"
-            className="h-7 w-auto mx-auto"
+            className="h-10 w-auto mx-auto"
             style={{ filter: 'brightness(0) invert(1)' }}
           />
           {/* Text logo fallback — uncomment to use
