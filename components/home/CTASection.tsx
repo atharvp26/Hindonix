@@ -96,7 +96,7 @@ export function CTASection({ initialBgImage, initialMobileImage }: CTASectionPro
 
         {/* ── Mobile: dark content block on top, image below ── */}
         <div className="lg:hidden flex flex-col">
-          <div className="bg-[#1a1a1a] px-8 py-16">
+          <div className="bg-[#1a1a1a] px-8 pt-12 pb-8">
             {textContent}
           </div>
           {(mobileImage || bgImage) && (

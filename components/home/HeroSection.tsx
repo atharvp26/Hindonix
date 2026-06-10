@@ -62,14 +62,14 @@ export function HeroSection({ initialImages }: HeroSectionProps) {
 
   return (
     /*
-     * Mobile  (< md): flex-col — image on top (52vw tall), text stacked below, all centered
-     * Desktop (≥ md): relative block — image absolute full-bleed, text absolute right overlay
+     * Mobile  (< md): stacked — image (aspect-[4/3]) on top, text block below on #eaeaea
+     * Desktop (≥ md): relative full-height — image absolute full-bleed, text absolute right overlay
      */
-    <section
-      className="w-full bg-[#eaeaea] overflow-hidden relative h-[75vw] md:h-[calc(100vh-65px)] md:min-h-[500px]"
-    >
-      {/* IMAGE — always absolute background fill */}
-      <div className="absolute inset-0">
+    <section className="w-full bg-[#eaeaea] overflow-hidden md:relative md:h-[calc(100vh-65px)] md:min-h-[500px]">
+
+      {/* IMAGE */}
+      {/* Mobile: natural aspect-ratio box; Desktop: absolute fill */}
+      <div className="relative aspect-[4/3] md:aspect-auto md:absolute md:inset-0">
         {heroImages.length <= 1 ? (
           <ImageDisplay
             src={heroImages[0]}
@@ -99,27 +99,23 @@ export function HeroSection({ initialImages }: HeroSectionProps) {
         )}
       </div>
 
-      {/* Mobile gradient — fades image toward bottom for text readability */}
-      <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-[#eaeaea] via-[#eaeaea]/60 to-transparent md:hidden" aria-hidden="true" />
+      {/* TEXT */}
+      {/* Mobile: normal-flow block below image; Desktop: absolute right-side overlay */}
+      <div className="flex flex-col items-center text-center px-6 py-10 bg-[#eaeaea] md:bg-transparent md:py-0 md:px-0 md:absolute md:top-0 md:bottom-0 md:h-full md:left-[42%] md:right-16 md:justify-center">
 
-      {/* TEXT — overlay: bottom-center on mobile, right side on desktop */}
-      <div className="absolute bottom-0 left-0 right-0 z-10 flex flex-col items-center text-center px-6 pb-8 md:top-0 md:bottom-0 md:h-full md:left-[42%] md:right-16 md:px-0 md:pb-0 md:justify-center">
-
-        {/* Heading — wraps on mobile, single line on desktop */}
         <h1
           className="text-[#1a1a1a] leading-none mb-4 tracking-[0.1em] md:whitespace-nowrap md:tracking-[0.2em]"
           style={{
             fontFamily: '"Times New Roman", Times, serif',
-            fontSize: 'clamp(1.2rem, 2.5vw, 3.2rem)',
+            fontSize: 'clamp(1.4rem, 2.5vw, 3.2rem)',
             fontWeight: 400,
           }}
         >
           ARCHITECTURAL DOORWARE
         </h1>
 
-        {/* Subtitle */}
         <p
-          className="text-[#1a1a1a]/70 mb-6 md:mb-8"
+          className="text-[#1a1a1a]/70 mb-7 md:mb-8"
           style={{
             fontFamily: 'Montserrat, system-ui, sans-serif',
             fontSize: 'clamp(0.85rem, 1.1vw, 1.1rem)',
@@ -130,7 +126,6 @@ export function HeroSection({ initialImages }: HeroSectionProps) {
           Export Grade Craftsmanship
         </p>
 
-        {/* CTA pill */}
         <div className="inline-flex items-center rounded-full border border-[#c8c8c8] bg-[#f4f4f4]/90 overflow-hidden">
           <Link
             href="/products"
