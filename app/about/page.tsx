@@ -80,7 +80,9 @@ export default function AboutPage() {
                 ))}
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4 items-start">
+
+            {/* Desktop: 2-col grid inside container */}
+            <div className="hidden lg:grid grid-cols-2 gap-4 items-start">
               {[
                 { image: "https://res.cloudinary.com/dlt9vf8qk/image/upload/v1780072786/10-countries_capmwi.png", label: "Countries" },
                 { image: "https://res.cloudinary.com/dlt9vf8qk/image/upload/v1780072786/50-Clients_rb2nrl.png", label: "Clients" },
@@ -93,6 +95,18 @@ export default function AboutPage() {
               ))}
             </div>
           </div>
+        </div>
+
+        {/* Mobile: full-bleed stacked images, outside container */}
+        <div className="lg:hidden flex flex-col mt-10">
+          {[
+            { image: "https://res.cloudinary.com/dlt9vf8qk/image/upload/v1780072786/10-countries_capmwi.png", label: "Countries" },
+            { image: "https://res.cloudinary.com/dlt9vf8qk/image/upload/v1780072786/50-Clients_rb2nrl.png", label: "Clients" },
+            { image: "https://res.cloudinary.com/dlt9vf8qk/image/upload/v1780072786/Precision_lavali.png", label: "Suppliers" },
+            { image: "https://res.cloudinary.com/dlt9vf8qk/image/upload/v1780072787/10-Finishes_pefw99.png", label: "Finishes" },
+          ].map(({ image, label }) => (
+            <img key={label} src={image} alt={label} className="w-full h-auto block" />
+          ))}
         </div>
       </section>
 
