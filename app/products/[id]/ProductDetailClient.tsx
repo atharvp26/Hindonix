@@ -73,7 +73,7 @@ export function ProductDetailClient({ product }: { product: Product }) {
 
               {/* Main image — hover to zoom, click to open lightbox */}
               <div
-                className="relative bg-card rounded-2xl overflow-hidden border border-border/50 aspect-[4/3] cursor-zoom-in select-none"
+                className="relative rounded-2xl overflow-hidden aspect-[4/3] cursor-zoom-in select-none"
                 onMouseMove={(e) => {
                   const r = e.currentTarget.getBoundingClientRect();
                   setZoomPos({

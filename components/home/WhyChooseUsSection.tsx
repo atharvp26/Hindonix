@@ -24,9 +24,9 @@ export function WhyChooseUsSection() {
             <div>
               <span className="inline-block text-[#1a1a1a]/45 font-normal text-xs tracking-[0.05em] mb-3" style={{ fontFamily: 'Montserrat, system-ui, sans-serif' }}>Industry Expertise</span>
               <h3 className="text-2xl lg:text-3xl font-semibold text-[#1a1a1a] mb-3 tracking-tight">Specialized in Architectural Hardware</h3>
-              <p className="text-[#1a1a1a]/55 text-sm lg:text-base mb-5 leading-relaxed font-light">Since 2025, we&apos;ve been crafting premium architectural hardware for luxury residential and commercial projects. Our expertise in material selection, finish quality, and ergonomic design ensures hardware that performs beautifully for decades.</p>
+              <p className="text-[#1a1a1a]/55 text-sm lg:text-base mb-5 leading-relaxed font-light">Designed for architects, interior designers and developers, Hindonix delivers architectural hardware defined by refined craftsmanship, lasting durability and exceptional finish quality.</p>
               <div className="flex flex-wrap gap-2 mb-6">
-                {["Door Handles", "Mortise Handles", "Custom Finishes"].map((tag) => (
+                {["Lever Handles", "Mortise Handle System", "Bespoke Finishes"].map((tag) => (
                   <span key={tag} className="px-3 py-1.5 text-xs font-medium border border-[#1a1a1a]/20 text-[#1a1a1a]/70 hover:border-[#1a1a1a] hover:text-[#1a1a1a] transition-colors cursor-default tracking-wide">{tag}</span>
                 ))}
               </div>
@@ -35,24 +35,24 @@ export function WhyChooseUsSection() {
               <div className="bg-[#eaeaea] p-5 text-center">
                 <Factory className="w-8 h-8 text-[#1a1a1a]/40 mx-auto mb-3" />
                 <div className="text-xl font-semibold text-[#1a1a1a]">10+</div>
-                <div className="text-xs text-[#1a1a1a]/50 uppercase tracking-wider mt-1">Finishes</div>
+                <div className="text-xs text-[#1a1a1a]/50 uppercase tracking-wider mt-1">Signature Finishes</div>
               </div>
               <div className="bg-[#eaeaea] p-5 text-center">
                 <Shield className="w-8 h-8 text-[#1a1a1a]/40 mx-auto mb-3" />
                 <div className="text-xl font-semibold text-[#1a1a1a]">100%</div>
-                <div className="text-xs text-[#1a1a1a]/50 uppercase tracking-wider mt-1">Quality Assured</div>
+                <div className="text-xs text-[#1a1a1a]/50 uppercase tracking-wider mt-1">Engineered for Durability</div>
               </div>
               <div className="bg-[#1a1a1a] p-5 text-center col-span-2">
-                <div className="text-base font-semibold text-[#eaeaea] mb-1 tracking-wide">UAE &amp; USA Markets</div>
-                <div className="text-xs text-[#f3f3f3]/60 font-light">Serving B2B Partners Across Two Regions</div>
+                <div className="text-base font-semibold text-[#eaeaea] mb-1 tracking-wide">Global Presence</div>
+                <div className="text-xs text-[#f3f3f3]/60 font-light">Trusted by Architects, developers &amp; hardware partners across international markets.</div>
               </div>
             </div>
           </div>
 
           <div className="bg-[#f3f3f3] p-6 lg:p-10 border border-[#1a1a1a]/8">
             <span className="inline-block text-[#1a1a1a]/45 font-normal text-xs tracking-[0.05em] mb-3" style={{ fontFamily: 'Montserrat, system-ui, sans-serif' }}>Why Choose Us</span>
-            <h2 className="text-2xl lg:text-3xl font-semibold text-[#1a1a1a] mb-3 tracking-tight">Craftsmanship Meets Design Excellence</h2>
-            <p className="text-[#1a1a1a]/55 text-sm lg:text-base mb-6 font-light">We combine traditional craftsmanship with modern design to deliver architectural hardware that enhances every space with beauty, function, and lasting quality.</p>
+            <h2 className="text-2xl lg:text-3xl font-semibold text-[#1a1a1a] mb-3 tracking-tight">Built on Precision, Trusted by Professionals</h2>
+            <p className="text-[#1a1a1a]/55 text-sm lg:text-base mb-6 font-light">Hindonix delivers premium architectural hardware that combines refined aesthetics, precision engineering and lasting durability for residential projects.</p>
             <div className="grid sm:grid-cols-2 gap-6 mb-6">
               {reasons.map((reason, index) => (
                 <div key={reason.title} className={cn("flex gap-4")} style={{ animationDelay: `${index * 0.1}s` }}>
