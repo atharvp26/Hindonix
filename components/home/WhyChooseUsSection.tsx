@@ -2,10 +2,10 @@ import { Award, Clock, Handshake, Globe, CheckCircle, TrendingUp, Factory, Shiel
 import { cn } from "@/lib/utils";
 
 const reasons = [
-  { icon: Clock, title: "Responsive Service", description: "Quick quotes, sample availability, and dedicated support for all your hardware needs." },
-  { icon: Globe, title: "UAE & USA Focus", description: "Dedicated service to UAE and USA markets with local understanding and support." },
-  { icon: Handshake, title: "B2B Partnership", description: "Tailored solutions for architects, designers, and construction professionals." },
-  { icon: Award, title: "10+ Years Expertise", description: "Decade of experience crafting premium architectural hardware for luxury projects." },
+  { icon: Clock, title: "Project Focused Support", description: "Fast quotation, sample assistance, technical guidance and dedicated support from concept to completion." },
+  { icon: Globe, title: "Global Presence", description: "Trusted by architects, developers & hardware partners across international markets." },
+  { icon: Handshake, title: "Architects & Designer Collaborations", description: "Tailored hardware solutions for architects, interior designers, builders & procurement teams." },
+  { icon: Award, title: "Proven Manufacturing Excellence", description: "Over a decade of experience delivering premium architectural hardware for luxury & large scale projects." },
 ];
 
 const stats = [
