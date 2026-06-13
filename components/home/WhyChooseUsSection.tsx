@@ -1,4 +1,4 @@
-import { Award, Clock, Handshake, Globe, CheckCircle, TrendingUp, Factory, Shield } from "lucide-react";
+import { Award, Clock, Handshake, Globe } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const reasons = [
@@ -8,12 +8,6 @@ const reasons = [
   { icon: Award, title: "Proven Manufacturing Excellence", description: "Over a decade of experience delivering premium architectural hardware for luxury & large scale projects." },
 ];
 
-const stats = [
-  { value: "10+", label: "Trade Partners", icon: Handshake },
-  { value: "5,000+", label: "Projects Completed", icon: TrendingUp },
-  { value: "99%", label: "Satisfaction Rate", icon: CheckCircle },
-  { value: "10+", label: "Premium Finishes", icon: Globe },
-];
 
 export function WhyChooseUsSection() {
   return (
@@ -32,19 +26,14 @@ export function WhyChooseUsSection() {
               </div>
             </div>
             <div className="grid grid-cols-2 gap-3">
-              <div className="bg-[#eaeaea] p-5 text-center">
-                <Factory className="w-8 h-8 text-[#1a1a1a]/40 mx-auto mb-3" />
-                <div className="text-xl font-semibold text-[#1a1a1a]">10+</div>
-                <div className="text-xs text-[#1a1a1a]/50 uppercase tracking-wider mt-1">Signature Finishes</div>
+              <div className="overflow-hidden">
+                <img src="https://res.cloudinary.com/dlt9vf8qk/image/upload/v1781361665/Finish-Signature_hkh2s3.png" alt="Signature Finishes" className="w-full h-auto block" />
               </div>
-              <div className="bg-[#eaeaea] p-5 text-center">
-                <Shield className="w-8 h-8 text-[#1a1a1a]/40 mx-auto mb-3" />
-                <div className="text-xl font-semibold text-[#1a1a1a]">100%</div>
-                <div className="text-xs text-[#1a1a1a]/50 uppercase tracking-wider mt-1">Engineered for Durability</div>
+              <div className="overflow-hidden">
+                <img src="https://res.cloudinary.com/dlt9vf8qk/image/upload/v1781361667/Engineered_ragx6k.png" alt="Engineered for Durability" className="w-full h-auto block" />
               </div>
-              <div className="bg-[#1a1a1a] p-5 text-center col-span-2">
-                <div className="text-base font-semibold text-[#eaeaea] mb-1 tracking-wide">Global Presence</div>
-                <div className="text-xs text-[#f3f3f3]/60 font-light">Trusted by Architects, developers &amp; hardware partners across international markets.</div>
+              <div className="overflow-hidden col-span-2">
+                <img src="https://res.cloudinary.com/dlt9vf8qk/image/upload/v1781361668/Global-Presence_lijaa7.png" alt="Global Presence" className="w-full h-auto block" />
               </div>
             </div>
           </div>
@@ -67,13 +56,18 @@ export function WhyChooseUsSection() {
               ))}
             </div>
             <div className="grid grid-cols-2 gap-3">
-              {stats.map((stat) => (
-                <div key={stat.label} className="text-center p-5 bg-white border border-[#1a1a1a]/8">
-                  <stat.icon className="w-5 h-5 text-[#1a1a1a]/35 mx-auto mb-2" />
-                  <div className="text-xl lg:text-2xl font-semibold text-[#1a1a1a] mb-0.5">{stat.value}</div>
-                  <div className="text-xs text-[#1a1a1a]/45 uppercase tracking-wider">{stat.label}</div>
-                </div>
-              ))}
+              <div className="overflow-hidden">
+                <img src="https://res.cloudinary.com/dlt9vf8qk/image/upload/v1781361665/Client-Focused_ouuhsa.png" alt="Client Focused" className="w-full h-auto block" />
+              </div>
+              <div className="overflow-hidden">
+                <img src="https://res.cloudinary.com/dlt9vf8qk/image/upload/v1781361665/Premium-Finish-Option_ouqxnq.png" alt="Premium Finish Option" className="w-full h-auto block" />
+              </div>
+              <div className="overflow-hidden">
+                <img src="https://res.cloudinary.com/dlt9vf8qk/image/upload/v1781361666/Project-ready_suiimz.png" alt="Project Ready" className="w-full h-auto block" />
+              </div>
+              <div className="overflow-hidden">
+                <img src="https://res.cloudinary.com/dlt9vf8qk/image/upload/v1781361666/Trade-Network_ews3wa.png" alt="Trade Network" className="w-full h-auto block" />
+              </div>
             </div>
           </div>
         </div>

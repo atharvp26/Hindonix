@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
-  Target, Eye, Heart, Shield, Users, Award, ArrowRight,
+  Heart, Shield, Users, Award, ArrowRight,
   CheckCircle,
 } from "lucide-react";
 
@@ -45,19 +45,11 @@ export default function AboutPage() {
       <section className="py-20 bg-background">
         <div className="container mx-auto px-4 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12">
-            <div className="bg-secondary rounded-3xl p-8 lg:p-10">
-              <div className="w-14 h-14 rounded-xl bg-accent/10 flex items-center justify-center mb-6">
-                <Eye className="w-7 h-7 text-accent" />
-              </div>
-              <h2 className="font-heading text-2xl lg:text-3xl font-bold text-foreground mb-4">Our Vision</h2>
-              <p className="text-muted-foreground text-lg leading-relaxed">To be the world&apos;s most trusted import-export partner, enabling businesses of all sizes to thrive in global markets through seamless trade solutions and unwavering commitment to excellence.</p>
+            <div className="rounded-3xl overflow-hidden">
+              <img src="https://res.cloudinary.com/dlt9vf8qk/image/upload/v1781361665/Vision_y0apil.png" alt="Our Vision" className="w-full h-auto block" />
             </div>
-            <div className="bg-primary rounded-3xl p-8 lg:p-10">
-              <div className="w-14 h-14 rounded-xl bg-primary-foreground/10 flex items-center justify-center mb-6">
-                <Target className="w-7 h-7 text-accent" />
-              </div>
-              <h2 className="font-heading text-2xl lg:text-3xl font-bold text-primary-foreground mb-4">Our Mission</h2>
-              <p className="text-primary-foreground/80 text-lg leading-relaxed">To simplify international trade for our clients by providing comprehensive, reliable, and cost-effective import-export services backed by expert guidance and cutting-edge logistics solutions.</p>
+            <div className="rounded-3xl overflow-hidden">
+              <img src="https://res.cloudinary.com/dlt9vf8qk/image/upload/v1781361667/Mission_rrfbc4.png" alt="Our Mission" className="w-full h-auto block" />
             </div>
           </div>
         </div>
