@@ -46,10 +46,10 @@ export default function AboutPage() {
         <div className="container mx-auto px-4 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12">
             <div className="rounded-3xl overflow-hidden">
-              <img src="https://res.cloudinary.com/dlt9vf8qk/image/upload/v1781361665/Vision_y0apil.png" alt="Our Vision" className="w-full h-auto block" />
+              <img src="https://res.cloudinary.com/dlt9vf8qk/image/upload/v1781371669/Vision-1_uprclx.png" alt="Our Vision" className="w-full h-auto block" />
             </div>
             <div className="rounded-3xl overflow-hidden">
-              <img src="https://res.cloudinary.com/dlt9vf8qk/image/upload/v1781361667/Mission_rrfbc4.png" alt="Our Mission" className="w-full h-auto block" />
+              <img src="https://res.cloudinary.com/dlt9vf8qk/image/upload/v1781371669/Mission_1_uhiesz.png" alt="Our Mission" className="w-full h-auto block" />
             </div>
           </div>
         </div>
