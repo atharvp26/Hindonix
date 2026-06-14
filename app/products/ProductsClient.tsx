@@ -261,9 +261,11 @@ export function ProductsClient({
           <div className="bg-primary rounded-3xl p-8 lg:p-12 text-center">
             <h2 className="font-heading text-3xl lg:text-4xl font-bold text-primary-foreground mb-4">Looking for Custom Solutions?</h2>
             <p className="text-primary-foreground/80 text-lg mb-8 max-w-2xl mx-auto">We offer bespoke architectural hardware tailored to your project specifications. Contact our team to discuss custom finishes, sizes, and designs.</p>
-            <Button variant="hero" size="xl" asChild>
-              <Link href="/contact" className="gap-2">Request Custom Quote <ArrowRight className="w-5 h-5" /></Link>
-            </Button>
+            <div className="flex justify-center">
+              <Button variant="hero" size="xl" asChild>
+                <Link href="/contact" className="gap-2 inline-flex items-center justify-center">Request Custom Quote <ArrowRight className="w-5 h-5" /></Link>
+              </Button>
+            </div>
           </div>
         </div>
       </section>
