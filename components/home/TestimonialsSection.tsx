@@ -3,21 +3,23 @@
 import { useEffect, useState, useRef } from "react";
 import { ChevronLeft, ChevronRight, Quote, Star } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { getTestimonials, getOverviewImages, type Testimonial } from "@/lib/data";
+import { getTestimonials, getOverviewImages, getTestimonialsMobileBg, type Testimonial } from "@/lib/data";
 import { ImageDisplay } from "@/components/ImageDisplay";
 
 interface TestimonialsSectionProps {
   initialTestimonials?: Testimonial[];
   initialBackgroundImages?: string[];
+  initialMobileBgImage?: string;
 }
 
-export function TestimonialsSection({ initialTestimonials, initialBackgroundImages }: TestimonialsSectionProps) {
+export function TestimonialsSection({ initialTestimonials, initialBackgroundImages, initialMobileBgImage }: TestimonialsSectionProps) {
   const [testimonials, setTestimonials] = useState<Testimonial[]>(initialTestimonials ?? []);
   const [activeIndex, setActiveIndex] = useState(0);
 
   const [bgImages, setBgImages] = useState<string[]>(initialBackgroundImages ?? []);
   const [bgIndex, setBgIndex] = useState(0);
   const bgTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const [mobileBgImage, setMobileBgImage] = useState<string>(initialMobileBgImage ?? "");
 
   useEffect(() => {
     if (!initialTestimonials) {
@@ -32,10 +34,16 @@ export function TestimonialsSection({ initialTestimonials, initialBackgroundImag
     if (!initialBackgroundImages) {
       getOverviewImages().then(setBgImages).catch(console.error);
     }
-    const reload = () => getOverviewImages().then(setBgImages).catch(console.error);
+    if (!initialMobileBgImage) {
+      getTestimonialsMobileBg().then(url => { if (url) setMobileBgImage(url); }).catch(console.error);
+    }
+    const reload = () => {
+      getOverviewImages().then(setBgImages).catch(console.error);
+      getTestimonialsMobileBg().then(url => setMobileBgImage(url || "")).catch(console.error);
+    };
     window.addEventListener("overviewImagesUpdated", reload);
     return () => window.removeEventListener("overviewImagesUpdated", reload);
-  }, [initialBackgroundImages]);
+  }, [initialBackgroundImages, initialMobileBgImage]);
 
   useEffect(() => {
     if (bgImages.length <= 1) return;
@@ -59,11 +67,24 @@ export function TestimonialsSection({ initialTestimonials, initialBackgroundImag
       className="py-10 md:py-12 lg:py-14 2xl:py-28 relative overflow-hidden"
       style={{ backgroundColor: '#eaeaea', minHeight: 'calc(100vw * 800 / 1920)' }}
     >
-      {/* Background slideshow */}
+      {/* Mobile background — portrait image, hidden on desktop */}
+      {mobileBgImage && (
+        <div className="absolute inset-0 md:hidden pointer-events-none" style={{ zIndex: 0 }} aria-hidden="true">
+          <img
+            src={mobileBgImage}
+            alt=""
+            aria-hidden="true"
+            className="w-full h-full object-cover object-center select-none"
+            style={{ display: 'block' }}
+          />
+        </div>
+      )}
+
+      {/* Desktop background slideshow — landscape images, hidden on mobile */}
       {bgImages.map((src, idx) => (
         <div
           key={src + idx}
-          className="absolute inset-0 transition-opacity duration-1000 pointer-events-none"
+          className="absolute inset-0 hidden md:block transition-opacity duration-1000 pointer-events-none"
           style={{ opacity: idx === bgIndex ? 1 : 0, zIndex: 0 }}
           aria-hidden="true"
         >
@@ -76,8 +97,9 @@ export function TestimonialsSection({ initialTestimonials, initialBackgroundImag
           />
         </div>
       ))}
-      {/* Overlay for readability — only shown when background images are present */}
-      {bgImages.length > 0 && (
+
+      {/* Overlay for readability */}
+      {(mobileBgImage || bgImages.length > 0) && (
         <div
           className="absolute inset-0 pointer-events-none bg-[rgba(234,234,234,0.55)] md:bg-[rgba(234,234,234,0.38)]"
           style={{ zIndex: 1 }}

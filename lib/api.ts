@@ -218,6 +218,12 @@ export const getHeroDesktopImageFromRedis = (): Promise<{ url: string }> =>
 export const setHeroDesktopImageInRedis = (url: string): Promise<{ url: string }> =>
   apiFetch<{ url: string }>("/hero-desktop-image", { method: "PUT", body: JSON.stringify({ url }) });
 
+export const getTestimonialsMobileBgFromRedis = (): Promise<{ url: string }> =>
+  apiFetch<{ url: string }>("/testimonials-mobile-bg");
+
+export const setTestimonialsMobileBgInRedis = (url: string): Promise<{ url: string }> =>
+  apiFetch<{ url: string }>("/testimonials-mobile-bg", { method: "PUT", body: JSON.stringify({ url }) });
+
 // ============================================
 // CTA IMAGE
 // ============================================

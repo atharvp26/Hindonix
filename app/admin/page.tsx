@@ -44,6 +44,8 @@ import {
   setOverviewImages,
   getOverviewBlockImages,
   setOverviewBlockImages,
+  getTestimonialsMobileBg,
+  setTestimonialsMobileBg,
   getCategories,
   addCategory,
   updateCategory,
@@ -142,6 +144,9 @@ const Admin = () => {
   const [overviewImages, setOverviewImagesState] = useState<string[]>([]);
   const [selectedOverviewImages, setSelectedOverviewImages] = useState<string[]>([]);
   const [overviewImageFiles, setOverviewImageFiles] = useState<File[]>([]);
+
+  const [testimonialsMobileBg, setTestimonialsMobileBgState] = useState<string>("");
+  const [testimonialsMobileBgPreview, setTestimonialsMobileBgPreview] = useState<string>("");
 
   const [blockImages, setBlockImagesState] = useState<string[]>(Array(5).fill(""));
   const [blockImagePreviews, setBlockImagePreviews] = useState<string[]>(Array(5).fill(""));
@@ -264,6 +269,7 @@ const Admin = () => {
           ctaMobileImageData,
           overviewImagesData,
           blockImagesData,
+          testimonialsMobileBgData,
         ] = await Promise.all([
           getProducts(),
           getBlogs(),
@@ -279,6 +285,7 @@ const Admin = () => {
           getCTAMobileImage(),
           getOverviewImages(),
           getOverviewBlockImages(),
+          getTestimonialsMobileBg(),
         ]);
 
         setProducts(productsData);
@@ -299,6 +306,8 @@ const Admin = () => {
         setCTAMobileImagePreview(ctaMobileImageData);
         setOverviewImagesState(overviewImagesData);
         setSelectedOverviewImages(overviewImagesData);
+        setTestimonialsMobileBgState(testimonialsMobileBgData);
+        setTestimonialsMobileBgPreview(testimonialsMobileBgData);
         const filled = Array(5).fill("").map((_, i) => blockImagesData[i] || "");
         setBlockImagesState(filled);
         setBlockImagePreviews(filled);
@@ -809,6 +818,51 @@ const Admin = () => {
 
   const handleClearAllOverviewImages = () => {
     setSelectedOverviewImages([]);
+  };
+
+  // Testimonials mobile background image handlers
+  const handleTestimonialsMobileBgUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      setUploading(true);
+      const response = await uploadImageToCloudinary(file);
+      setTestimonialsMobileBgPreview(response.secure_url);
+      toast({
+        title: "Image Uploaded",
+        description: 'Mobile background uploaded. Click "Save Mobile BG" to apply.',
+      });
+    } catch (error) {
+      toast({
+        title: "Upload Error",
+        description: error instanceof Error ? error.message : "Failed to upload image.",
+        variant: "destructive",
+      });
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleSaveTestimonialsMobileBg = async () => {
+    if (!testimonialsMobileBgPreview) {
+      toast({ title: "Error", description: "Please upload an image first.", variant: "destructive" });
+      return;
+    }
+    try {
+      setUploading(true);
+      await setTestimonialsMobileBg(testimonialsMobileBgPreview);
+      setTestimonialsMobileBgState(testimonialsMobileBgPreview);
+      toast({ title: "Mobile BG Saved", description: "Testimonials mobile background image has been updated." });
+      window.dispatchEvent(new Event("overviewImagesUpdated"));
+    } catch (error) {
+      toast({
+        title: "Save Error",
+        description: error instanceof Error ? error.message : "Failed to save.",
+        variant: "destructive",
+      });
+    } finally {
+      setUploading(false);
+    }
   };
 
   // Overview block image handlers (5 individual images)
@@ -2265,6 +2319,62 @@ const Admin = () => {
                           </button>
                         </div>
                       ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Testimonials Mobile Background Image */}
+          <div className="mb-12 bg-card rounded-xl p-8 border border-border/50">
+            <h2 className="font-heading text-2xl font-bold text-foreground mb-2">
+              Testimonials Background — Mobile
+            </h2>
+            <p className="text-sm text-muted-foreground mb-6">
+              Upload a <strong>portrait</strong> image shown as the background of the Testimonials section on mobile screens. Recommended size: <strong>1080 × 1350 px</strong>. The desktop uses the landscape slideshow images above.
+            </p>
+            <div className="grid lg:grid-cols-2 gap-8">
+              <div>
+                <Label htmlFor="testimonials-mobile-bg">Mobile Background Image</Label>
+                <Input
+                  id="testimonials-mobile-bg"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleTestimonialsMobileBgUpload}
+                  disabled={uploading}
+                  className="cursor-pointer mt-2"
+                />
+                {uploading && (
+                  <div className="flex items-center gap-2 mt-2 text-sm text-primary">
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    Uploading to Cloudinary...
+                  </div>
+                )}
+                {testimonialsMobileBgPreview && !uploading && (
+                  <p className="text-sm text-green-600 mt-2 font-medium">✓ Image ready</p>
+                )}
+                {testimonialsMobileBg && (
+                  <p className="text-sm text-muted-foreground mt-2">Current image saved</p>
+                )}
+                <Button
+                  className="mt-4"
+                  onClick={handleSaveTestimonialsMobileBg}
+                  disabled={!testimonialsMobileBgPreview || uploading}
+                >
+                  {uploading ? (
+                    <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Saving...</>
+                  ) : "Save Mobile BG"}
+                </Button>
+              </div>
+              <div>
+                <Label>Preview</Label>
+                <div className="mt-2 bg-secondary rounded-lg overflow-hidden h-48">
+                  {testimonialsMobileBgPreview ? (
+                    <img src={testimonialsMobileBgPreview} alt="Mobile BG Preview" className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-muted-foreground text-sm">
+                      No image selected
                     </div>
                   )}
                 </div>
