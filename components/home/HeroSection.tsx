@@ -19,7 +19,7 @@ export function HeroSection({ initialImages }: HeroSectionProps) {
   const [heroImages, setHeroImages] = useState<string[]>(
     initialImages && initialImages.length > 0
       ? initialImages
-      : ["/images/home/hero-knobs.jpg"]
+      : ["https://res.cloudinary.com/dlt9vf8qk/image/upload/v1781429420/Hero-Page-02_vmrd24.png"]
   );
   const [carouselApi, setCarouselApi] = useState<CarouselApi | null>(null);
 
@@ -62,20 +62,18 @@ export function HeroSection({ initialImages }: HeroSectionProps) {
 
   return (
     /*
-     * Mobile  (< md): stacked — image (aspect-[4/3]) on top, text block below on #eaeaea
-     * Desktop (≥ md): relative full-height — image absolute full-bleed, text absolute right overlay
+     * Mobile  (< md): full-bleed image fills screen height, text overlaid at bottom with gradient
+     * Desktop (≥ md): image contain + left-aligned, text absolute right-side overlay
      */
-    <section className="w-full bg-[#eaeaea] overflow-hidden md:relative md:h-[calc(100vh-65px)] md:min-h-[500px]">
+    <section className="relative w-full bg-[#eaeaea] overflow-hidden h-[100svh] min-h-[600px] md:h-[calc(100vh-65px)] md:min-h-[500px]">
 
-      {/* IMAGE */}
-      {/* Mobile: natural aspect-ratio box; Desktop: absolute fill */}
-      <div className="relative aspect-[4/3] md:aspect-auto md:absolute md:inset-0">
+      {/* IMAGE — absolute fill on both mobile and desktop */}
+      <div className="absolute inset-0">
         {heroImages.length <= 1 ? (
           <ImageDisplay
             src={heroImages[0]}
             alt="Architectural Hardware Collection"
-            className="w-full h-full object-cover md:object-contain"
-            style={{ objectPosition: 'left center' }}
+            className="w-full h-full object-cover object-center md:object-contain md:object-left"
           />
         ) : (
           <Carousel
@@ -89,8 +87,7 @@ export function HeroSection({ initialImages }: HeroSectionProps) {
                   <ImageDisplay
                     src={img}
                     alt={`Hero ${idx + 1}`}
-                    className="w-full h-full object-cover md:object-contain"
-                    style={{ objectPosition: 'left center' }}
+                    className="w-full h-full object-cover object-center md:object-contain md:object-left"
                   />
                 </CarouselItem>
               ))}
@@ -99,12 +96,14 @@ export function HeroSection({ initialImages }: HeroSectionProps) {
         )}
       </div>
 
-      {/* TEXT */}
-      {/* Mobile: normal-flow block below image; Desktop: absolute right-side overlay */}
-      <div className="flex flex-col items-center text-center px-6 py-10 bg-[#eaeaea] md:bg-transparent md:py-0 md:px-0 md:absolute md:top-0 md:bottom-0 md:h-full md:left-[42%] md:right-16 md:justify-center">
+      {/* Gradient for text readability on mobile only */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/15 to-transparent md:hidden" />
+
+      {/* TEXT — bottom overlay on mobile, right-side panel on desktop */}
+      <div className="absolute inset-x-0 bottom-0 flex flex-col items-center text-center px-6 pb-16 md:inset-x-auto md:top-0 md:bottom-0 md:left-[42%] md:right-16 md:justify-center md:pb-0 md:px-0">
 
         <h1
-          className="text-[#1a1a1a] leading-none mb-4 tracking-[0.1em] md:whitespace-nowrap md:tracking-[0.2em]"
+          className="text-[#eaeaea] md:text-[#1a1a1a] leading-none mb-4 tracking-[0.1em] md:whitespace-nowrap md:tracking-[0.2em]"
           style={{
             fontFamily: '"Times New Roman", Times, serif',
             fontSize: 'clamp(1.4rem, 2.5vw, 3.2rem)',
@@ -115,7 +114,7 @@ export function HeroSection({ initialImages }: HeroSectionProps) {
         </h1>
 
         <p
-          className="text-[#1a1a1a]/70 mb-7 md:mb-8"
+          className="text-[#eaeaea]/80 md:text-[#1a1a1a]/70 mb-7 md:mb-8"
           style={{
             fontFamily: 'Montserrat, system-ui, sans-serif',
             fontSize: 'clamp(0.85rem, 1.1vw, 1.1rem)',
