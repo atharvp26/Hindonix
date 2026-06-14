@@ -117,13 +117,13 @@ export function HeroSection({ initialImages, initialDesktopImage }: HeroSectionP
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/15 to-transparent md:hidden" />
 
       {/* TEXT — bottom overlay on mobile, right-side panel on desktop */}
-      <div className="absolute inset-x-0 bottom-0 flex flex-col items-center text-center px-6 pb-16 md:inset-x-auto md:top-0 md:bottom-0 md:left-[42%] md:right-16 md:justify-center md:pb-0 md:px-0">
+      <div className="absolute inset-x-0 bottom-0 flex flex-col items-center text-center px-6 pb-24 md:inset-x-auto md:top-0 md:bottom-0 md:left-[42%] md:right-16 md:justify-center md:pb-0 md:px-0">
 
         <h1
-          className="text-[#eaeaea] md:text-[#1a1a1a] leading-none mb-4 tracking-[0.1em] md:whitespace-nowrap md:tracking-[0.2em]"
+          className="text-[#eaeaea] md:text-[#1a1a1a] leading-none mb-4 whitespace-nowrap tracking-[0.1em] md:tracking-[0.2em]"
           style={{
             fontFamily: '"Times New Roman", Times, serif',
-            fontSize: 'clamp(1.4rem, 2.5vw, 3.2rem)',
+            fontSize: 'clamp(0.95rem, 4.2vw, 3.2rem)',
             fontWeight: 400,
           }}
         >
