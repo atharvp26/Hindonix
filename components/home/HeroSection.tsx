@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { getHeroImages } from "@/lib/data";
+import { getHeroImages, getHeroDesktopImage } from "@/lib/data";
 import {
   Carousel,
   CarouselContent,
@@ -13,37 +13,42 @@ import { ImageDisplay } from "@/components/ImageDisplay";
 
 interface HeroSectionProps {
   initialImages?: string[];
+  initialDesktopImage?: string;
 }
 
-export function HeroSection({ initialImages }: HeroSectionProps) {
+export function HeroSection({ initialImages, initialDesktopImage }: HeroSectionProps) {
   const [heroImages, setHeroImages] = useState<string[]>(
     initialImages && initialImages.length > 0
       ? initialImages
       : ["https://res.cloudinary.com/dlt9vf8qk/image/upload/v1781429420/Hero-Page-02_vmrd24.png"]
   );
+  const [desktopImage, setDesktopImage] = useState<string>(initialDesktopImage || "");
   const [carouselApi, setCarouselApi] = useState<CarouselApi | null>(null);
 
   useEffect(() => {
     if (!initialImages) {
       getHeroImages()
-        .then((images) => {
-          if (images && images.length > 0) setHeroImages(images);
-        })
+        .then((images) => { if (images && images.length > 0) setHeroImages(images); })
+        .catch(console.error);
+    }
+    if (!initialDesktopImage) {
+      getHeroDesktopImage()
+        .then((url) => { if (url) setDesktopImage(url); })
         .catch(console.error);
     }
 
     const handleHeroImageUpdate = () => {
       getHeroImages()
-        .then((images) => {
-          if (images && images.length > 0) setHeroImages(images);
-        })
+        .then((images) => { if (images && images.length > 0) setHeroImages(images); })
+        .catch(console.error);
+      getHeroDesktopImage()
+        .then((url) => setDesktopImage(url || ""))
         .catch(console.error);
     };
 
     window.addEventListener("heroImageUpdated", handleHeroImageUpdate);
-    return () =>
-      window.removeEventListener("heroImageUpdated", handleHeroImageUpdate);
-  }, [initialImages]);
+    return () => window.removeEventListener("heroImageUpdated", handleHeroImageUpdate);
+  }, [initialImages, initialDesktopImage]);
 
   useEffect(() => {
     if (!carouselApi || heroImages.length <= 1) return;
@@ -60,20 +65,23 @@ export function HeroSection({ initialImages }: HeroSectionProps) {
     return () => clearInterval(interval);
   }, [carouselApi, heroImages]);
 
+  // The active image for desktop (falls back to first mobile image if none set)
+  const activeDesktopImage = desktopImage || heroImages[0] || "";
+
   return (
     /*
-     * Mobile  (< md): full-bleed image fills screen height, text overlaid at bottom with gradient
-     * Desktop (≥ md): image contain + left-aligned, text absolute right-side overlay
+     * Mobile  (< md): portrait image fills full screen height, text overlaid at bottom with gradient
+     * Desktop (≥ md): landscape desktop image fills full viewport, text overlaid on right side
      */
     <section className="relative w-full bg-[#eaeaea] overflow-hidden h-[100svh] min-h-[600px] md:h-[calc(100vh-65px)] md:min-h-[500px]">
 
-      {/* IMAGE — absolute fill on both mobile and desktop */}
-      <div className="absolute inset-0">
+      {/* MOBILE IMAGE — portrait, full bleed, hidden on desktop */}
+      <div className="absolute inset-0 md:hidden">
         {heroImages.length <= 1 ? (
           <ImageDisplay
             src={heroImages[0]}
             alt="Architectural Hardware Collection"
-            className="w-full h-full object-cover object-center md:object-contain md:object-left"
+            className="w-full h-full object-cover object-center"
           />
         ) : (
           <Carousel
@@ -87,7 +95,7 @@ export function HeroSection({ initialImages }: HeroSectionProps) {
                   <ImageDisplay
                     src={img}
                     alt={`Hero ${idx + 1}`}
-                    className="w-full h-full object-cover object-center md:object-contain md:object-left"
+                    className="w-full h-full object-cover object-center"
                   />
                 </CarouselItem>
               ))}
@@ -96,7 +104,16 @@ export function HeroSection({ initialImages }: HeroSectionProps) {
         )}
       </div>
 
-      {/* Gradient for text readability on mobile only */}
+      {/* DESKTOP IMAGE — landscape, full bleed, hidden on mobile */}
+      <div className="absolute inset-0 hidden md:block">
+        <ImageDisplay
+          src={activeDesktopImage}
+          alt="Architectural Hardware Collection"
+          className="w-full h-full object-cover object-center"
+        />
+      </div>
+
+      {/* Gradient overlay for text readability on mobile only */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/15 to-transparent md:hidden" />
 
       {/* TEXT — bottom overlay on mobile, right-side panel on desktop */}

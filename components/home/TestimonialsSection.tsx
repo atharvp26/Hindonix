@@ -79,7 +79,7 @@ export function TestimonialsSection({ initialTestimonials, initialBackgroundImag
       {/* Overlay for readability — only shown when background images are present */}
       {bgImages.length > 0 && (
         <div
-          className="absolute inset-0 pointer-events-none bg-[rgba(234,234,234,0.88)] md:bg-[rgba(234,234,234,0.72)]"
+          className="absolute inset-0 pointer-events-none bg-[rgba(234,234,234,0.55)] md:bg-[rgba(234,234,234,0.38)]"
           style={{ zIndex: 1 }}
           aria-hidden="true"
         />

@@ -34,6 +34,8 @@ import {
   deleteTestimonial,
   getHeroImages,
   setHeroImages,
+  getHeroDesktopImage,
+  setHeroDesktopImage,
   getCTAImage,
   setCTAImage,
   getCTAMobileImage,
@@ -125,6 +127,9 @@ const Admin = () => {
 
   const [heroImages, setHeroImagesState] = useState<string[]>([]);
   const [selectedHeroImages, setSelectedHeroImages] = useState<string[]>([]);
+
+  const [heroDesktopImage, setHeroDesktopImageState] = useState<string>("");
+  const [heroDesktopImagePreview, setHeroDesktopImagePreview] = useState<string>("");
 
   const [ctaImage, setCTAImageState] = useState<string>("");
   const [ctaImageFile, setCTAImageFile] = useState<File | null>(null);
@@ -254,6 +259,7 @@ const Admin = () => {
           finishesData,
           finishCategoriesData,
           heroImagesData,
+          heroDesktopImageData,
           ctaImageData,
           ctaMobileImageData,
           overviewImagesData,
@@ -268,6 +274,7 @@ const Admin = () => {
           getFinishes(),
           getFinishCategories(),
           getHeroImages(),
+          getHeroDesktopImage(),
           getCTAImage(),
           getCTAMobileImage(),
           getOverviewImages(),
@@ -284,6 +291,8 @@ const Admin = () => {
         setFinishCategoriesList(finishCategoriesData);
         setHeroImagesState(heroImagesData);
         setSelectedHeroImages(heroImagesData);
+        setHeroDesktopImageState(heroDesktopImageData);
+        setHeroDesktopImagePreview(heroDesktopImageData);
         setCTAImageState(ctaImageData);
         setCTAImagePreview(ctaImageData);
         setCTAMobileImageState(ctaMobileImageData);
@@ -569,6 +578,51 @@ const Admin = () => {
 
   const handleClearAllHeroImages = () => {
     setSelectedHeroImages([]);
+  };
+
+  // Hero Desktop Image handlers
+  const handleHeroDesktopImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      setUploading(true);
+      const response = await uploadImageToCloudinary(file);
+      setHeroDesktopImagePreview(response.secure_url);
+      toast({
+        title: "Image Uploaded",
+        description: 'Desktop hero image uploaded. Click "Save Desktop Image" to apply.',
+      });
+    } catch (error) {
+      toast({
+        title: "Upload Error",
+        description: error instanceof Error ? error.message : "Failed to upload image.",
+        variant: "destructive",
+      });
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleSaveHeroDesktopImage = async () => {
+    if (!heroDesktopImagePreview) {
+      toast({ title: "Error", description: "Please upload an image first.", variant: "destructive" });
+      return;
+    }
+    try {
+      setUploading(true);
+      await setHeroDesktopImage(heroDesktopImagePreview);
+      setHeroDesktopImageState(heroDesktopImagePreview);
+      toast({ title: "Desktop Hero Image Saved", description: "The desktop hero image has been updated." });
+      window.dispatchEvent(new Event("heroImageUpdated"));
+    } catch (error) {
+      toast({
+        title: "Save Error",
+        description: error instanceof Error ? error.message : "Failed to save desktop hero image.",
+        variant: "destructive",
+      });
+    } finally {
+      setUploading(false);
+    }
   };
 
   // CTA Image handlers
@@ -1883,6 +1937,62 @@ const Admin = () => {
                           </button>
                         </div>
                       ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Hero Desktop Image */}
+          <div className="mb-12 bg-card rounded-xl p-8 border border-border/50">
+            <h2 className="font-heading text-2xl font-bold text-foreground mb-2">
+              Hero Image — Desktop
+            </h2>
+            <p className="text-sm text-muted-foreground mb-6">
+              Upload a <strong>landscape</strong> image for the desktop hero. Recommended size: <strong>1920 × 900 px</strong>. Place the subject on the left ~40% of the frame; the right side should be clean/empty for the text overlay.
+            </p>
+            <div className="grid lg:grid-cols-2 gap-8">
+              <div>
+                <Label htmlFor="hero-desktop-image">Desktop Hero Image</Label>
+                <Input
+                  id="hero-desktop-image"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleHeroDesktopImageUpload}
+                  disabled={uploading}
+                  className="cursor-pointer mt-2"
+                />
+                {uploading && (
+                  <div className="flex items-center gap-2 mt-2 text-sm text-primary">
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    Uploading to Cloudinary...
+                  </div>
+                )}
+                {heroDesktopImagePreview && !uploading && (
+                  <p className="text-sm text-green-600 mt-2 font-medium">✓ Image ready</p>
+                )}
+                {heroDesktopImage && (
+                  <p className="text-sm text-muted-foreground mt-2">Current image saved</p>
+                )}
+                <Button
+                  className="mt-4"
+                  onClick={handleSaveHeroDesktopImage}
+                  disabled={!heroDesktopImagePreview || uploading}
+                >
+                  {uploading ? (
+                    <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Saving...</>
+                  ) : "Save Desktop Image"}
+                </Button>
+              </div>
+              <div>
+                <Label>Preview</Label>
+                <div className="mt-2 bg-secondary rounded-lg overflow-hidden h-48">
+                  {heroDesktopImagePreview ? (
+                    <img src={heroDesktopImagePreview} alt="Desktop Hero Preview" className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-muted-foreground">
+                      No image selected
                     </div>
                   )}
                 </div>

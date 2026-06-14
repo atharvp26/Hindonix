@@ -37,6 +37,8 @@ import {
   deleteFinishCategoryFromRedis,
   getHeroImagesFromRedis,
   setHeroImagesInRedis,
+  getHeroDesktopImageFromRedis,
+  setHeroDesktopImageInRedis,
   getCTAImageFromDB,
   setCTAImageInDB,
   getCTAMobileImageFromDB,
@@ -162,6 +164,9 @@ export const deleteCaseStudy = async (id: number): Promise<boolean> => deleteCas
 
 export const getHeroImages = async (): Promise<string[]> => getHeroImagesFromRedis();
 export const setHeroImages = async (images: string[]): Promise<string[]> => setHeroImagesInRedis(images);
+
+export const getHeroDesktopImage = async (): Promise<string> => getHeroDesktopImageFromRedis().then(r => r.url);
+export const setHeroDesktopImage = async (url: string): Promise<string> => setHeroDesktopImageInRedis(url).then(r => r.url);
 
 export const getCTAImage = async (): Promise<string> => getCTAImageFromDB();
 export const setCTAImage = async (url: string): Promise<string> => setCTAImageInDB(url);

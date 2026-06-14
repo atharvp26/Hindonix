@@ -21,6 +21,16 @@ async function getHeroImagesFromDB(): Promise<string[]> {
   }
 }
 
+async function getHeroDesktopImageFromDB(): Promise<string> {
+  try {
+    const [rows] = await pool.query("SELECT url FROM hero_desktop_image ORDER BY id ASC LIMIT 1");
+    const r = (rows as any[])[0];
+    return r?.url || "";
+  } catch {
+    return "";
+  }
+}
+
 async function getCTAImageFromDB(): Promise<string> {
   try {
     const [rows] = await pool.query("SELECT url FROM cta_image ORDER BY id ASC LIMIT 1");
@@ -56,8 +66,9 @@ async function getOverviewBlockImagesFromDB(): Promise<string[]> {
 }
 
 export default async function HomePage() {
-  const [heroImages, testimonials, ctaBgImage, overviewImages, blockImages] = await Promise.all([
+  const [heroImages, heroDesktopImage, testimonials, ctaBgImage, overviewImages, blockImages] = await Promise.all([
     getHeroImagesFromDB(),
+    getHeroDesktopImageFromDB(),
     getTestimonialsFromDB(),
     getCTAImageFromDB(),
     getOverviewImagesFromDB(),
@@ -66,7 +77,7 @@ export default async function HomePage() {
 
   return (
     <main className="min-h-screen">
-      <HeroSection initialImages={heroImages} />
+      <HeroSection initialImages={heroImages} initialDesktopImage={heroDesktopImage} />
       <OverviewSection initialBlockImages={blockImages} />
       <WhyChooseUsSection />
       <TestimonialsSection initialTestimonials={testimonials} initialBackgroundImages={overviewImages} />
