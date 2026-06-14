@@ -117,10 +117,10 @@ export function HeroSection({ initialImages, initialDesktopImage }: HeroSectionP
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/15 to-transparent md:hidden" />
 
       {/* TEXT — bottom overlay on mobile, right-side panel on desktop */}
-      <div className="absolute inset-x-0 bottom-0 flex flex-col items-center text-center px-6 pb-24 md:inset-x-auto md:top-0 md:bottom-0 md:left-[42%] md:right-16 md:justify-center md:pb-0 md:px-0">
+      <div className="absolute inset-x-0 bottom-0 flex flex-col items-center text-center px-6 pb-[14%] md:inset-x-auto md:top-0 md:bottom-0 md:left-[42%] md:right-16 md:justify-center md:pb-0 md:px-0">
 
         <h1
-          className="text-[#eaeaea] md:text-[#1a1a1a] leading-none mb-4 tracking-[0.1em] md:whitespace-nowrap md:tracking-[0.2em]"
+          className="text-[#eaeaea] md:text-[#1a1a1a] leading-none mb-4 tracking-[0.2em] md:whitespace-nowrap"
           style={{
             fontFamily: '"Times New Roman", Times, serif',
             fontSize: 'clamp(0.95rem, 2.5vw, 3.2rem)',
@@ -131,7 +131,7 @@ export function HeroSection({ initialImages, initialDesktopImage }: HeroSectionP
         </h1>
 
         <p
-          className="text-[#eaeaea]/80 md:text-[#1a1a1a]/70 mb-7 md:mb-8"
+          className="text-[#eaeaea]/80 md:text-[#1a1a1a]/70 mb-3 md:mb-8"
           style={{
             fontFamily: 'Montserrat, system-ui, sans-serif',
             fontSize: 'clamp(0.85rem, 1.1vw, 1.1rem)',
