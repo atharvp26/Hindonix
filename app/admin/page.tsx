@@ -145,8 +145,8 @@ const Admin = () => {
   const [selectedOverviewImages, setSelectedOverviewImages] = useState<string[]>([]);
   const [overviewImageFiles, setOverviewImageFiles] = useState<File[]>([]);
 
-  const [testimonialsMobileBg, setTestimonialsMobileBgState] = useState<string>("");
-  const [testimonialsMobileBgPreview, setTestimonialsMobileBgPreview] = useState<string>("");
+  const [testimonialsMobileBg, setTestimonialsMobileBgState] = useState<string[]>([]);
+  const [selectedTestimonialsMobileBgImages, setSelectedTestimonialsMobileBgImages] = useState<string[]>([]);
 
   const [blockImages, setBlockImagesState] = useState<string[]>(Array(5).fill(""));
   const [blockImagePreviews, setBlockImagePreviews] = useState<string[]>(Array(5).fill(""));
@@ -307,7 +307,7 @@ const Admin = () => {
         setOverviewImagesState(overviewImagesData);
         setSelectedOverviewImages(overviewImagesData);
         setTestimonialsMobileBgState(testimonialsMobileBgData);
-        setTestimonialsMobileBgPreview(testimonialsMobileBgData);
+        setSelectedTestimonialsMobileBgImages(testimonialsMobileBgData);
         const filled = Array(5).fill("").map((_, i) => blockImagesData[i] || "");
         setBlockImagesState(filled);
         setBlockImagePreviews(filled);
@@ -820,22 +820,26 @@ const Admin = () => {
     setSelectedOverviewImages([]);
   };
 
-  // Testimonials mobile background image handlers
+  // Testimonials mobile background image handlers (multi-image)
   const handleTestimonialsMobileBgUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
     try {
       setUploading(true);
-      const response = await uploadImageToCloudinary(file);
-      setTestimonialsMobileBgPreview(response.secure_url);
+      const uploadedUrls: string[] = [];
+      for (const file of files) {
+        const response = await uploadImageToCloudinary(file);
+        uploadedUrls.push(response.secure_url);
+      }
+      setSelectedTestimonialsMobileBgImages((prev) => [...prev, ...uploadedUrls]);
       toast({
-        title: "Image Uploaded",
-        description: 'Mobile background uploaded. Click "Save Mobile BG" to apply.',
+        title: "Images Uploaded",
+        description: `${files.length} image(s) uploaded. Click "Save Mobile BG Images" to apply.`,
       });
     } catch (error) {
       toast({
         title: "Upload Error",
-        description: error instanceof Error ? error.message : "Failed to upload image.",
+        description: error instanceof Error ? error.message : "Failed to upload image(s).",
         variant: "destructive",
       });
     } finally {
@@ -844,15 +848,11 @@ const Admin = () => {
   };
 
   const handleSaveTestimonialsMobileBg = async () => {
-    if (!testimonialsMobileBgPreview) {
-      toast({ title: "Error", description: "Please upload an image first.", variant: "destructive" });
-      return;
-    }
     try {
       setUploading(true);
-      await setTestimonialsMobileBg(testimonialsMobileBgPreview);
-      setTestimonialsMobileBgState(testimonialsMobileBgPreview);
-      toast({ title: "Mobile BG Saved", description: "Testimonials mobile background image has been updated." });
+      await setTestimonialsMobileBg(selectedTestimonialsMobileBgImages);
+      setTestimonialsMobileBgState(selectedTestimonialsMobileBgImages);
+      toast({ title: "Mobile BG Images Saved", description: "Testimonials mobile background images have been updated." });
       window.dispatchEvent(new Event("overviewImagesUpdated"));
     } catch (error) {
       toast({
@@ -863,6 +863,14 @@ const Admin = () => {
     } finally {
       setUploading(false);
     }
+  };
+
+  const handleRemoveTestimonialsMobileBgImage = (index: number) => {
+    setSelectedTestimonialsMobileBgImages((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const handleClearAllTestimonialsMobileBgImages = () => {
+    setSelectedTestimonialsMobileBgImages([]);
   };
 
   // Overview block image handlers (5 individual images)
@@ -2326,21 +2334,22 @@ const Admin = () => {
             </div>
           </div>
 
-          {/* Testimonials Mobile Background Image */}
+          {/* Testimonials Mobile Background Images */}
           <div className="mb-12 bg-card rounded-xl p-8 border border-border/50">
             <h2 className="font-heading text-2xl font-bold text-foreground mb-2">
               Testimonials Background — Mobile
             </h2>
             <p className="text-sm text-muted-foreground mb-6">
-              Upload a <strong>portrait</strong> image shown as the background of the Testimonials section on mobile screens. Recommended size: <strong>1080 × 1350 px</strong>. The desktop uses the landscape slideshow images above.
+              Upload <strong>portrait</strong> images shown as an auto-slideshow background in the Testimonials section on mobile screens. Recommended size: <strong>1080 × 1350 px</strong>. Images auto-advance every 2.5 seconds. The desktop uses the landscape slideshow images above.
             </p>
             <div className="grid lg:grid-cols-2 gap-8">
               <div>
-                <Label htmlFor="testimonials-mobile-bg">Mobile Background Image</Label>
+                <Label htmlFor="testimonials-mobile-bg">Mobile Background Images</Label>
                 <Input
                   id="testimonials-mobile-bg"
                   type="file"
                   accept="image/*"
+                  multiple
                   onChange={handleTestimonialsMobileBgUpload}
                   disabled={uploading}
                   className="cursor-pointer mt-2"
@@ -2351,30 +2360,55 @@ const Admin = () => {
                     Uploading to Cloudinary...
                   </div>
                 )}
-                {testimonialsMobileBgPreview && !uploading && (
-                  <p className="text-sm text-green-600 mt-2 font-medium">✓ Image ready</p>
+                {selectedTestimonialsMobileBgImages.length > 0 && !uploading && (
+                  <p className="text-sm text-green-600 mt-2 font-medium">
+                    ✓ {selectedTestimonialsMobileBgImages.length} image(s) ready
+                  </p>
                 )}
-                {testimonialsMobileBg && (
-                  <p className="text-sm text-muted-foreground mt-2">Current image saved</p>
+                {testimonialsMobileBg.length > 0 && (
+                  <p className="text-sm text-muted-foreground mt-1">
+                    Current: {testimonialsMobileBg.length} image(s)
+                  </p>
                 )}
-                <Button
-                  className="mt-4"
-                  onClick={handleSaveTestimonialsMobileBg}
-                  disabled={!testimonialsMobileBgPreview || uploading}
-                >
-                  {uploading ? (
-                    <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Saving...</>
-                  ) : "Save Mobile BG"}
-                </Button>
+                <div className="flex gap-2 mt-4">
+                  <Button
+                    onClick={handleSaveTestimonialsMobileBg}
+                    disabled={uploading}
+                  >
+                    {uploading ? (
+                      <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Saving...</>
+                    ) : "Save Mobile BG Images"}
+                  </Button>
+                  {selectedTestimonialsMobileBgImages.length > 0 && (
+                    <Button onClick={handleClearAllTestimonialsMobileBgImages} variant="outline">
+                      Clear All
+                    </Button>
+                  )}
+                </div>
               </div>
               <div>
                 <Label>Preview</Label>
                 <div className="mt-2 bg-secondary rounded-lg overflow-hidden h-48">
-                  {testimonialsMobileBgPreview ? (
-                    <img src={testimonialsMobileBgPreview} alt="Mobile BG Preview" className="w-full h-full object-cover" />
-                  ) : (
+                  {selectedTestimonialsMobileBgImages.length === 0 ? (
                     <div className="w-full h-full flex items-center justify-center text-muted-foreground text-sm">
-                      No image selected
+                      No images selected
+                    </div>
+                  ) : selectedTestimonialsMobileBgImages.length === 1 ? (
+                    <img src={selectedTestimonialsMobileBgImages[0]} alt="Mobile BG Preview" className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="flex w-full h-full overflow-x-auto gap-2 p-2">
+                      {selectedTestimonialsMobileBgImages.map((url, idx) => (
+                        <div key={idx} className="relative group h-full flex-shrink-0">
+                          <img src={url} alt={`Preview ${idx + 1}`} className="h-full object-cover rounded-md" />
+                          <button
+                            onClick={() => handleRemoveTestimonialsMobileBgImage(idx)}
+                            className="absolute top-1 right-1 bg-destructive text-destructive-foreground rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-xs font-bold"
+                            title="Remove image"
+                          >
+                            ×
+                          </button>
+                        </div>
+                      ))}
                     </div>
                   )}
                 </div>

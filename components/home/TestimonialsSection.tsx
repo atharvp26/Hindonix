@@ -9,17 +9,20 @@ import { ImageDisplay } from "@/components/ImageDisplay";
 interface TestimonialsSectionProps {
   initialTestimonials?: Testimonial[];
   initialBackgroundImages?: string[];
-  initialMobileBgImage?: string;
+  initialMobileBgImages?: string[];
 }
 
-export function TestimonialsSection({ initialTestimonials, initialBackgroundImages, initialMobileBgImage }: TestimonialsSectionProps) {
+export function TestimonialsSection({ initialTestimonials, initialBackgroundImages, initialMobileBgImages }: TestimonialsSectionProps) {
   const [testimonials, setTestimonials] = useState<Testimonial[]>(initialTestimonials ?? []);
   const [activeIndex, setActiveIndex] = useState(0);
 
   const [bgImages, setBgImages] = useState<string[]>(initialBackgroundImages ?? []);
   const [bgIndex, setBgIndex] = useState(0);
   const bgTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const [mobileBgImage, setMobileBgImage] = useState<string>(initialMobileBgImage ?? "");
+
+  const [mobileBgImages, setMobileBgImages] = useState<string[]>(initialMobileBgImages ?? []);
+  const [mobileBgIndex, setMobileBgIndex] = useState(0);
+  const mobileBgTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
     if (!initialTestimonials) {
@@ -34,16 +37,16 @@ export function TestimonialsSection({ initialTestimonials, initialBackgroundImag
     if (!initialBackgroundImages) {
       getOverviewImages().then(setBgImages).catch(console.error);
     }
-    if (!initialMobileBgImage) {
-      getTestimonialsMobileBg().then(url => { if (url) setMobileBgImage(url); }).catch(console.error);
+    if (!initialMobileBgImages) {
+      getTestimonialsMobileBg().then(urls => { if (urls.length) setMobileBgImages(urls); }).catch(console.error);
     }
     const reload = () => {
       getOverviewImages().then(setBgImages).catch(console.error);
-      getTestimonialsMobileBg().then(url => setMobileBgImage(url || "")).catch(console.error);
+      getTestimonialsMobileBg().then(urls => setMobileBgImages(urls)).catch(console.error);
     };
     window.addEventListener("overviewImagesUpdated", reload);
     return () => window.removeEventListener("overviewImagesUpdated", reload);
-  }, [initialBackgroundImages, initialMobileBgImage]);
+  }, [initialBackgroundImages, initialMobileBgImages]);
 
   useEffect(() => {
     if (bgImages.length <= 1) return;
@@ -52,6 +55,14 @@ export function TestimonialsSection({ initialTestimonials, initialBackgroundImag
     }, 2500);
     return () => { if (bgTimerRef.current) clearInterval(bgTimerRef.current); };
   }, [bgImages.length]);
+
+  useEffect(() => {
+    if (mobileBgImages.length <= 1) return;
+    mobileBgTimerRef.current = setInterval(() => {
+      setMobileBgIndex((prev) => (prev + 1) % mobileBgImages.length);
+    }, 2500);
+    return () => { if (mobileBgTimerRef.current) clearInterval(mobileBgTimerRef.current); };
+  }, [mobileBgImages.length]);
 
   useEffect(() => {
     if (activeIndex >= testimonials.length) setActiveIndex(0);
@@ -67,18 +78,23 @@ export function TestimonialsSection({ initialTestimonials, initialBackgroundImag
       className="py-10 md:py-12 lg:py-14 2xl:py-28 relative overflow-hidden"
       style={{ backgroundColor: '#eaeaea', minHeight: 'calc(100vw * 800 / 1920)' }}
     >
-      {/* Mobile background — portrait image, hidden on desktop */}
-      {mobileBgImage && (
-        <div className="absolute inset-0 md:hidden pointer-events-none" style={{ zIndex: 0 }} aria-hidden="true">
+      {/* Mobile background slideshow — portrait images, hidden on desktop */}
+      {mobileBgImages.map((src, idx) => (
+        <div
+          key={src + idx}
+          className="absolute inset-0 md:hidden transition-opacity duration-1000 pointer-events-none"
+          style={{ opacity: idx === mobileBgIndex ? 1 : 0, zIndex: 0 }}
+          aria-hidden="true"
+        >
           <img
-            src={mobileBgImage}
+            src={src}
             alt=""
             aria-hidden="true"
             className="w-full h-full object-cover object-center select-none"
             style={{ display: 'block' }}
           />
         </div>
-      )}
+      ))}
 
       {/* Desktop background slideshow — landscape images, hidden on mobile */}
       {bgImages.map((src, idx) => (
@@ -99,7 +115,7 @@ export function TestimonialsSection({ initialTestimonials, initialBackgroundImag
       ))}
 
       {/* Overlay for readability */}
-      {(mobileBgImage || bgImages.length > 0) && (
+      {(mobileBgImages.length > 0 || bgImages.length > 0) && (
         <div
           className="absolute inset-0 pointer-events-none bg-[rgba(234,234,234,0.55)] md:bg-[rgba(234,234,234,0.38)]"
           style={{ zIndex: 1 }}

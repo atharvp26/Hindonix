@@ -170,8 +170,8 @@ export const setHeroImages = async (images: string[]): Promise<string[]> => setH
 export const getHeroDesktopImage = async (): Promise<string> => getHeroDesktopImageFromRedis().then(r => r.url);
 export const setHeroDesktopImage = async (url: string): Promise<string> => setHeroDesktopImageInRedis(url).then(r => r.url);
 
-export const getTestimonialsMobileBg = async (): Promise<string> => getTestimonialsMobileBgFromRedis().then(r => r.url);
-export const setTestimonialsMobileBg = async (url: string): Promise<string> => setTestimonialsMobileBgInRedis(url).then(r => r.url);
+export const getTestimonialsMobileBg = async (): Promise<string[]> => getTestimonialsMobileBgFromRedis();
+export const setTestimonialsMobileBg = async (urls: string[]): Promise<string[]> => setTestimonialsMobileBgInRedis(urls);
 
 export const getCTAImage = async (): Promise<string> => getCTAImageFromDB();
 export const setCTAImage = async (url: string): Promise<string> => setCTAImageInDB(url);

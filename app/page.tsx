@@ -41,13 +41,15 @@ async function getCTAImageFromDB(): Promise<string> {
   }
 }
 
-async function getTestimonialsMobileBgFromDB(): Promise<string> {
+async function getTestimonialsMobileBgFromDB(): Promise<string[]> {
   try {
-    const [rows] = await pool.query("SELECT url FROM testimonials_mobile_bg ORDER BY id ASC LIMIT 1");
+    const [rows] = await pool.query("SELECT urls FROM testimonials_mobile_bg ORDER BY id ASC LIMIT 1");
     const r = (rows as any[])[0];
-    return r?.url || "";
+    if (!r) return [];
+    const urls = typeof r.urls === "string" ? JSON.parse(r.urls) : r.urls;
+    return Array.isArray(urls) ? urls : [];
   } catch {
-    return "";
+    return [];
   }
 }
 
@@ -91,7 +93,7 @@ export default async function HomePage() {
       <HeroSection initialImages={heroImages} initialDesktopImage={heroDesktopImage} />
       <OverviewSection initialBlockImages={blockImages} />
       <WhyChooseUsSection />
-      <TestimonialsSection initialTestimonials={testimonials} initialBackgroundImages={overviewImages} initialMobileBgImage={testimonialsMobileBg} />
+      <TestimonialsSection initialTestimonials={testimonials} initialBackgroundImages={overviewImages} initialMobileBgImages={testimonialsMobileBg} />
       <CTASection initialBgImage={ctaBgImage} />
     </main>
   );
