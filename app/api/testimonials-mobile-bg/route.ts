@@ -5,9 +5,15 @@ async function ensureTable() {
   await pool.query(`
     CREATE TABLE IF NOT EXISTS testimonials_mobile_bg (
       id   INT AUTO_INCREMENT PRIMARY KEY,
-      urls JSON NOT NULL DEFAULT ('[]')
+      urls TEXT NOT NULL DEFAULT '[]'
     )
   `);
+  // Migrate old schema: old table may have had a single 'url' TEXT column
+  try {
+    await pool.query(`ALTER TABLE testimonials_mobile_bg ADD COLUMN urls TEXT NOT NULL DEFAULT '[]'`);
+  } catch {
+    // Column already exists — expected on fresh tables
+  }
 }
 
 function parseJSON(val: unknown): string[] {

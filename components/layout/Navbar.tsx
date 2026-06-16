@@ -161,7 +161,7 @@ function NavbarContent({
                 key={link.path}
                 href={link.path}
                 className={cn(
-                  "block px-3 py-3 text-sm font-medium border-b border-[#e8e8e8] tracking-widest uppercase",
+                  "block px-3 py-3 text-sm font-medium border-b border-[#e8e8e8] tracking-widest",
                   pathname === link.path
                     ? "text-[#1a1a1a] font-semibold"
                     : "text-[#777] hover:text-[#1a1a1a]"
@@ -174,7 +174,7 @@ function NavbarContent({
               <Link
                 href="/admin"
                 className={cn(
-                  "block px-3 py-3 text-sm font-medium border-b border-[#e8e8e8] tracking-widest uppercase",
+                  "block px-3 py-3 text-sm font-medium border-b border-[#e8e8e8] tracking-widest",
                   pathname === "/admin"
                     ? "text-[#1a1a1a] font-semibold"
                     : "text-[#777] hover:text-[#1a1a1a]"
@@ -187,7 +187,7 @@ function NavbarContent({
               {!isSignedIn ? (
                 <Link
                   href="/sign-in"
-                  className="block px-3 py-3 text-sm font-medium tracking-widest uppercase text-[#777] hover:text-[#1a1a1a]"
+                  className="block px-3 py-3 text-sm font-medium tracking-widest text-[#777] hover:text-[#1a1a1a]"
                 >
                   Login
                 </Link>
