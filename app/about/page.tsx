@@ -1,9 +1,16 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
   Heart, Shield, Users, Award, ArrowRight,
   CheckCircle,
 } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "About Us",
+  description:
+    "Learn about Hindonix, a manufacturer and exporter of premium stainless steel and brass architectural hardware including door handles and door knobs.",
+};
 
 const values = [
   { icon: Shield, title: "Integrity", description: "Transparent dealings and honest communication in every transaction." },

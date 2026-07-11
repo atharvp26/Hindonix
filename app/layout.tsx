@@ -10,9 +10,46 @@ import { ScrollToTop } from "@/components/ScrollToTop";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Hindonix - Premium Architectural Hardware",
+  metadataBase: new URL("https://hindonix.com"),
+  title: {
+    default: "Hindonix - Premium Architectural Hardware",
+    template: "%s | Hindonix",
+  },
   description:
-    "Hindonix manufactures and exports premium stainless steel and brass architectural hardware including door knobs, handles, and more.",
+    "Hindonix manufactures and exports premium stainless steel and brass architectural hardware including door handles, door knobs, and more.",
+  keywords: [
+    "architectural hardware",
+    "door handles",
+    "door knobs",
+    "stainless steel hardware",
+    "brass hardware manufacturer",
+    "door hardware exporter",
+  ],
+  openGraph: {
+    type: "website",
+    siteName: "Hindonix",
+    title: "Hindonix - Premium Architectural Hardware",
+    description:
+      "Hindonix manufactures and exports premium stainless steel and brass architectural hardware including door handles, door knobs, and more.",
+  },
+};
+
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Hindonix",
+  alternateName: "Hindonix Architectural Hardware",
+  url: "https://hindonix.com",
+  logo: "https://res.cloudinary.com/dlt9vf8qk/image/upload/v1780943181/Logo-Black_ytnast.png",
+  description:
+    "Hindonix manufactures and exports premium stainless steel and brass architectural hardware including door handles, door knobs, and more.",
+  telephone: "+91-8850765050",
+  email: "info@hindonix.com",
+  sameAs: [
+    "https://www.instagram.com/hindonix.handles",
+    "https://www.facebook.com/share/1BjnmmbXY1/",
+    "https://youtube.com/@hindonix",
+  ],
 };
 
 export default function RootLayout({
@@ -24,6 +61,10 @@ export default function RootLayout({
     <ClerkProvider afterSignOutUrl="/">
       <html lang="en">
         <body>
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+          />
           <Providers>
             <TooltipProvider>
               <ScrollToTop />

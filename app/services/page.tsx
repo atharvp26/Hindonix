@@ -1,6 +1,13 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, CheckCircle, Shield, Clock, Package, FileText, Search, Truck, Ship, Plane } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "Services - Export & Import Solutions",
+  description:
+    "Hindonix offers end-to-end export management, import consulting, and logistics services for architectural hardware including door handles and door knobs.",
+};
 
 const services = [
   {
