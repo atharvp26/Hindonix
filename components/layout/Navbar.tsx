@@ -14,6 +14,15 @@ const navLinks = [
   { name: "Get Catalogue", path: "/contact" },
 ];
 
+const CATALOGUE_PDF_URL =
+  "https://drive.google.com/file/d/1-JTryfBc_rjsXD8r2WnRO1-8IyS4JUxm/view";
+
+function handleCatalogueClick(name: string) {
+  if (name === "Get Catalogue") {
+    window.open(CATALOGUE_PDF_URL, "_blank", "noopener,noreferrer");
+  }
+}
+
 function NavbarContent({
   isSignedIn,
   isAdmin,
@@ -84,6 +93,7 @@ function NavbarContent({
               <Link
                 key={link.path}
                 href={link.path}
+                onClick={() => handleCatalogueClick(link.name)}
                 className={cn(
                   "px-5 py-1.5 rounded-full text-base transition-colors tracking-wide",
                   pathname === link.path
@@ -160,6 +170,7 @@ function NavbarContent({
               <Link
                 key={link.path}
                 href={link.path}
+                onClick={() => handleCatalogueClick(link.name)}
                 className={cn(
                   "block px-3 py-3 text-sm font-medium border-b border-[#e8e8e8] tracking-widest",
                   pathname === link.path

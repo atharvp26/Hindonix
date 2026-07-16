@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { Phone, Mail } from "lucide-react";
 import { type SVGProps } from "react";
@@ -28,10 +30,19 @@ const YouTubeLogo = (props: SVGProps<SVGSVGElement>) => (
 
 const footerTopLinks = [
   { name: "About", path: "/about" },
-  { name: "Catalogue", path: "/products" },
+  { name: "Catalogue", path: "/contact" },
   { name: "Blogs", path: "/blogs" },
   { name: "Get Quote", path: "/contact" },
 ];
+
+const CATALOGUE_PDF_URL =
+  "https://drive.google.com/file/d/1-JTryfBc_rjsXD8r2WnRO1-8IyS4JUxm/view";
+
+function handleCatalogueClick(name: string) {
+  if (name === "Catalogue") {
+    window.open(CATALOGUE_PDF_URL, "_blank", "noopener,noreferrer");
+  }
+}
 
 const socialLinks = [
   { name: "LinkedIn", href: "#", icon: LinkedInLogo },
@@ -49,8 +60,9 @@ export function Footer() {
           <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-4">
             {footerTopLinks.map((link) => (
               <Link
-                key={link.path}
+                key={link.name}
                 href={link.path}
+                onClick={() => handleCatalogueClick(link.name)}
                 className="text-xs font-medium tracking-[0.2em] uppercase transition-colors hover:text-white"
                 style={{ color: '#eaeaea99' }}
               >
