@@ -46,7 +46,8 @@ const organizationJsonLd = {
   telephone: "+91-8850765050",
   email: "info@hindonix.com",
   sameAs: [
-    "https://www.instagram.com/hindonix.handles",
+    "https://www.linkedin.com/company/hindonix/",
+    "https://www.instagram.com/hindonix/",
     "https://www.facebook.com/share/1BjnmmbXY1/",
     "https://youtube.com/@hindonix",
   ],

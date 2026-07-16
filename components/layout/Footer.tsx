@@ -45,8 +45,8 @@ function handleCatalogueClick(name: string) {
 }
 
 const socialLinks = [
-  { name: "LinkedIn", href: "#", icon: LinkedInLogo },
-  { name: "Instagram", href: "https://www.instagram.com/hindonix.handles?igsh=eTlidHJhdG54OGY1", icon: InstagramLogo },
+  { name: "LinkedIn", href: "https://www.linkedin.com/company/hindonix/", icon: LinkedInLogo },
+  { name: "Instagram", href: "https://www.instagram.com/hindonix/", icon: InstagramLogo },
   { name: "Facebook", href: "https://www.facebook.com/share/1BjnmmbXY1/", icon: FacebookLogo },
   { name: "YouTube", href: "https://youtube.com/@hindonix?si=Brk-vBuUaCcPNOzX", icon: YouTubeLogo },
 ];
@@ -95,13 +95,13 @@ export function Footer() {
             <p className="flex items-center justify-center gap-2 text-sm font-light" style={{ color: '#f3f3f399' }}>
               <Phone className="w-4 h-4" style={{ color: '#f3f3f3' }} />
               <a href="tel:+918850765050" className="hover:text-white transition-colors tracking-wide">
-                T: +91 8850765050
+                +91 8850765050
               </a>
             </p>
             <p className="flex items-center justify-center gap-2 text-sm font-light" style={{ color: '#f3f3f399' }}>
               <Mail className="w-4 h-4" style={{ color: '#f3f3f3' }} />
               <a href="mailto:info@hindonix.com" className="hover:text-white transition-colors tracking-wide">
-                E: info@hindonix.com
+                info@hindonix.com
               </a>
             </p>
           </div>

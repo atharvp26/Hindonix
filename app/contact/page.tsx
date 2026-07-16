@@ -167,7 +167,7 @@ function ContactPageInner() {
                     { icon: WhatsAppLogo, label: "WhatsApp", content: <a href="https://wa.me/+918850765050" target="_blank" rel="noopener noreferrer" className="text-accent font-medium hover:underline">+91 8850765050</a> },
                     { icon: Phone, label: "Phone", content: <a href="tel:+918850765050" className="text-muted-foreground text-sm hover:text-accent transition-colors">+91 8850765050</a> },
                     { icon: Mail, label: "Email", content: <a href="mailto:sales@hindonix.com" className="text-foreground hover:text-accent transition-colors">sales@hindonix.com</a> },
-                    { icon: LinkedInLogo, label: "LinkedIn", content: <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer" className="text-accent font-medium hover:underline">Hindonix</a> },
+                    { icon: LinkedInLogo, label: "LinkedIn", content: <a href="https://www.linkedin.com/company/hindonix/" target="_blank" rel="noopener noreferrer" className="text-accent font-medium hover:underline">Hindonix</a> },
                     { icon: MapPin, label: "Address", content: <p className="text-muted-foreground text-sm">182/1/A/1, Shiv samarth nagar, Opp.ST Depot,<br />Tal.Khed, Dis.Ratnagiri. Maharashtra, India Pin code : 415709.</p> },
                   ].map(({ icon: Icon, label, content }) => (
                     <div key={label} className="flex items-start gap-4">
